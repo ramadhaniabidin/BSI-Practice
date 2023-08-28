@@ -1,9 +1,13 @@
-﻿﻿body {
+﻿body {
 }
 
 
 .background-login {
-    background-size: contain;
-    height: 385px;
-    left: 10px;
+    /*background-size: contain !important;*/
+    /*style =" display:flex" */
+    justify-content:center !important;
+    height: 485px;
+    width: 400px !important;
+    left: 5px;
+    /*background: url('../Images/download.png');*/
 }

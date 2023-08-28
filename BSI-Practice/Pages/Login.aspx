@@ -28,9 +28,12 @@
                     <div class="card o-hidden border-0 shadow-lg my-5">
                         <div class="card-body p-0">
                             <div class="row">
-                                <div class="col-lg-5" style="background: url('Assets/images/download.png'); background-size: contain;height: 385px; left: 10px;">
+<%--                                <div class="col-lg-5" style="background:url('/Images/download.png'); background-size: contain;height: 385px; left: 10px;">
+                                </div>--%>
+                                <div class="col-lg-4">
+                                    <img class="background-login" src="../Images/download.png"/>
                                 </div>
-                                <div class="col-lg-7">
+                                <div class="col-lg-8">
                                     <div class="p-5">
                                         <div class="text-center">
                                             <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>

@@ -67,7 +67,6 @@ C:\Users\ramad\OneDrive\Documents\Belajar\BSI-Practice\BSI-Practice\bin\Newtonso
 C:\Users\ramad\OneDrive\Documents\Belajar\BSI-Practice\BSI-Practice\bin\Antlr3.Runtime.pdb
 C:\Users\ramad\OneDrive\Documents\Belajar\BSI-Practice\BSI-Practice\bin\Microsoft.AspNet.FriendlyUrls.xml
 C:\Users\ramad\OneDrive\Documents\Belajar\BSI-Practice\BSI-Practice\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\Users\ramad\OneDrive\Documents\Belajar\BSI-Practice\BSI-Practice\obj\Debug\BSI-Practice.csproj.AssemblyReference.cache
 C:\Users\ramad\OneDrive\Documents\Belajar\BSI-Practice\BSI-Practice\obj\Debug\BSI-Practice.csproj.CoreCompileInputs.cache
 C:\Users\ramad\OneDrive\Documents\Belajar\BSI-Practice\BSI-Practice\obj\Debug\BSI-Practice.csproj.CopyComplete
 C:\Users\ramad\OneDrive\Documents\Belajar\BSI-Practice\BSI-Practice\obj\Debug\BSI-Practice.dll

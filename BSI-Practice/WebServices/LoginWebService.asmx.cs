@@ -68,5 +68,46 @@ namespace BSI_Practice.WebServices
             }
             return returnedOutput;
         }
+
+        [WebMethod]
+        public string GenerateLoginToken(string email)
+        {
+            var returnedOutput = "";
+            try
+            {
+                var LoginToken = controller.GenerateLoginToken(email);
+                if (!string.IsNullOrWhiteSpace(LoginToken))
+                {
+                    var responseBody = new
+                    {
+                        Success = true,
+                        Message = "OK",
+                        LoginToken
+                    };
+                    returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+                }
+
+                else
+                {
+                    var responseBody = new
+                    {
+                        Success = false,
+                        Message = "Error, mohon periksa kembali email Anda",
+                        LoginToken
+                    };
+                    returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+                }
+            }
+            catch(Exception ex)
+            {
+                var responseBody = new
+                {
+                    Success = false,
+                    Message = $"Error: {ex.Message}"
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            return returnedOutput;
+        }
     }
 }

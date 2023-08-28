@@ -45,6 +45,7 @@
     <Compile Include="Common\Utility.cs" />
     <Compile Include="Controller\LoginController.cs" />
     <Compile Include="Models\AccountModel.cs" />
+    <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\StationaryRequestDetail.cs" />
     <Compile Include="Models\StationaryRequestHeader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

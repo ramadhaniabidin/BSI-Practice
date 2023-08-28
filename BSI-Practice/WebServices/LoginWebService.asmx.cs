@@ -1,7 +1,11 @@
-﻿using System;
+﻿using BSI_Logics.Controller;
+using BSI_Logics.Models;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Serialization;
 using System.Web.Services;
 
 namespace BSI_Practice.WebServices
@@ -16,11 +20,53 @@ namespace BSI_Practice.WebServices
     // [System.Web.Script.Services.ScriptService]
     public class LoginWebService : System.Web.Services.WebService
     {
+        private readonly LoginController controller = new LoginController();
 
         [WebMethod]
         public string HelloWorld()
         {
             return "Hello World";
+        }
+
+        [WebMethod]
+        public string GetRoleId(string email)
+        {
+            var returnedOutput = "";
+            int role_id ;
+            try
+            {
+                role_id = controller.GetRoleId(email);
+                if(role_id != -1)
+                {
+                    var responseBody = new
+                    {
+                        Success = true,
+                        Message = "OK",
+                        role_id
+                    };
+                    returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+                }
+
+                else
+                {
+                    var responseBody = new
+                    {
+                        Success = false,
+                        Message = "Error, periksa kembali email yang Anda masukkan",
+                    };
+                    returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+                }
+            }
+            catch(Exception ex)
+            {
+                var responseBody = new
+                {
+                    Success = false,
+                    Message = $"Error: {ex.Message}",
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            return returnedOutput;
         }
     }
 }

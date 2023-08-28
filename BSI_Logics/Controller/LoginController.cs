@@ -16,20 +16,29 @@ namespace BSI_Logics.Controller
         SqlConnection conn = new SqlConnection();
         SqlDataReader reader = null;
 
-        public int GetLoginToken(AccountModel model)
+        public int GetRoleId(string email)
         {
             //var returnedOutput = "";
-            int role_id = 0;
+            int role_id = -1;
 
             db.OpenConnection(ref conn);
-            db.cmd.CommandText = $"SELECT TOP 1 role_id FROM master_users WHERE email = {model.email}";
+            db.cmd.CommandText = $"SELECT TOP 1 role_id FROM master_users WHERE email = '{email}'";
             db.cmd.CommandType = CommandType.Text;
             reader = db.cmd.ExecuteReader();
 
-            while (reader.Read())
+            if(reader != null)
             {
-                role_id = reader.GetInt32(0);
+                while (reader.Read())
+                {
+                    role_id = reader.GetInt32(0);
+                }
             }
+
+            else
+            {
+                role_id = -1;
+            }
+
             reader.Close();
             db.CloseConnection(ref conn);
             return role_id;

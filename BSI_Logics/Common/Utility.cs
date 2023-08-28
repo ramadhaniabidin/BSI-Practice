@@ -188,7 +188,6 @@ namespace BSI_Logics.Common
             }
             return data;
         }
-
         public static T GetItem<T>(DataRow dr)
         {
             Type temp = typeof(T);

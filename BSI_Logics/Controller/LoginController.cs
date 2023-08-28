@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BSI_Logics.Controller
 {
@@ -16,6 +19,9 @@ namespace BSI_Logics.Controller
         SqlConnection conn = new SqlConnection();
         SqlDataReader reader = null;
 
+        private readonly string JwtKey = "LO6i4DuNxIpmGIpjCPRuPwx1NpA2Deuryh7HOsaw_b0";
+        private readonly string JwtIssuer = "https://localhost:44313/";
+        private readonly string JwtAudience = "https://localhost:44313/";
         public int GetRoleId(string email)
         {
             //var returnedOutput = "";
@@ -42,6 +48,26 @@ namespace BSI_Logics.Controller
             reader.Close();
             db.CloseConnection(ref conn);
             return role_id;
+        }
+
+        public string GenerateLoginToken(string email)
+        {
+            var token = "";
+            int role_id = GetRoleId(email);
+            if(role_id >= 0)
+            {
+                var claims = new[]
+                {
+                    new Claim("Email", email),
+                    new Claim("Role Id", role_id.ToString())
+                };
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtKey));
+            }
+            else
+            {
+                token = "";
+            }
+            return token;
         }
     }
 }

@@ -36,7 +36,7 @@ namespace BSI_Practice.WebServices
             try
             {
                 role_id = controller.GetRoleId(email);
-                if(role_id != -1)
+                if(role_id >= 0)
                 {
                     var responseBody = new
                     {

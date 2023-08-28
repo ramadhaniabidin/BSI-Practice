@@ -52,7 +52,7 @@ namespace BSI_Logics.Controller
 
         public string GenerateLoginToken(string email)
         {
-            var token = "";
+            var LoginToken = "";
             int role_id = GetRoleId(email);
             if(role_id >= 0)
             {
@@ -62,12 +62,17 @@ namespace BSI_Logics.Controller
                     new Claim("Role Id", role_id.ToString())
                 };
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtKey));
+                var login = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                var token = new JwtSecurityToken(JwtIssuer, 
+                    JwtAudience, claims, expires: DateTime.UtcNow.AddHours(3), signingCredentials: login);
+                var JwtToken = new JwtSecurityTokenHandler().WriteToken(token);
+                LoginToken = JwtToken;
             }
             else
             {
-                token = "";
+                LoginToken = "";
             }
-            return token;
+            return LoginToken;
         }
     }
 }

@@ -52,7 +52,7 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            <button type="button" class="btn btn-primary btn-user btn-block" ng-click="AlertLoginButton()">Login</button>
+                                            <button type="button" class="btn btn-danger btn-user btn-block" ng-click="AlertLoginButton()">Alert Login Check</button>
                                         </div>
                                     </div>
                                 </div>

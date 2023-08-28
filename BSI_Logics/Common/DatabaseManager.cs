@@ -10,7 +10,7 @@ namespace BSI_Logics.Common
 {
     public class DatabaseManager
     {
-        public string sqlConnection = "";
+        public string sqlConnection = "Data Source=(localdb)\\local;Initial Catalog=E-Learning;Integrated Security=True;";
         public SqlCommand cmd;
         public SqlDataReader dReader;
         public SqlTransaction trans;

@@ -126,6 +126,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Scripts\AngularJS\angular-route.min.js.map" />
     <Content Include="Scripts\AngularJS\angular.min.js.map" />
+    <Content Include="WebServices\LoginWebService.asmx" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Images\download.png" />
     <Content Include="Pages\Login.aspx" />
@@ -226,6 +227,10 @@
     <Compile Include="ViewSwitcher.ascx.designer.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
     </Compile>
+    <Compile Include="WebServices\LoginWebService.asmx.cs">
+      <DependentUpon>LoginWebService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -240,6 +245,12 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BSI_Logics\BSI_Logics.csproj">
+      <Project>{4acb5562-3e4d-4d79-93ce-d6708c6b9cf0}</Project>
+      <Name>BSI_Logics</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

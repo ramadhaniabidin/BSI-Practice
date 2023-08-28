@@ -71,4 +71,3 @@ C:\Users\ramad\OneDrive\Documents\Belajar\BSI-Practice\BSI-Practice\obj\Debug\BS
 C:\Users\ramad\OneDrive\Documents\Belajar\BSI-Practice\BSI-Practice\obj\Debug\BSI-Practice.csproj.CopyComplete
 C:\Users\ramad\OneDrive\Documents\Belajar\BSI-Practice\BSI-Practice\obj\Debug\BSI-Practice.dll
 C:\Users\ramad\OneDrive\Documents\Belajar\BSI-Practice\BSI-Practice\obj\Debug\BSI-Practice.pdb
-C:\Users\ramad\OneDrive\Documents\Belajar\BSI-Practice\BSI-Practice\obj\Debug\BSI-Practice.csproj.AssemblyReference.cache

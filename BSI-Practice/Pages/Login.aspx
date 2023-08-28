@@ -18,18 +18,20 @@
     <link href="../Style/Login.css" rel="stylesheet"/>
 
 
+    <script src="../Scripts/AngularJS/angular.min.js"></script>
+    <script src="../Scripts/AngularJS/angular-filter.js"></script>
+    <script src="../Scripts/Page/Login.js"></script>
+
 
 </head>
-<body class="bg-gradient-primary" style="background-color:rgb(22 22 21)">
+<body ng-app="LoginPage" ng-controller="LoginController" class="bg-gradient-primary" style="background-color:rgb(22 22 21)">
     <form id="form1" runat="server">
-        <div class="custom-centered " ng-app="app" ng-controller="ctrl">
+        <div class="custom-centered">
             <div class="row justify-content-center">
                 <div class="col-xl-10 col-lg-12 col-md-9">
                     <div class="card o-hidden border-0 shadow-lg my-5">
                         <div class="card-body p-0">
                             <div class="row">
-<%--                                <div class="col-lg-5" style="background:url('/Images/download.png'); background-size: contain;height: 385px; left: 10px;">
-                                </div>--%>
                                 <div class="col-lg-4">
                                     <img class="background-login" src="../Images/download.png"/>
                                 </div>
@@ -50,7 +52,7 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            <button class="btn btn-primary btn-user btn-block" ng-click="LoginButton()">Login</button>
+                                            <button type="button" class="btn btn-primary btn-user btn-block" ng-click="AlertLoginButton()">Login</button>
                                         </div>
                                     </div>
                                 </div>

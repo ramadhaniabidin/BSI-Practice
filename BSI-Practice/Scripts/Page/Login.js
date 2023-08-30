@@ -38,6 +38,7 @@ app.controller('LoginController', function ($scope, svc) {
             console.log('Response Data: ', response_data);
             if (response_data.Success) {
                 alert('Login Success with token: ' + response_data.LoginToken);
+                location.href = "/Default";
             }
             else {
                 alert(response_data.Message);

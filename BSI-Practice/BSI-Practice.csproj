@@ -175,6 +175,7 @@
     <Content Include="Scripts\AngularJS\angular-route.min.js.map" />
     <Content Include="Scripts\AngularJS\angular.min.js.map" />
     <Content Include="Scripts\MainMaster.js" />
+    <Content Include="Scripts\Page\StationaryRequest.js" />
     <Content Include="Style\MainMaster.css" />
     <Content Include="Style\StationaryRequest.css" />
     <Content Include="WebServices\LoginWebService.asmx" />

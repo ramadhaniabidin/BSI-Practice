@@ -1,7 +1,11 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Main.Master" AutoEventWireup="true" CodeBehind="StationaryRequest.aspx.cs" Inherits="BSI_Practice.Pages.StationaryRequest" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <link rel="stylesheet" href="../Style/StationaryRequest.css"/>
-    <form>
+
+    <script src="../Scripts/AngularJS/angular.min.js"></script>
+    <script src="../Scripts/AngularJS/angular-filter.js"></script>
+    <script src="../Scripts/Page/StationaryRequest.js"></script>
+    <form ng-app="StationaryRequestPage" ng-controller="StatinoaryRequestController">
         <div class="row" style="padding-top: 1%">
             <div class="row">
                 <div class="col-9" style="display: flex;">

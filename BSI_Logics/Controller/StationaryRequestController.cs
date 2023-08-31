@@ -82,7 +82,7 @@ namespace BSI_Logics.Controller
             }
 
         }
-        public StationaryItemsModel GetAllStationary()
+        public List<StationaryItemsModel> GetAllStationary()
         {
             try
             {
@@ -98,11 +98,11 @@ namespace BSI_Logics.Controller
 
                 if (dt.Rows.Count > 0)
                 {
-                    return Common.Utility.ConvertDataTableToList<StationaryItemsModel>(dt)[0];
+                    return Common.Utility.ConvertDataTableToList<StationaryItemsModel>(dt);
                 }
                 else
                 {
-                    return new StationaryItemsModel();
+                    return new List<StationaryItemsModel>();
                 }
             }
             catch(Exception ex)

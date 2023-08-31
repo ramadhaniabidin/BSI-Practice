@@ -54,5 +54,32 @@ namespace BSI_Practice.WebServices
             }
             return returnedOutput;
         }
+
+        [WebMethod]
+        public string GetStationaryItems()
+        {
+            var returnedOutput = "";
+            try
+            {
+                var StationaryItems = controller.GetAllStationary();
+                var responseBody = new
+                {
+                    Success = true,
+                    Message = "OK",
+                    StationaryItems
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            catch(Exception ex)
+            {
+                var responseBody = new
+                {
+                    Success = false,
+                    Message = $"Error: {ex.Message}",
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            return returnedOutput;
+        }
     }
 }

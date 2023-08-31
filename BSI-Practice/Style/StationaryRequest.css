@@ -1,0 +1,156 @@
+﻿/*label {
+    width: 35%;
+    padding-bottom: 15px;
+    padding-left: 15px;
+}*/
+
+.header-label{
+    padding-bottom: 2%;
+    padding-left: 1%;
+    font-weight: bold;
+/*    width: 35%;*/
+}
+
+.myInput {
+    width: 95%;
+}
+
+.col-5 {
+/*    border: black solid thin;
+    border-radius: 5px;
+    padding-top: 15px;*/
+    width: 49% !important;
+}
+
+.border-col-6 {
+    border: black solid thin;
+    border-radius: 5px;
+    padding-top: 1.5%;
+    padding-bottom: 1.5%;
+}
+
+.col-1 {
+    width: 1%;
+}
+
+.myLabel {
+    padding-bottom: 0;
+    font-size: large;
+    padding-top: 5px;
+    font-weight: bold;
+}
+
+.myLabel-detail {
+    padding-bottom: 0;
+    padding-top: 20px;
+    font-size: large;
+}
+
+.myTable th {
+    border: solid black thin;
+    text-align: center;
+    color: black;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.myTable tr {
+    text-align: center;
+    border: solid black thin;
+}
+
+.myTable td {
+    text-align: center;
+    border: solid black thin;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.myContainer {
+    border: solid thin black;
+}
+
+.myParagraph {
+    text-align: center;
+    font-size: 100%;
+    font-weight: bold;
+    
+    width: 100%;
+    padding-top: 2.5%;
+    padding-bottom: 5px;
+    /*margin-left: 45%;*/
+    background-color: aqua;
+    border-radius: 5px;
+}
+
+.logo {
+    width: 60px;
+    height: 55px;
+}
+
+.header-input {
+    width: 100%;
+    background-color: gainsboro;
+    border-width: thin;
+}
+
+.submit-button {
+    width: 5%;
+    background-color: green;
+    color: white;
+    border-radius: 5px;
+    border: none;
+}
+
+#logo_atas {
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-bottom: 0px;
+    padding-top: 0.2rem;
+}
+
+#logo_bawah {
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.separator {
+    width: 100%;
+    background-color: black;
+    height: 2px;
+}
+
+#submit {
+    width: 5%;
+    background-color: green;
+    color: white;
+    margin-right: 5px;
+}
+
+#close {
+    width: 5%;
+    color: white;
+    margin-right: 5px;
+}
+
+#approve_action {
+    width: 5%;
+    background-color: green;
+    color: white;
+    margin-right: 5px;
+}
+
+#LogOut {
+    width: 5%;
+    color: white;
+    margin-top: 5px;
+    margin-left: 7px;
+}
+
+/*#approve{
+    margin-right:5%;
+}*/

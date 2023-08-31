@@ -104,8 +104,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td></td>
+                        <tr ng-repeat="row in rows">
+                            <td><p style="text-align:center">{{ $index + 1 }}</p></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -113,8 +113,15 @@
                             <td></td>
                         </tr>
                     </tbody>
+                    <caption id="add" class="button-addRow" ng-click="AddRow()">
+                        <span>&#43</span> Add New Row
+                    </caption>
                 </table>
             </div>
         </div>
+        <br /><br />
+        <button type="button" class="btn btn-primary" ng-click="CekRequestDetails()">Cek Details</button>
     </form>
+    
+    
 </asp:Content>

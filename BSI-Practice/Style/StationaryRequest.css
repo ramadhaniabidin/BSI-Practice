@@ -4,11 +4,19 @@
     padding-left: 15px;
 }*/
 
-.header-label{
+.button-addRow {
+    caption-side: bottom;
+    cursor:pointer;
+    color:black;
+    width:10%;
+    font-weight:bold;
+}
+
+.header-label {
     padding-bottom: 2%;
     padding-left: 1%;
     font-weight: bold;
-/*    width: 35%;*/
+    /*    width: 35%;*/
 }
 
 .myInput {

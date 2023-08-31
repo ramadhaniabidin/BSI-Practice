@@ -27,8 +27,19 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     $scope.role = "";
     $scope.employee_id = "";
     $scope.extension = "";
+
+    $scope.rows = [{
+        item_name: '',
+        no: '',
+        uom: '',
+        stock: '',
+        request_qty: 0,
+        reason: '',
+        WarningMessage: false
+    }];
     // End region
 
+    // This function is for retrieving user data
     $scope.GetCurrentLoginData = function () {
         var token = sessionStorage.getItem('LoginToken');
         var promise = svc.svc_GetCurrentLoginData(token);
@@ -44,6 +55,26 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
             //console.log(response_data);
         });
     };
+    // End region
 
+    // This function is for checking the request detail table
+    $scope.CekRequestDetails = function () {
+        console.log('Request Detail: ', $scope.rows);
+    };
+    // End region
+
+    // This function enables the user to add row in request detail table
+    $scope.AddRow = function () {
+        $scope.rows.push({
+            item_name: '',
+            no: '',
+            uom: '',
+            stock: '',
+            request_qty: 0,
+            reason: '',
+            WarningMessage: false
+        });
+    };
+    // End region
     $scope.GetCurrentLoginData();
 });

@@ -82,5 +82,34 @@ namespace BSI_Logics.Controller
             }
 
         }
+        public StationaryItemsModel GetAllStationary()
+        {
+            try
+            {
+                dt = new DataTable();
+                db.OpenConnection(ref conn);
+                db.cmd.CommandText = "SELECT * FROM dbo.inventory_stationary";
+                db.cmd.CommandType = CommandType.Text;
+
+                reader = db.cmd.ExecuteReader();
+                dt.Load(reader);
+                db.CloseDataReader(reader);
+                db.CloseConnection(ref conn);
+
+                if (dt.Rows.Count > 0)
+                {
+                    return Common.Utility.ConvertDataTableToList<StationaryItemsModel>(dt)[0];
+                }
+                else
+                {
+                    return new StationaryItemsModel();
+                }
+            }
+            catch(Exception ex)
+            {
+                db.CloseConnection(ref conn);
+                throw ex;
+            }
+        }
     }
 }

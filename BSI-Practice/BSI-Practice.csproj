@@ -179,6 +179,7 @@
     <Content Include="Style\StationaryRequest.css" />
     <Content Include="WebServices\LoginWebService.asmx" />
     <Content Include="Main.Master" />
+    <Content Include="WebServices\StationaryRequestWebService.asmx" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Images\download.png" />
     <Content Include="Pages\Login.aspx" />
@@ -295,6 +296,10 @@
     </Compile>
     <Compile Include="WebServices\LoginWebService.asmx.cs">
       <DependentUpon>LoginWebService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WebServices\StationaryRequestWebService.asmx.cs">
+      <DependentUpon>StationaryRequestWebService.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
   </ItemGroup>

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -51,11 +52,13 @@ namespace BSI_Logics.Controller
                     account_id = -1;
                 }
 
+                Debug.WriteLine($"Account Id = {account_id}");
+
                 dt = new DataTable();
                 db.OpenConnection(ref conn);
-                db.cmd.CommandText = "SELECT u.*, r.name role FROM dbo.master_users u" +
-                    "LEFT JOIN dbo.master_roles r ON u.role_id = r.id" +
-                    $"WHERE u.id = {account_id}";
+                db.cmd.CommandText = "SELECT u.*, r.name role FROM dbo.master_users u " +
+                    "LEFT JOIN dbo.master_roles r ON u.role_id = r.id " +
+                    $"WHERE u.id = '{account_id}'";
                 db.cmd.CommandType = CommandType.Text;
                 reader = db.cmd.ExecuteReader();
                 dt.Load(reader);

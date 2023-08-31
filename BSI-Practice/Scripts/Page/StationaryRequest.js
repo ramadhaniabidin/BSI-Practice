@@ -30,7 +30,21 @@ app.service("svc", function ($http) {
         return response;
     }
 
-    
+    this.svc_GetStockAndUnit = function (item_name) {
+        var param = {
+            'item_name': item_name
+        };
+
+        var response = $http({
+            method: 'POST',
+            url: '/WebServices/StationaryRequestWebService.asmx/GetStockAndUnit',
+            data: JSON.stringify(param),
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json"
+        });
+
+        return response;
+    }
 });
 
 app.controller("StatinoaryRequestController", function ($scope, svc) {
@@ -107,6 +121,18 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     };
     // End region
 
+    // This function is for retieving stock and unit of a particular item
+    $scope.GetStockAndUnit = function (index) {
+        var item_name = $scope.rows[index].item_name;
+        var promise = svc.svc_GetStockAndUnit(item_name);
+        promise.then(function (response) {
+            var response_data = JSON.parse(response.data.d);
+            var StockAndUnit = response_data.StockAndUnit;
+            $scope.rows[index].uom = StockAndUnit.uom;
+            $scope.rows[index].stock = StockAndUnit.stock;
+        });
+    };
+    // End region
     $scope.GetStationaryItems();
     $scope.GetCurrentLoginData();
 });

@@ -74,5 +74,53 @@ namespace BSI_Logics.Controller
             }
             return LoginToken;
         }
+
+        public string GenerateLoginToken1(string email)
+        {
+            var LoginToken = "";
+            int role_id = -1;
+            int account_id = -1;
+
+            db.OpenConnection(ref conn);
+            db.cmd.CommandText = $"SELECT TOP 1 id, role_id FROM dbo.master_users WHERE email = '{email}'";
+            db.cmd.CommandType = CommandType.Text;
+            reader = db.cmd.ExecuteReader();
+
+            if(reader != null)
+            {
+                while (reader.Read())
+                {
+                    account_id = reader.GetInt32(0);
+                    role_id = reader.GetInt32(1);
+                }
+            }
+
+            else
+            {
+                account_id = -1;
+                role_id = -1;
+            }
+
+            if (account_id != 0)
+            {
+                var claims = new[]
+                {
+                    new Claim("Email", email),
+                    new Claim("Account Id", account_id.ToString()),
+                    new Claim("Role Id", role_id.ToString())
+                };
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtKey));
+                var login = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                var token = new JwtSecurityToken(JwtIssuer,
+                    JwtAudience, claims, expires: DateTime.UtcNow.AddHours(3), signingCredentials: login);
+                var JwtToken = new JwtSecurityTokenHandler().WriteToken(token);
+                LoginToken = JwtToken;
+            }
+            else
+            {
+                LoginToken = "";
+            }
+            return LoginToken;
+        }
     }
 }

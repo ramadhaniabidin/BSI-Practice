@@ -14,12 +14,14 @@
                             <p id="logo_bawah">PT Mitsubishi Motors Krama Yudha Sales Indonesia</p>
                         </div>
                     </div>
-                    <%--<p class="myParagraph">Stationary Request</p>--%>
                 </div>
                 <div class="col-3">
                     <p class="myParagraph">Stationary Request</p>
                 </div>
             </div>
+
+
+            <%--This is the Request header--%>
             <div class="row">
                 <label class="myLabel">Application ID</label>
                 <hr class="separator"/>
@@ -80,6 +82,34 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <%--This is the request Detail--%>
+            <div class="row">
+                <label class="myLabel-detail">Request Detail</label>
+                <hr class="separator"/>
+                <table class="myTable">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Item Name</th>
+                            <th>UOM</th>
+                            <th>Stock</th>
+                            <th>Request QTY</th>
+                            <th>Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </form>

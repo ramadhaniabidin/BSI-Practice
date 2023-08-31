@@ -88,6 +88,7 @@
     <Compile Include="Common\DatabaseManager.cs" />
     <Compile Include="Common\Utility.cs" />
     <Compile Include="Controller\LoginController.cs" />
+    <Compile Include="Controller\StationaryRequestController.cs" />
     <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\StationaryRequestDetail.cs" />

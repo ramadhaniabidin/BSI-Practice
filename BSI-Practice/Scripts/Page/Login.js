@@ -37,8 +37,9 @@ app.controller('LoginController', function ($scope, svc) {
             var response_data = JSON.parse(response.data.d);
             console.log('Response Data: ', response_data);
             if (response_data.Success) {
+                sessionStorage.setItem('LoginToken', response_data.LoginToken);
                 alert('Login Success with token: ' + response_data.LoginToken);
-                location.href = "/Default";
+                location.href = "/Pages/StationaryRequest";
             }
             else {
                 alert(response_data.Message);

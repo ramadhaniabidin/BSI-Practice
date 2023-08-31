@@ -35,7 +35,7 @@
                             <label class="header-label">Folio No</label>
                         </div>
                         <div class="col-8">
-                            <input id="folio_no" class="header-input" type="text" runat="server"/>
+                            <input id="folio_no" class="header-input" type="text" runat="server" ng-model="folio_no"/>
                         </div>
                     </div>
                     <br />
@@ -44,7 +44,7 @@
                             <label class="header-label">Applicant</label>
                         </div>
                         <div class="col-8">
-                            <input id="applicant" class="header-input" type="text" runat="server"/>
+                            <input id="applicant" class="header-input" type="text" runat="server" ng-model="applicant"/>
                         </div>
                     </div>
                     <br />
@@ -53,7 +53,7 @@
                             <label class="header-label">Department</label>
                         </div>
                         <div class="col-8">
-                            <input id="department" class="header-input" type="text" runat="server"/>
+                            <input id="department" class="header-input" type="text" runat="server" ng-model="department"/>
                         </div>
                     </div>
                 </div>
@@ -64,7 +64,7 @@
                             <label class="header-label">Role</label>
                         </div>
                         <div class="col-8">
-                            <input id="role" class="header-input" type="text" runat="server"/>
+                            <input id="role" class="header-input" type="text" runat="server" ng-model="role"/>
                         </div>
                     </div>
                     <br />
@@ -73,7 +73,7 @@
                             <label class="header-label">Employee ID</label>
                         </div>
                         <div class="col-8">
-                            <input id="employee_id" class="header-input" type="text" runat="server"/>
+                            <input id="employee_id" class="header-input" type="text" runat="server" ng-model="employee_id"/>
                         </div>
                     </div>
                     <br />
@@ -82,7 +82,7 @@
                             <label class="header-label">Extension</label>
                         </div>
                         <div class="col-8">
-                            <input id="extension" class="header-input" type="text" runat="server"/>
+                            <input id="extension" class="header-input" type="text" runat="server" ng-model="extension"/>
                         </div>
                     </div>
                 </div>

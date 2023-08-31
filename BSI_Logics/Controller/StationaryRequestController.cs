@@ -117,7 +117,7 @@ namespace BSI_Logics.Controller
             {
                 dt = new DataTable();
                 db.OpenConnection(ref conn);
-                db.cmd.CommandText = "SELECT uom, SUM(stock) stock FROM dbo.inventory_stationary" +
+                db.cmd.CommandText = "SELECT SUM(stock) stock, uom FROM dbo.inventory_stationary" +
                     $" WHERE item_name = '{item_name}'" +
                     " GROUP BY uom";
                 db.cmd.CommandType = CommandType.Text;
@@ -126,7 +126,7 @@ namespace BSI_Logics.Controller
                 db.CloseDataReader(reader);
                 db.CloseConnection(ref conn);
 
-                if (dt.Rows.Count > 1)
+                if (dt.Rows.Count > 0)
                 {
                     return Common.Utility.ConvertDataTableToList<StockAndUnitModel>(dt)[0];
                 }

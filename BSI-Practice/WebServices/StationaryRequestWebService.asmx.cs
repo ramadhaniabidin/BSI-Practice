@@ -81,5 +81,32 @@ namespace BSI_Practice.WebServices
             }
             return returnedOutput;
         }
+
+        [WebMethod]
+        public string GetStockAndUnit(string item_name)
+        {
+            var returnedOutput = "";
+            try
+            {
+                var StockAndUnit = controller.GetStockAndUnit(item_name);
+                var responseBody = new
+                {
+                    Success = true,
+                    Message = "OK",
+                    StockAndUnit
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            catch(Exception ex)
+            {
+                var responseBody = new
+                {
+                    Success = false,
+                    Message = $"Error: {ex.Message}",
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            return returnedOutput;
+        }
     }
 }

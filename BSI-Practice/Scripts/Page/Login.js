@@ -9,7 +9,7 @@ app.service("svc", function ($http) {
 
         var response = $http({
             method: 'POST',
-            url: '/WebServices/LoginWebService.asmx/GenerateLoginToken',
+            url: '/WebServices/LoginWebService.asmx/GenerateLoginToken1',
             data: JSON.stringify(param),
             contentType: 'application/json; charset=utf-8',
             dataType: "json"

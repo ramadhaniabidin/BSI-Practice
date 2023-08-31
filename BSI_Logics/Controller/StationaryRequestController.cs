@@ -111,5 +111,35 @@ namespace BSI_Logics.Controller
                 throw ex;
             }
         }
+        public StockAndUnitModel GetStockAndUnit(string item_name)
+        {
+            try
+            {
+                dt = new DataTable();
+                db.OpenConnection(ref conn);
+                db.cmd.CommandText = "SELECT uom, SUM(stock) stock FROM dbo.inventory_stationary" +
+                    $" WHERE item_name = '{item_name}'" +
+                    " GROUP BY uom";
+                db.cmd.CommandType = CommandType.Text;
+                reader = db.cmd.ExecuteReader();
+                dt.Load(reader);
+                db.CloseDataReader(reader);
+                db.CloseConnection(ref conn);
+
+                if (dt.Rows.Count > 1)
+                {
+                    return Common.Utility.ConvertDataTableToList<StockAndUnitModel>(dt)[0];
+                }
+                else
+                {
+                    return new StockAndUnitModel();
+                }
+            }
+            catch(Exception ex)
+            {
+                db.CloseConnection(ref conn);
+                throw ex;
+            }
+        }
     }
 }

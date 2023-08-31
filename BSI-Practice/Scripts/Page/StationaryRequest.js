@@ -17,6 +17,20 @@ app.service("svc", function ($http) {
 
         return response;
     }
+
+    this.svc_GetStationaryItems = function () {
+        var response = $http({
+            method: 'POST',
+            url: '/WebServices/StationaryRequestWebService.asmx/GetStationaryItems',
+            data: {},
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json"
+        });
+
+        return response;
+    }
+
+    
 });
 
 app.controller("StatinoaryRequestController", function ($scope, svc) {
@@ -76,5 +90,23 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         });
     };
     // End region
+
+    // This function is for retrieving stationary items from database
+    $scope.GetStationaryItems = function () {
+        var promise = svc.svc_GetStationaryItems();
+        promise.then(function (response) {
+            var response_data = JSON.parse(response.data.d);
+            var StationaryItems = response_data.StationaryItems;
+            $scope.itemNames = [];
+            for (i of StationaryItems) {
+                if (!$scope.itemNames.includes(i.item_name)) {
+                    $scope.itemNames.push(i.item_name);
+                }
+            }
+        });
+    };
+    // End region
+
+    $scope.GetStationaryItems();
     $scope.GetCurrentLoginData();
 });

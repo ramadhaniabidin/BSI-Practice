@@ -95,21 +95,29 @@
                 <table class="myTable">
                     <thead>
                         <tr>
-                            <th>No.</th>
-                            <th>Item Name</th>
-                            <th>UOM</th>
-                            <th>Stock</th>
-                            <th>Request QTY</th>
-                            <th>Reason</th>
+                            <th style="width: 3%">No.</th>
+                            <th style="width: 25%">Item Name</th>
+                            <th style="width: 10%">​​​​UOM</th>
+                            <th style="width: 10%">Stock</th>
+                            <th style="width: 10%">Request QTY</th>
+                            <th style="width: 20%">Reason</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in rows">
                             <td><p style="text-align:center">{{ $index + 1 }}</p></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td>
+                                <select ng-model="row.item_name" ng-change="GetStockAndUnit({{$index}})">
+                                    <option value="" selected disabled style="text-align:center;"> == Select Stationary Item == </option>
+                                    <option style="text-align:center;" ng-repeat="item in itemNames" value="{{item}}">{{item}}</option>
+                                </select>
+                            </td>
+                            <td><input type="text" ng-model="row.uom" readonly="readonly"/></td>
+                            <td><input type="text" ng-model="row.stock" readonly="readonly"/></td>
+                            <td>
+                                <p ng-show="row.WarningMessage" style="color:red; margin-bottom:0px;">Permintaan Anda melebihi stok</p>
+                                <input type="number" ng-model="row.request_qty" ng-change="CekRequestQty({{$index}})">
+                            </td>
                             <td></td>
                         </tr>
                     </tbody>

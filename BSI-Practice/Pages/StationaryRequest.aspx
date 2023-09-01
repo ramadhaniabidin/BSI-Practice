@@ -118,12 +118,95 @@
                                 <p ng-show="row.WarningMessage" style="color:red; margin-bottom:0px;">Permintaan Anda melebihi stok</p>
                                 <input type="number" ng-model="row.request_qty" ng-change="CekRequestQty({{$index}})">
                             </td>
-                            <td></td>
+                            <td>
+                                <textarea ng-model="row.reason"></textarea>
+                            </td>
                         </tr>
                     </tbody>
                     <caption id="add" class="button-addRow" ng-click="AddRow()">
                         <span>&#43</span> Add New Row
                     </caption>
+                </table>
+            </div>
+            
+            <%--Approval Action--%>
+            <div class="row">
+                <label class="myLabel">Approval Action</label>
+                <hr class="separator"/>
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-2">
+                            <input type="radio" value="Approve" name="action"/>
+                            <label for="approve">Approve</label>
+                        </div>
+                        <div class="col-2">
+                            <input type="radio" value="Reject" name="action"/>
+                            <label for="approve">Reject</label>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-3">
+                            <strong>Next Approval : </strong>
+                        </div>
+                        <div class="col-5">
+                            <select> 
+                                <option value="" selected disabled style="text-align:center">== Choose The Next Approver ==</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-2">
+                            <button class="btn btn-primary">Submit</button>
+                        </div>
+                        <div class="col-2">
+                            <button class="btn btn-danger">Close</button>
+                        </div>
+                        <div class="col-2">
+                            <button class="btn btn-primary">Submit</button>
+                        </div>
+                        <div class="col-2">
+                            <button class="btn btn-primary">Delivered</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div>
+                        <label>Comments:</label>
+                    </div>
+                    <div class="row" style="width: 70%; height:90%">
+                        <textarea></textarea>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <%--<br /><br />--%>
+
+            <%--Approval History Log--%>
+            <div class="row" style="padding-top:1%">
+                <label class="myLabel">Approval History</label>
+                <hr class="separator"/>
+                <table class="myTable">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Name</th>
+                            <th>Comment</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>

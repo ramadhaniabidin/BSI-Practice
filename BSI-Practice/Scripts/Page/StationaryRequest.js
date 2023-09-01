@@ -133,6 +133,8 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         });
     };
     // End region
+
+
     $scope.GetStationaryItems();
     $scope.GetCurrentLoginData();
 });

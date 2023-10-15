@@ -17,11 +17,11 @@
 
 </head>
 <body id="body-pd">
-        <header class="header" id="header">
-            <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
+        <header class="header" id="header" style="background-color: black">
+            <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle" style="color: white"></i> </div>
             <div class="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt=""> </div>
         </header>
-        <div class="l-navbar" id="nav-bar">
+        <div class="l-navbar" id="nav-bar" style="background-color: black">
             <nav class="nav">
                 <div> 
                     <a href="#" class="nav_logo"> 

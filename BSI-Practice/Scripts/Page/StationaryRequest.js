@@ -55,6 +55,10 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     $scope.role = "";
     $scope.employee_id = "";
     $scope.extension = "";
+    $scope.role_id = -1;
+    $scope.request_status_id = 0;
+
+    $scope.IsRequestor = false;
 
     $scope.rows = [{
         item_name: '',
@@ -80,6 +84,11 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
             $scope.department = userData.department;
             $scope.role = userData.role;
             $scope.employee_id = userData.id;
+            $scope.role_id = userData.role_id;
+
+            if ($scope.role_id == 0) {
+                $scope.IsRequestor = true;
+            }
             //console.log(response_data);
         });
     };
@@ -134,7 +143,16 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     };
     // End region
 
+    var folio_no = GetQueryString()["folio_no"]
+    console.log('Folio No: ', folio_no);
 
-    $scope.GetStationaryItems();
-    $scope.GetCurrentLoginData();
+    if ((folio_no === null) || (folio_no === undefined) || (folio_no === '')) {
+        $scope.request_status_id = 0;
+        console.log("Request status id : ", $scope.request_status_id);
+        $scope.GetCurrentLoginData();
+        $scope.GetStationaryItems();
+    }
+
+    
+    
 });

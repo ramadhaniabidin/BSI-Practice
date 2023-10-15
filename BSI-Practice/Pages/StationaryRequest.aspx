@@ -1,10 +1,11 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Main.Master" AutoEventWireup="true" CodeBehind="StationaryRequest.aspx.cs" Inherits="BSI_Practice.Pages.StationaryRequest" %>
+﻿ <%@ Page Title="" Language="C#" MasterPageFile="~/Main.Master" AutoEventWireup="true" CodeBehind="StationaryRequest.aspx.cs" Inherits="BSI_Practice.Pages.StationaryRequest" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <link rel="stylesheet" href="../Style/StationaryRequest.css"/>
 
     <script src="../Scripts/AngularJS/angular.min.js"></script>
     <script src="../Scripts/AngularJS/angular-filter.js"></script>
     <script src="../Scripts/Page/StationaryRequest.js"></script>
+    <script src="../Scripts/BaseLogic.js"></script>
     <form ng-app="StationaryRequestPage" ng-controller="StatinoaryRequestController">
         <div class="row" style="padding-top: 1%">
             <div class="row">
@@ -130,7 +131,7 @@
             </div>
             
             <%--Approval Action--%>
-            <div class="row">
+            <div class="row" ng-show="role_id != 0">
                 <label class="myLabel">Approval Action</label>
                 <hr class="separator"/>
                 <div class="col-6">
@@ -141,7 +142,7 @@
                         </div>
                         <div class="col-2">
                             <input type="radio" value="Reject" name="action"/>
-                            <label for="approve">Reject</label>
+                            <label for="reject">Reject</label>
                         </div>
                     </div>
                     <br />
@@ -156,20 +157,6 @@
                         </div>
                     </div>
                     <br />
-                    <div class="row">
-                        <div class="col-2">
-                            <button class="btn btn-primary">Submit</button>
-                        </div>
-                        <div class="col-2">
-                            <button class="btn btn-danger">Close</button>
-                        </div>
-                        <div class="col-2">
-                            <button class="btn btn-primary">Submit</button>
-                        </div>
-                        <div class="col-2">
-                            <button class="btn btn-primary">Delivered</button>
-                        </div>
-                    </div>
                 </div>
                 <div class="col-6">
                     <div>
@@ -177,9 +164,19 @@
                     </div>
                     <div class="row" style="width: 70%; height:90%">
                         <textarea></textarea>
-                    </div>
-                    
+                    </div>                    
                 </div>
+            </div>
+            
+            <%--Buttons--%>
+            <div class="row" style="padding-top:2.75%">
+                <div class="col">
+                    <button id="submit-btn" class="btn btn-primary">Submit</button>
+                    <button id="close-btn" class="btn btn-danger" ng-show="request_status_id == 5">Close</button>
+                    <button id="approval-btn" class="btn btn-primary" ng-show="role_id != 0">Submit</button>
+                    <button id="deliver-btn" class="btn btn-primary" ng-show="role_id != 0">Delivered</button>
+                </div>
+
             </div>
 
             <%--<br /><br />--%>

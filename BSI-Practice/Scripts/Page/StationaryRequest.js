@@ -143,7 +143,7 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     };
     // End region
 
-    // THIS FUNCTION IS FOR CHECK VALIDATING THE REQUEST QUANTITY
+    // THIS FUNCTION VALIDATES THE REQUEST QUANTITY
     $scope.CekRequestQty = function (index) {
         
         var stock = $scope.rows[index].stock;

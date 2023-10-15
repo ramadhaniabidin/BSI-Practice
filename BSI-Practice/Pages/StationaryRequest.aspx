@@ -170,7 +170,7 @@
             
             <%--Buttons--%>
             <div class="row" style="padding-top:2.75%">
-                <div class="col">
+                <div class="col" style="padding-left: 0px">
                     <button id="submit-btn" class="btn btn-primary">Submit</button>
                     <button id="close-btn" class="btn btn-danger" ng-show="request_status_id == 5">Close</button>
                     <button id="approval-btn" class="btn btn-primary" ng-show="role_id != 0">Submit</button>
@@ -182,7 +182,7 @@
             <%--<br /><br />--%>
 
             <%--Approval History Log--%>
-            <div class="row" style="padding-top:1%">
+            <div class="row" style="padding-top:1%" ng-show="role_id != 0">
                 <label class="myLabel">Approval History</label>
                 <hr class="separator"/>
                 <table class="myTable">

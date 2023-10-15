@@ -143,6 +143,25 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     };
     // End region
 
+    // THIS FUNCTION IS FOR CHECK VALIDATING THE REQUEST QUANTITY
+    $scope.CekRequestQty = function (index) {
+        
+        var stock = $scope.rows[index].stock;
+        var req_qty = $scope.rows[index].request_qty;
+
+        console.log('stock = ', stock);
+        console.log('request quantity = ', req_qty);
+
+        if (req_qty > stock) {
+            $scope.rows[index].WarningMessage = true;
+        }
+
+        else {
+            $scope.rows[index].WarningMessage = false;
+        }
+    }
+    // END REGION
+
     var folio_no = GetQueryString()["folio_no"]
     console.log('Folio No: ', folio_no);
 

@@ -100,6 +100,7 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     // This function is for checking the request detail table
     $scope.CekRequestDetails = function () {
         console.log('Request Detail: ', $scope.rows);
+        // End region
     };
     // End region
 
@@ -224,16 +225,16 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
                 $scope.isRequestValid = true;
             }
 
-            if ($scope.isRequestValid == true) {
-                if (submit_btn.classList.contains("disabled")) {
-                    submit_btn.classList.remove("disabled");
-                }
-                $scope.CekRequestDetails();
-            }
+            //if ($scope.isRequestValid == true) {
+            //    if (submit_btn.classList.contains("disabled")) {
+            //        submit_btn.classList.remove("disabled");
+            //    }
+            //    $scope.CekRequestDetails();
+            //}
 
-            else {
-                submit_btn.classList.add("disabled");
-            }
+            //else {
+            //    submit_btn.classList.add("disabled");
+            //}
 
             //else {
             //    if (submit_btn.classList.contains("disabled")) {

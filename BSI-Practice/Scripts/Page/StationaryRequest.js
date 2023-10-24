@@ -58,6 +58,8 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     $scope.role_id = -1;
     $scope.request_status_id = 0;
 
+    $scope.isRequestValid = false;
+
     $scope.IsRequestor = false;
 
     $scope.rows = [{
@@ -67,7 +69,8 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         stock: '',
         request_qty: 0,
         reason: '',
-        WarningMessage: false
+        WarningMessage1: false,
+        WarningMessage2: false
     }];
     // End region
 
@@ -152,12 +155,85 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         console.log('stock = ', stock);
         console.log('request quantity = ', req_qty);
 
-        if (req_qty > stock) {
-            $scope.rows[index].WarningMessage = true;
+        // THIS CHECKS WHETHER THE REQUEST QUANTITY EXCEEDS THE STOCK
+        var validation1 = req_qty > stock;
+        // END REGION
+
+        // THIS CHECKS WHETHER THE REQUEST QUANTITY IS EMPTY OR NULL
+        var validation2 = ((req_qty == 0) || (req_qty == undefined) || (req_qty == null));
+        // END REGION
+
+        if (validation1) {
+            $scope.rows[index].WarningMessage1 = true;
+            document.getElementById("submit-btn").classList.add("disabled");
         }
 
+        else if (validation2) {
+            $scope.rows[index].WarningMessage2 = true;
+            document.getElementById("submit-btn").classList.add("disabled");
+        }
+
+
         else {
-            $scope.rows[index].WarningMessage = false;
+            $scope.rows[index].WarningMessage1 = false;
+            $scope.rows[index].WarningMessage2 = false;
+            var submit_btn = document.getElementById("submit-btn");
+            if (submit_btn.classList.contains("disabled")) {
+                submit_btn.classList.remove("disabled");
+            }
+        }
+    }
+    // END REGION
+
+    // THIS FUNCTION VALIDATES THE OVERALL REQUEST SUBMISSION
+    $scope.ValidateRequest = function () {
+        var stock;
+        var req_qty;
+        var item_name;
+        var submit_btn = document.getElementById("submit-btn");
+
+        for (var i = 0; i < $scope.rows.length; i++) {
+            stock = $scope.rows[i].stock;
+            req_qty = $scope.rows[i].request_qty;
+            item_name = $scope.rows[i].item_name;
+
+            if (req_qty > stock) {
+                alert("Permintaan Anda (baris ke " + (i + 1) + ") melebihi stok yang ada");
+                //submit_btn.classList.add("disabled");
+                $scope.isRequestValid = false;
+            }
+
+            if ((item_name == null) || (item_name == undefined)) {
+                alert("Mohon pilih barang yang akan diminta (baris " + (i + 1) + ")");
+                $scope.isRequestValid = false;
+            }
+
+            if ((req_qty == 0) || (req_qty == undefined) || (req_qty == undefined)) {
+                alert("Jumlah barang yang diminta tidak boleh kosong (baris " + (i + 1) + ")");
+                $scope.isRequestValid = false;
+                //submit_btn.classList.add("disabled");
+            }
+
+            else {
+                $scope.isRequestValid = true;
+            }
+
+            if ($scope.isRequestValid == true) {
+                if (submit_btn.classList.contains("disabled")) {
+                    submit_btn.classList.remove("disabled");
+                }
+                $scope.CekRequestDetails();
+            }
+
+            else {
+                submit_btn.classList.add("disabled");
+            }
+
+            //else {
+            //    if (submit_btn.classList.contains("disabled")) {
+            //        submit_btn.classList.remove("disabled");
+            //    }
+            //}
         }
     }
     // END REGION
@@ -170,6 +246,7 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         console.log("Request status id : ", $scope.request_status_id);
         $scope.GetCurrentLoginData();
         $scope.GetStationaryItems();
+        //$scope.ValidateRequest();
     }
 
     

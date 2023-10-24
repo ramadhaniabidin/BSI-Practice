@@ -102,6 +102,7 @@
                             <th style="width: 10%">Stock</th>
                             <th style="width: 10%">Request QTY</th>
                             <th style="width: 20%">Reason</th>
+                            <th style="width: 5%"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -116,11 +117,15 @@
                             <td><input type="text" ng-model="row.uom" readonly="readonly"/></td>
                             <td><input type="text" ng-model="row.stock" readonly="readonly"/></td>
                             <td>
-                                <p ng-show="row.WarningMessage" style="color:red; margin-bottom:0px;">Permintaan Anda melebihi stok</p>
+                                <p ng-show="row.WarningMessage1" style="color:red; margin-bottom:0px;">Permintaan Anda melebihi stok</p>
+                                <p ng-show="row.WarningMessage2" style="color:red; margin-bottom:0px;">Jumlah permintaan tidak boleh kosong</p>
                                 <input type="number" ng-model="row.request_qty" ng-change="CekRequestQty({{$index}})">
                             </td>
                             <td>
                                 <textarea ng-model="row.reason"></textarea>
+                            </td>
+                            <td>
+                                <i style="font-size:30px" class="bx bx-trash"></i>
                             </td>
                         </tr>
                     </tbody>
@@ -171,7 +176,7 @@
             <%--Buttons--%>
             <div class="row" style="padding-top:2.75%">
                 <div class="col" style="padding-left: 0px">
-                    <button id="submit-btn" class="btn btn-primary">Submit</button>
+                    <button id="submit-btn" class="btn btn-primary" ng-click="ValidateRequest()">Submit</button>
                     <button id="close-btn" class="btn btn-danger" ng-show="request_status_id == 5">Close</button>
                     <button id="approval-btn" class="btn btn-primary" ng-show="role_id != 0">Submit</button>
                     <button id="deliver-btn" class="btn btn-primary" ng-show="role_id != 0">Delivered</button>

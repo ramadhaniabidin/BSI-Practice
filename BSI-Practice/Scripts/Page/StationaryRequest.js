@@ -117,6 +117,12 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     };
     // End region
 
+    // This function enables user to delete a particular row in the request detail
+    $scope.DeleteRow = function (index) {
+        $scope.rows.splice(index, 1);
+    };
+    // End region
+
     // This function is for retrieving stationary items from database
     $scope.GetStationaryItems = function () {
         var promise = svc.svc_GetStationaryItems();

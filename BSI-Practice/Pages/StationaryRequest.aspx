@@ -125,7 +125,7 @@
                                 <textarea ng-model="row.reason"></textarea>
                             </td>
                             <td>
-                                <i style="font-size:30px" class="bx bx-trash"></i>
+                                <i style="font-size:30px; cursor: pointer" class="bx bx-trash" ng-click="DeleteRow($index)"></i>
                             </td>
                         </tr>
                     </tbody>

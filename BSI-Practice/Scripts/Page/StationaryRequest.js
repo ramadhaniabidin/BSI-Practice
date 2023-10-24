@@ -28,7 +28,19 @@ app.service("svc", function ($http) {
         });
 
         return response;
-    }
+    };
+
+    this.svc_GetApproverList = function () {
+        var response = $http({
+            method: 'POST',
+            url: '/WebServices/StationaryRequestWebService.asmx/GetApproverList',
+            data: {},
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json"
+        });
+
+        return response;
+    };
 
     this.svc_GetStockAndUnit = function (item_name) {
         var param = {
@@ -139,6 +151,23 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         });
     };
     // End region
+
+    // This function is for retrieving the approvers
+    $scope.GetApproverList = function () {
+        let promise = svc.svc_GetApproverList();
+        promise.then(function (response) {
+            let JsonData = JSON.parse(response.data.d);
+            let approver = JsonData.approver_name;
+            //console.log('Json Data : ', JsonData);
+            $scope.approver_list = [];
+            for (i of approver) {
+                if (!$scope.approver_list.includes(i)) {
+                    $scope.approver_list.push(i);
+                }
+            }
+        });
+    };
+    // End Region
 
     // This function is for retieving stock and unit of a particular item
     $scope.GetStockAndUnit = function (index) {
@@ -253,6 +282,7 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         console.log("Request status id : ", $scope.request_status_id);
         $scope.GetCurrentLoginData();
         $scope.GetStationaryItems();
+        $scope.GetApproverList();
         //$scope.ValidateRequest();
     }
 

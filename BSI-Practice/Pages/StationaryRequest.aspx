@@ -36,7 +36,7 @@
                             <label class="header-label">Folio No</label>
                         </div>
                         <div class="col-8">
-                            <input id="folio_no" class="header-input" type="text" runat="server" ng-model="folio_no"/>
+                            <input id="folio_no" class="header-input" type="text" runat="server" ng-model="folio_no" readonly="readonly"/>
                         </div>
                     </div>
                     <br />
@@ -45,7 +45,7 @@
                             <label class="header-label">Applicant</label>
                         </div>
                         <div class="col-8">
-                            <input id="applicant" class="header-input" type="text" runat="server" ng-model="applicant"/>
+                            <input id="applicant" class="header-input" type="text" runat="server" ng-model="applicant" readonly="readonly"/>
                         </div>
                     </div>
                     <br />
@@ -54,7 +54,7 @@
                             <label class="header-label">Department</label>
                         </div>
                         <div class="col-8">
-                            <input id="department" class="header-input" type="text" runat="server" ng-model="department"/>
+                            <input id="department" class="header-input" type="text" runat="server" ng-model="department" readonly="readonly"/>
                         </div>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                             <label class="header-label">Role</label>
                         </div>
                         <div class="col-8">
-                            <input id="role" class="header-input" type="text" runat="server" ng-model="role"/>
+                            <input id="role" class="header-input" type="text" runat="server" ng-model="role" readonly="readonly"/>
                         </div>
                     </div>
                     <br />
@@ -74,7 +74,7 @@
                             <label class="header-label">Employee ID</label>
                         </div>
                         <div class="col-8">
-                            <input id="employee_id" class="header-input" type="text" runat="server" ng-model="employee_id"/>
+                            <input id="employee_id" class="header-input" type="text" runat="server" ng-model="employee_id" readonly="readonly"/>
                         </div>
                     </div>
                     <br />
@@ -83,7 +83,7 @@
                             <label class="header-label">Extension</label>
                         </div>
                         <div class="col-8">
-                            <input id="extension" class="header-input" type="text" runat="server" ng-model="extension"/>
+                            <input id="extension" class="header-input" type="text" runat="server" ng-model="extension" readonly="readonly"/>
                         </div>
                     </div>
                 </div>
@@ -136,11 +136,11 @@
             </div>
             
             <%--Approval Action--%>
-            <div class="row" ng-show="role_id != 0">
-                <label class="myLabel">Approval Action</label>
+            <div class="row">
+                <label class="myLabel" ng-show="role_id != 0">Approval Action</label>
                 <hr class="separator"/>
                 <div class="col-6">
-                    <div class="row">
+                    <div class="row" ng-show="role_id != 0">
                         <div class="col-2">
                             <input type="radio" value="Approve" name="action"/>
                             <label for="approve">Approve</label>
@@ -151,19 +151,20 @@
                         </div>
                     </div>
                     <br />
-                    <div class="row">
+                    <div class="row" ng-show="role_id == 0">
                         <div class="col-3">
-                            <strong>Next Approval : </strong>
+                            <strong>Next Approver : </strong>
                         </div>
                         <div class="col-5">
                             <select> 
                                 <option value="" selected disabled style="text-align:center">== Choose The Next Approver ==</option>
+                                <option style="text-align:center;" ng-repeat="app in approver_list" value="{{app}}">{{app}}</option>
                             </select>
                         </div>
                     </div>
                     <br />
                 </div>
-                <div class="col-6">
+                <div class="col-6" ng-show="role_id != 0">
                     <div>
                         <label>Comments:</label>
                     </div>

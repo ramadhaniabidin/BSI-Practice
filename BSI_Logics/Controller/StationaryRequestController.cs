@@ -111,6 +111,34 @@ namespace BSI_Logics.Controller
                 throw ex;
             }
         }
+        public List<string> GetApproverList()
+        {
+            try
+            {
+                List<string> output = new List<string>();
+
+                db.OpenConnection(ref conn);
+                db.cmd.CommandText = "SELECT B.name FROM dbo.master_approver A LEFT JOIN dbo.master_roles B ON A.role_no = B.id";
+                db.cmd.CommandType = CommandType.Text;
+
+                reader = db.cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    output.Add(reader.GetString(0));
+                }
+
+                db.CloseDataReader(reader);
+                db.CloseConnection(ref conn);
+
+                return output;
+
+            }
+            catch(Exception ex)
+            {
+                db.CloseConnection(ref conn);
+                throw ex;
+            }
+        }
         public StockAndUnitModel GetStockAndUnit(string item_name)
         {
             try

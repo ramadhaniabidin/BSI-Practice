@@ -83,6 +83,33 @@ namespace BSI_Practice.WebServices
         }
 
         [WebMethod]
+        public string GetApproverList()
+        {
+            string returnedOutput = string.Empty;
+            try
+            {
+                var approver_name = controller.GetApproverList();
+                var responseBody = new
+                {
+                    Success = true,
+                    Message = "OK",
+                    approver_name
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            catch(Exception ex)
+            {
+                var responseBody = new
+                {
+                    Success = false,
+                    Message = $"Error : {ex.Message}"
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            return returnedOutput;
+        }
+
+        [WebMethod]
         public string GetStockAndUnit(string item_name)
         {
             var returnedOutput = "";

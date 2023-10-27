@@ -156,7 +156,7 @@
                             <strong>Next Approver : </strong>
                         </div>
                         <div class="col-5">
-                            <select> 
+                            <select ng-model="next_approver"> 
                                 <option value="" selected disabled style="text-align:center">== Choose The Next Approver ==</option>
                                 <option style="text-align:center;" ng-repeat="app in approver_list" value="{{app}}">{{app}}</option>
                             </select>
@@ -215,6 +215,7 @@
         </div>
         <br /><br />
         <button type="button" class="btn btn-primary" ng-click="CekRequestDetails()">Cek Details</button>
+        <button type="button" class="btn btn-primary" ng-click="CheckSubmittedData()">Cek Data</button>
     </form>
     
     

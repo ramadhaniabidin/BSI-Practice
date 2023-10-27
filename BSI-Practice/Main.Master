@@ -15,11 +15,21 @@
     <script src="/Scripts/bootstrap.bundle.min.js"></script>
     <script src="/Scripts/MainMaster.js"></script>
 
+<%--    <script src="../Scripts/AngularJS/angular.min.js"></script>
+    <script src="../Scripts/AngularJS/angular-filter.js"></script>
+    <script src="../Scripts/Page/StationaryRequest.js"></script>
+    <script src="../Scripts/BaseLogic.js"></script>--%>
+
 </head>
-<body id="body-pd">
+<body id="body-pd" ng-app="StationaryRequestPage" ng-controller="StatinoaryRequestController">
         <header class="header" id="header" style="background-color: black">
             <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle" style="color: white"></i> </div>
-            <div class="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt=""> </div>
+            
+            <span style="width: 100%; color: white; text-align: right; padding-right: 1%" ng-model="username">{{username}}</span>
+            <div class="header_img"> 
+                <img src="https://i.imgur.com/hczKIze.jpg" alt=""> 
+                
+            </div>
         </header>
         <div class="l-navbar" id="nav-bar" style="background-color: black">
             <nav class="nav">

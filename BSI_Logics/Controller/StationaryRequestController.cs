@@ -169,5 +169,56 @@ namespace BSI_Logics.Controller
                 throw ex;
             }
         }
+        public void SaveUpdate(StationaryRequestHeader header, List<StationaryRequestDetail> details)
+        {
+            try
+            {
+                int LastInsertedId = 0;
+                db.OpenConnection(ref conn);
+                db.cmd.CommandText = "SaveUpdateHeader";
+                db.cmd.CommandType = CommandType.StoredProcedure;
+                db.cmd.Parameters.Clear();
+                db.AddInParameter(db.cmd, "applicant", header.applicant);
+                db.AddInParameter(db.cmd, "created_by", header.created_by);
+                db.AddInParameter(db.cmd, "created_date", header.created_date);
+                db.AddInParameter(db.cmd, "current_approver_role", header.current_approver_role);
+                db.AddInParameter(db.cmd, "department", header.department);
+                db.AddInParameter(db.cmd, "employee_id", header.employee_id);
+                db.AddInParameter(db.cmd, "extension", header.extension);
+                db.AddInParameter(db.cmd, "folio_no", header.folio_no);
+                db.AddInParameter(db.cmd, "modified_by", header.modified_by);
+                db.AddInParameter(db.cmd, "modified_date", header.modified_date);
+                db.AddInParameter(db.cmd, "role", header.role);
+
+                reader = db.cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    LastInsertedId = reader.GetInt32(0);
+                }
+
+                db.CloseDataReader(reader);
+                for(int i = 0; i < details.Count; i++)
+                {
+                    db.cmd.CommandText = "SaveUpdateDetail";
+                    db.cmd.CommandType = CommandType.StoredProcedure;
+                    db.cmd.Parameters.Clear();
+                    db.AddInParameter(db.cmd, "header_id", LastInsertedId);
+                    db.AddInParameter(db.cmd, "no", (i + 1));
+                    db.AddInParameter(db.cmd, "item_name", details[i].item_name);
+                    db.AddInParameter(db.cmd, "uom", details[i].uom);
+                    db.AddInParameter(db.cmd, "stock", details[i].stock);
+                    db.AddInParameter(db.cmd, "request_qty", details[i].request_qty);
+                    db.AddInParameter(db.cmd, "reason", details[i].reason);
+
+                    db.cmd.ExecuteNonQuery();
+                }
+                db.CloseConnection(ref conn);
+            }
+            catch(Exception ex)
+            {
+                db.CloseConnection(ref conn);
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

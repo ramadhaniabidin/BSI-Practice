@@ -70,6 +70,8 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     $scope.role_id = -1;
     $scope.request_status_id = 0;
 
+    $scope.username = "";
+
     $scope.isRequestValid = false;
 
     $scope.IsRequestor = false;
@@ -84,6 +86,8 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         WarningMessage1: false,
         WarningMessage2: false
     }];
+
+    $scope.next_approver = "";
     // End region
 
     // This function is for retrieving user data
@@ -100,6 +104,7 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
             $scope.role = userData.role;
             $scope.employee_id = userData.id;
             $scope.role_id = userData.role_id;
+            $scope.username = $scope.applicant;
 
             if ($scope.role_id == 0) {
                 $scope.IsRequestor = true;
@@ -273,6 +278,41 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         }
     }
     // END REGION
+
+    // Get current date time function
+    $scope.getCurrentDateTime = function() {
+        var currentDate = new Date();
+        var year = currentDate.getFullYear();
+        var month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Adding 1 to the month and zero-padding
+        var day = String(currentDate.getDate()).padStart(2, '0'); // Zero-padding
+        var hours = String(currentDate.getHours()).padStart(2, '0'); // Zero-padding
+        var minutes = String(currentDate.getMinutes()).padStart(2, '0'); // Zero-padding
+        var seconds = String(currentDate.getSeconds()).padStart(2, '0'); // Zero-padding
+
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+    // end region
+
+    // This function shows the header and detail data that are about to be submitted
+    $scope.CheckSubmittedData = function () {
+        let header_data = {};
+        header_data.folio_no = $scope.folio_no;
+        header_data.applicant = $scope.applicant;
+        header_data.department = $scope.department
+        header_data.role = $scope.role;
+        header_data.role_id = $scope.role_id;
+        header_data.employee_id = $scope.employee_id;
+        header_data.extension = $scope.extension;
+        header_data.created_by = $scope.applicant;
+        header_data.created_date = $scope.getCurrentDateTime();
+        header_data.modified_by = $scope.applicant;
+        header_data.modified_date = $scope.getCurrentDateTime();
+        header_data.current_approver = $scope.next_approver;
+
+        console.log('Header data : ', header_data);
+        console.log('Detail data : ', $scope.rows);
+    }
+    // End region
 
     var folio_no = GetQueryString()["folio_no"]
     console.log('Folio No: ', folio_no);

@@ -1,4 +1,5 @@
 ﻿using BSI_Logics.Controller;
+using BSI_Logics.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -130,6 +131,31 @@ namespace BSI_Practice.WebServices
                 {
                     Success = false,
                     Message = $"Error: {ex.Message}",
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            return returnedOutput;
+        }
+
+        [WebMethod]
+        public string SaveUpdate(StationaryRequestHeader header, List<StationaryRequestDetail> details)
+        {
+            var returnedOutput = "";
+            try
+            {
+                var responseBody = new
+                {
+                    Success = true,
+                    Message = "OK"
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            catch(Exception ex)
+            {
+                var responseBody = new
+                {
+                    Success = false,
+                    Message = $"Error : {ex.Message}"
                 };
                 returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
             }

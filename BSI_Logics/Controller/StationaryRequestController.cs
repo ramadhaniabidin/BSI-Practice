@@ -174,7 +174,7 @@ namespace BSI_Logics.Controller
             try
             {
                 int LastInsertedId = 0;
-                db.OpenConnection(ref conn);
+                db.OpenConnection(ref conn, false);
                 db.cmd.CommandText = "SaveUpdateHeader";
                 db.cmd.CommandType = CommandType.StoredProcedure;
                 db.cmd.Parameters.Clear();
@@ -190,20 +190,24 @@ namespace BSI_Logics.Controller
                 db.AddInParameter(db.cmd, "modified_date", header.modified_date);
                 db.AddInParameter(db.cmd, "role", header.role);
 
+                //LastInsertedId = Convert.ToInt32(db.cmd.ExecuteScalar());
+                //Console.WriteLine(LastInsertedId);
                 reader = db.cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    LastInsertedId = reader.GetInt32(0);
+                    LastInsertedId = (int)reader["id"];
                 }
 
                 db.CloseDataReader(reader);
-                for(int i = 0; i < details.Count; i++)
+                db.CloseConnection(ref conn, false);
+                for (int i = 0; i < details.Count; i++)
                 {
+                    db.OpenConnection(ref conn, false);
                     db.cmd.CommandText = "SaveUpdateDetail";
                     db.cmd.CommandType = CommandType.StoredProcedure;
                     db.cmd.Parameters.Clear();
                     db.AddInParameter(db.cmd, "header_id", LastInsertedId);
-                    db.AddInParameter(db.cmd, "no", (i + 1));
+                    db.AddInParameter(db.cmd, "no", details[i].no);
                     db.AddInParameter(db.cmd, "item_name", details[i].item_name);
                     db.AddInParameter(db.cmd, "uom", details[i].uom);
                     db.AddInParameter(db.cmd, "stock", details[i].stock);
@@ -211,12 +215,14 @@ namespace BSI_Logics.Controller
                     db.AddInParameter(db.cmd, "reason", details[i].reason);
 
                     db.cmd.ExecuteNonQuery();
+                    db.CloseConnection(ref conn, false);
                 }
-                db.CloseConnection(ref conn);
+                //db.CloseConnection(ref conn);
+                //return "OK";
             }
             catch(Exception ex)
             {
-                db.CloseConnection(ref conn);
+                db.CloseConnection(ref conn, false);
                 throw new Exception(ex.Message);
             }
         }

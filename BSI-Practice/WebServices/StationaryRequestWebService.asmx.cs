@@ -140,9 +140,10 @@ namespace BSI_Practice.WebServices
         [WebMethod]
         public string SaveUpdate(StationaryRequestHeader header, List<StationaryRequestDetail> details)
         {
-            var returnedOutput = "";
+            var returnedOutput = "Bitch Ass";
             try
             {
+                controller.SaveUpdate(header, details);
                 var responseBody = new
                 {
                     Success = true,
@@ -150,7 +151,7 @@ namespace BSI_Practice.WebServices
                 };
                 returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var responseBody = new
                 {

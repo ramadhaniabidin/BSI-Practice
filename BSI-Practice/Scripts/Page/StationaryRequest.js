@@ -42,6 +42,25 @@ app.service("svc", function ($http) {
         return response;
     };
 
+    this.svc_SaveUpdate = function (header, details) {
+        var param = {
+            'header': header,
+            'details': details
+        };
+
+        console.log('Param : ', param);
+
+        var response = $http({
+            method: 'POST',
+            url: '/WebServices/StationaryRequestWebService.asmx/SaveUpdate',
+            data: JSON.stringify(param),
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json"
+        });
+
+        return response;
+    };
+
     this.svc_GetStockAndUnit = function (item_name) {
         var param = {
             'item_name': item_name
@@ -259,22 +278,46 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
                 $scope.isRequestValid = true;
             }
 
-            //if ($scope.isRequestValid == true) {
-            //    if (submit_btn.classList.contains("disabled")) {
-            //        submit_btn.classList.remove("disabled");
-            //    }
-            //    $scope.CekRequestDetails();
-            //}
+            if ($scope.isRequestValid == true) {
+                let header_data = {};
+                header_data.folio_no = $scope.folio_no;
+                header_data.applicant = $scope.applicant;
+                header_data.department = $scope.department
+                header_data.role = $scope.role;
+                header_data.role_id = $scope.role_id;
+                header_data.employee_id = $scope.employee_id;
+                header_data.extension = $scope.extension;
+                header_data.created_by = $scope.applicant;
+                header_data.created_date = $scope.getCurrentDateTime();
+                header_data.modified_by = $scope.applicant;
+                header_data.modified_date = $scope.getCurrentDateTime();
+                header_data.current_approver_role = $scope.next_approver;
 
-            //else {
-            //    submit_btn.classList.add("disabled");
-            //}
+                let detail_data = [];
+                for (var i = 0; i < $scope.rows.length; i++) {
+                    detail_data.push({
+                        item_name: $scope.rows[i].item_name,
+                        no: i + 1,
+                        uom: $scope.rows[i].uom,
+                        stock: $scope.rows[i].stock,
+                        request_qty: $scope.rows[i].request_qty,
+                        reason: $scope.rows[i].reason,
+                    });
+                }
 
-            //else {
-            //    if (submit_btn.classList.contains("disabled")) {
-            //        submit_btn.classList.remove("disabled");
-            //    }
-            //}
+
+                var promise = svc.svc_SaveUpdate(header_data, detail_data);
+                promise.then(function (response) {
+                    let jsonData = JSON.parse(response.data.d);
+                    console.log('Json Data : ', jsonData);
+                    if (jsonData.Success) {
+                        alert('Berhasil memasukkan data header dan detail');
+                    }
+                    else {
+                        alert(jsonData.Message);
+                    }
+                });
+            }
         }
     }
     // END REGION

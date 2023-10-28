@@ -39,7 +39,7 @@ app.controller('LoginController', function ($scope, svc) {
             if (response_data.Success) {
                 sessionStorage.setItem('LoginToken', response_data.LoginToken);
                 alert('Login Success with token: ' + response_data.LoginToken);
-                location.href = "/Pages/StationaryRequest";
+                location.href = "/Pages/Home";
             }
             else {
                 alert(response_data.Message);

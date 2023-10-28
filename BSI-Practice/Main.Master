@@ -13,6 +13,8 @@
 
     <script src="/Scripts/jquery-3.4.1.min.js"></script>
     <script src="/Scripts/bootstrap.bundle.min.js"></script>
+    <script src="../Scripts/AngularJS/angular.min.js"></script>
+    <script src="../Scripts/AngularJS/angular-filter.js"></script>
     <script src="/Scripts/MainMaster.js"></script>
 
 <%--    <script src="../Scripts/AngularJS/angular.min.js"></script>
@@ -21,7 +23,7 @@
     <script src="../Scripts/BaseLogic.js"></script>--%>
 
 </head>
-<body id="body-pd" ng-app="StationaryRequestPage" ng-controller="StatinoaryRequestController">
+<body id="body-pd" ng-app="MasterPage" ng-controller="MasterPageController">
         <header class="header" id="header" style="background-color: black">
             <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle" style="color: white"></i> </div>
             
@@ -39,17 +41,17 @@
                         <span class="nav_logo-name">BBBootstrap</span>
                     </a>
                     <div class="nav_list"> 
-                        <a href="#" class="nav_link active"> 
+                        <a href="/Pages/Home" class="nav_link active"> 
                             <i class='bx bx-grid-alt nav_icon'></i> 
-                            <span class="nav_name">Dashboard</span> 
+                            <span class="nav_name">Home</span> 
                         </a> 
                         <a href="#" class="nav_link"> 
                             <i class='bx bx-user nav_icon'></i> 
                             <span class="nav_name">Users</span> 
                         </a> 
-                        <a href="#" class="nav_link"> 
+                        <a href="/Pages/StationaryRequest" class="nav_link"> 
                             <i class='bx bx-message-square-detail nav_icon'></i> 
-                            <span class="nav_name">Messages</span> 
+                            <span class="nav_name">Stationary Request</span> 
                         </a> 
                         <a href="#" class="nav_link"> 
                             <i class='bx bx-bookmark nav_icon'></i>
@@ -64,7 +66,7 @@
                             <span class="nav_name">Stats</span> 
                         </a> 
                     </div>
-                </div> <a href="#" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
+                </div> <a href="#" class="nav_link" ng-click="SignOut()"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
             </nav>
         </div>
         <div class="height-100 bg-light">

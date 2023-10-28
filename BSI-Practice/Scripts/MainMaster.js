@@ -36,3 +36,47 @@
 
     // Your code to run since DOM is loaded and ready
 });
+
+var app = angular.module("MasterPage", []);
+
+app.service("svc", function ($http) {
+    this.svc_GetCurrentLoginData = function (loginToken) {
+        var param = {
+            'loginToken': loginToken
+        };
+
+        var response = $http({
+            method: 'POST',
+            url: '/WebServices/StationaryRequestWebService.asmx/GetCurrentLoginData',
+            data: JSON.stringify(param),
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json"
+        });
+        console.log(param);
+
+        return response;
+    }
+});
+
+app.controller("MasterPageController", function ($scope, svc) {
+    // Variable declaration
+    $scope.username = "";
+
+    $scope.GetCurrentLoginData = function () {
+        var token = sessionStorage.getItem('LoginToken');
+        var promise = svc.svc_GetCurrentLoginData(token);
+        promise.then(function (response) {
+            var response_data = JSON.parse(response.data.d);
+            var userData = response_data.currentLoginData;
+            $scope.username = userData.name;
+        });
+    };
+
+    $scope.SignOut = function () {
+        sessionStorage.removeItem('LoginToken');
+        location.href = "/Pages/Login";
+    };
+
+    $scope.GetCurrentLoginData();
+});
+

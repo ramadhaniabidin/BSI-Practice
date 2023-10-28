@@ -155,6 +155,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\boxicons.min.css" />
     <Content Include="Images\logo.png" />
+    <Content Include="Pages\Home.aspx" />
     <Content Include="Pages\StationaryRequest.aspx" />
     <Content Include="Scripts\BaseLogic.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -259,6 +260,13 @@
     </Compile>
     <Compile Include="Main.Master.designer.cs">
       <DependentUpon>Main.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Home.aspx.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Home.aspx.designer.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>

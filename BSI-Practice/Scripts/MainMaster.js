@@ -60,4 +60,9 @@ function GetCurrentLoginData(loginToken) {
     });
 }
 
+function SignOut() {
+    sessionStorage.removeItem('LoginToken');
+    location.href = "/Pages/Login";
+}
+
 GetCurrentLoginData(sessionStorage.getItem('LoginToken'));

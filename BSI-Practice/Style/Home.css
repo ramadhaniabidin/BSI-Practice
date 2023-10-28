@@ -1,0 +1,18 @@
+﻿.table-head{
+    border: 1px solid black;
+    background-color: blue;
+}
+
+.table-head th{
+    border: 1px solid black;
+    text-align: center;
+}
+
+.table-body {
+    border: 1px solid black;
+}
+
+.table-body td{
+    text-align: center;
+    border: 1px solid black;
+}

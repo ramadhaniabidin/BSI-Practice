@@ -162,5 +162,34 @@ namespace BSI_Practice.WebServices
             }
             return returnedOutput;
         }
+
+        [WebMethod]
+        public string GetRequestData(string folio_no)
+        {
+            var returnedOutput = "";
+            try
+            {
+                var header = controller.GetRequestHeader(folio_no);
+                var details = controller.GetRequestDetails(folio_no);
+                var responseBody = new
+                {
+                    Success = true,
+                    Message = "OK",
+                    header, 
+                    details
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            catch(Exception ex)
+            {
+                var responseBody = new
+                {
+                    Success = false,
+                    Message = $"Error : {ex.Message}"
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            return returnedOutput;
+        }
     }
 }

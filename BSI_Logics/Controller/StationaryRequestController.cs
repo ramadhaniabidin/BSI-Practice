@@ -233,7 +233,7 @@ namespace BSI_Logics.Controller
                 string query = $"SELECT * FROM stationary_request_header WHERE folio_no = '{folio_no}'";
                 db.OpenConnection(ref conn, false);
                 db.cmd.CommandText = query;
-                db.cmd.CommandType = CommandType.StoredProcedure;
+                db.cmd.CommandType = CommandType.Text;
 
                 reader = db.cmd.ExecuteReader();
                 dt.Load(reader);
@@ -249,6 +249,27 @@ namespace BSI_Logics.Controller
                 {
                     return new StationaryRequestHeader();
                 }
+            }
+            catch(Exception ex)
+            {
+                db.CloseConnection(ref conn, false);
+                throw ex;
+            }
+        }
+        public List<StationaryRequestDetail> GetRequestDetails(string folio_no)
+        {
+            try
+            {
+                string query = $"DECLARE @header_id INT = (SELECT id FROM stationary_request_header WHERE folio_no = '{folio_no}')\n" +
+                    $"SELECT * FROM stationary_request_detail WHERE header_id = @header_id";
+                db.OpenConnection(ref conn, false);
+                db.cmd.CommandText = query;
+                db.cmd.CommandType = CommandType.Text;
+
+                reader = db.cmd.ExecuteReader();
+                dt.Load(reader);
+
+                return Common.Utility.ConvertDataTableToList<StationaryRequestDetail>(dt);
             }
             catch(Exception ex)
             {

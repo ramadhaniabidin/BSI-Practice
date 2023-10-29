@@ -75,7 +75,9 @@ app.service("svc", function ($http) {
         });
 
         return response;
-    }
+    };
+
+    
 });
 
 app.controller("StatinoaryRequestController", function ($scope, svc) {

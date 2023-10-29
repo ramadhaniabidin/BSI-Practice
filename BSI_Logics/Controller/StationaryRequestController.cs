@@ -226,5 +226,35 @@ namespace BSI_Logics.Controller
                 throw new Exception(ex.Message);
             }
         }
+        public StationaryRequestHeader GetRequestHeader(string folio_no)
+        {
+            try
+            {
+                string query = $"SELECT * FROM stationary_request_header WHERE folio_no = '{folio_no}'";
+                db.OpenConnection(ref conn, false);
+                db.cmd.CommandText = query;
+                db.cmd.CommandType = CommandType.StoredProcedure;
+
+                reader = db.cmd.ExecuteReader();
+                dt.Load(reader);
+
+                db.CloseConnection(ref conn, false);
+                db.CloseDataReader(reader);
+
+                if(dt.Rows.Count > 0)
+                {
+                    return Common.Utility.ConvertDataTableToList<StationaryRequestHeader>(dt)[0];
+                }
+                else
+                {
+                    return new StationaryRequestHeader();
+                }
+            }
+            catch(Exception ex)
+            {
+                db.CloseConnection(ref conn, false);
+                throw ex;
+            }
+        }
     }
 }

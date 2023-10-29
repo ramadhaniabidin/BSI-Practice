@@ -133,6 +133,18 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     };
     // End region
 
+    // This function get the current login role id when folio_no is not null
+    $scope.CurrentRoleId_WithFolioNo = function () {
+        var token = sessionStorage.getItem('LoginToken');
+        var promise = svc.svc_GetCurrentLoginData(token);
+        promise.then(function (response) {
+            var jsonData = JSON.parse(response.data.d);
+            var userData = jsonData.currentLoginData;
+            $scope.role_id = userData.role_id;
+        });
+    }
+    // End region
+
     // This function is for checking the request detail table
     $scope.CekRequestDetails = function () {
         console.log('Request Detail: ', $scope.rows);
@@ -368,7 +380,9 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         $scope.GetApproverList();
         //$scope.ValidateRequest();
     }
-
+    else {
+        $scope.CurrentRoleId_WithFolioNo();
+    }
     
     
 });

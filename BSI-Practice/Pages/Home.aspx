@@ -19,13 +19,13 @@
                 </tr>
             </thead>
             <tbody class="table-body">
-                <tr>
-                    <td>Satu</td>
-                    <td>Dua</td>
-                    <td>Dua</td>
-                    <td>Dua</td>
-                    <td>Dua</td>
-                    <td>Dua</td>
+                <tr ng-repeat="req in RequestList">
+                    <td>{{$index + 1}}</td>
+                    <td><a href="/Pages/StationaryRequest?folio_no={{req.folio_no}}">{{req.folio_no}}</a></td>
+                    <td>{{req.status_name}}</td>
+                    <td>{{req.created_by}}</td>
+                    <td>{{req.created_date}}</td>
+                    <td>{{req.approver_name}}</td>
                 </tr>
             </tbody>
         </table>

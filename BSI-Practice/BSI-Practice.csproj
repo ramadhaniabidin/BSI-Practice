@@ -177,9 +177,12 @@
     <Content Include="Scripts\AngularJS\angular-route.min.js.map" />
     <Content Include="Scripts\AngularJS\angular.min.js.map" />
     <Content Include="Scripts\MainMaster.js" />
+    <Content Include="Scripts\Page\Home.js" />
     <Content Include="Scripts\Page\StationaryRequest.js" />
+    <Content Include="Style\Home.css" />
     <Content Include="Style\MainMaster.css" />
     <Content Include="Style\StationaryRequest.css" />
+    <Content Include="WebServices\HomeWebService.asmx" />
     <Content Include="WebServices\LoginWebService.asmx" />
     <Content Include="Main.Master" />
     <Content Include="WebServices\StationaryRequestWebService.asmx" />
@@ -303,6 +306,10 @@
     </Compile>
     <Compile Include="ViewSwitcher.ascx.designer.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="WebServices\HomeWebService.asmx.cs">
+      <DependentUpon>HomeWebService.asmx</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="WebServices\LoginWebService.asmx.cs">
       <DependentUpon>LoginWebService.asmx</DependentUpon>

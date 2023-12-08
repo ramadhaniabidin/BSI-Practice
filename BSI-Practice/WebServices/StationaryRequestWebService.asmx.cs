@@ -169,18 +169,73 @@ namespace BSI_Practice.WebServices
             var returnedOutput = "";
             try
             {
+                var header = controller.GetHeaderData(folio_no);
+                var details = controller.GetDetailData(folio_no);
+                Console.WriteLine("Bla bla");
+                var responseBody = new
+                {
+                    Success = true,
+                    Message = "OK",
+                    //_header = header,
+                    _details = details
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            catch(Exception ex)
+            {
+                var responseBody = new
+                {
+                    Success = false,
+                    Message = $"Error : {ex.Message}"
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            return returnedOutput;
+        }
+
+        [WebMethod]
+        public string GetHeaderData(string folio_no)
+        {
+            var returnedOutput = "";
+            try
+            {
                 var header = controller.GetRequestHeader(folio_no);
+                var responseBody = new
+                {
+                    Success = true,
+                    Message = "OK",
+                    Data = header
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            catch(Exception ex)
+            {
+                var responseBody = new
+                {
+                    Success = false,
+                    Message = $"Error : {ex.Message}"
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            return returnedOutput;
+        }
+
+        [WebMethod]
+        public string GetDetailsData(string folio_no)
+        {
+            var returnedOutput = "";
+            try
+            {
                 var details = controller.GetRequestDetails(folio_no);
                 var responseBody = new
                 {
                     Success = true,
                     Message = "OK",
-                    header, 
-                    details
+                    Data = details
                 };
                 returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var responseBody = new
                 {

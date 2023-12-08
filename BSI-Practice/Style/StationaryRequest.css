@@ -9,6 +9,10 @@
     opacity: 0.7;
 }
 
+.readonly {
+    pointer-events: none;
+}
+
 .button-addRow {
     caption-side: bottom;
     cursor:pointer;

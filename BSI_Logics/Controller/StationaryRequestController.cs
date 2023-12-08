@@ -230,15 +230,81 @@ namespace BSI_Logics.Controller
         {
             try
             {
-                string query = $"SELECT * FROM stationary_request_header WHERE folio_no = '{folio_no}'";
-                db.OpenConnection(ref conn, false);
+                string query = $"SELECT id, folio_no, applicant, department, role, employee_id, employee_name, extension, status_id,\n" +
+                    $"remarks, created_by, created_date, modified_by, modified_date, approver_target_role_id" +
+                    $" FROM stationary_request_header WHERE folio_no = '{folio_no}'";
+                db.OpenConnection(ref conn, true);
                 db.cmd.CommandText = query;
                 db.cmd.CommandType = CommandType.Text;
 
                 reader = db.cmd.ExecuteReader();
                 dt.Load(reader);
 
-                db.CloseConnection(ref conn, false);
+                db.CloseConnection(ref conn, true);
+                db.CloseDataReader(reader);
+
+                StationaryRequestHeader output = new StationaryRequestHeader();
+
+                if(dt.Rows.Count > 0)
+                {
+                    output = Common.Utility.ConvertDataTableToList<StationaryRequestHeader>(dt)[0];
+                    Console.WriteLine(output);
+                    //return Common.Utility.ConvertDataTableToList<StationaryRequestHeader>(dt)[0];
+                    return output;
+                }
+                else
+                {
+                    output = new StationaryRequestHeader();
+                    //return new StationaryRequestHeader();
+                    return output;
+                }
+            }
+            catch(Exception ex)
+            {
+                db.CloseConnection(ref conn, true);
+                throw ex;
+            }
+        }
+        public List<StationaryRequestDetail> GetRequestDetails(string folio_no)
+        {
+            try
+            {
+                string query = $"DECLARE @header_id INT = (SELECT id FROM stationary_request_header WHERE folio_no = '{folio_no}')\n" +
+                    $"SELECT * FROM stationary_request_detail WHERE header_id = @header_id";
+                db.OpenConnection(ref conn, true);
+                db.cmd.CommandText = query;
+                db.cmd.CommandType = CommandType.Text;
+
+                reader = db.cmd.ExecuteReader();
+                dt.Load(reader);
+
+                //var output = Common.Utility.ConvertDataTableToList<StationaryRequestDetail>(dt);
+                db.CloseConnection(ref conn, true);
+                db.CloseDataReader(reader);
+
+                return Common.Utility.ConvertDataTableToList<StationaryRequestDetail>(dt);
+                //return output;
+            }
+            catch(Exception ex)
+            {
+                db.CloseConnection(ref conn, true);
+                throw ex;
+            }
+        }
+        public StationaryRequestHeader GetHeaderData(string folio_no)
+        {
+            try
+            {
+                db.OpenConnection(ref conn);
+                db.cmd.CommandText = "dbo.GetHeaderData";
+                db.cmd.CommandType = CommandType.StoredProcedure;
+                db.cmd.Parameters.Clear();
+                db.AddInParameter(db.cmd, "folio_no", folio_no);
+
+                reader = db.cmd.ExecuteReader();
+                dt.Load(reader);
+
+                db.CloseConnection(ref conn);
                 db.CloseDataReader(reader);
 
                 if(dt.Rows.Count > 0)
@@ -252,28 +318,31 @@ namespace BSI_Logics.Controller
             }
             catch(Exception ex)
             {
-                db.CloseConnection(ref conn, false);
+                db.CloseConnection(ref conn);
                 throw ex;
             }
         }
-        public List<StationaryRequestDetail> GetRequestDetails(string folio_no)
+        public List<StationaryRequestDetail> GetDetailData(string folio_no)
         {
             try
             {
-                string query = $"DECLARE @header_id INT = (SELECT id FROM stationary_request_header WHERE folio_no = '{folio_no}')\n" +
-                    $"SELECT * FROM stationary_request_detail WHERE header_id = @header_id";
-                db.OpenConnection(ref conn, false);
-                db.cmd.CommandText = query;
-                db.cmd.CommandType = CommandType.Text;
+                db.OpenConnection(ref conn);
+                db.cmd.CommandText = "dbo.GetDetailData";
+                db.cmd.CommandType = CommandType.StoredProcedure;
+                db.cmd.Parameters.Clear();
+                db.AddInParameter(db.cmd, "folio_no", folio_no);
 
                 reader = db.cmd.ExecuteReader();
                 dt.Load(reader);
+
+                db.CloseConnection(ref conn);
+                db.CloseDataReader(reader);
 
                 return Common.Utility.ConvertDataTableToList<StationaryRequestDetail>(dt);
             }
             catch(Exception ex)
             {
-                db.CloseConnection(ref conn, false);
+                db.CloseConnection(ref conn);
                 throw ex;
             }
         }

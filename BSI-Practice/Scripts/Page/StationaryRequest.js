@@ -77,7 +77,47 @@ app.service("svc", function ($http) {
         return response;
     };
 
-    
+    this.svc_GetRequestData = function (folio_no) {
+        var param = {
+            'folio_no': folio_no
+        };
+        var response = $http({
+            method: 'POST',
+            url: '/WebServices/StationaryRequestWebService.asmx/GetRequestData',
+            data: JSON.stringify(param),
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json"
+        });
+        return response;
+    };
+
+    this.svc_GetHeaderData = function (folio_no) {
+        let param = {
+            'folio_no': folio_no
+        };
+        let response = $http({
+            method: 'POST',
+            url: '/WebServices/StationaryRequestWebService.asmx/GetHeaderData',
+            data: JSON.stringify(param),
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json"
+        });
+        return response;
+    };
+
+    this.svc_GetDetailsData = function (folio_no) {
+        let param = {
+            'folio_no': folio_no
+        };
+        let response = $http({
+            method: 'POST',
+            url: '/WebServices/StationaryRequestWebService.asmx/GetDetailsData',
+            data: JSON.stringify(param),
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json"
+        });
+        return response;
+    };
 });
 
 app.controller("StatinoaryRequestController", function ($scope, svc) {
@@ -371,7 +411,70 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     }
     // End region
 
+    // This function retrieves header and details by folio_no
+    $scope.GetRequestData = function (folio_no) {
+        var promise = svc.svc_GetRequestData(folio_no);
+        promise.then(function (response) {
+            var jsonData = JSON.parse(response.data.d);
+            console.log('JSON Data : ', jsonData);
+        });
+
+        //let header_promise = svc.svc_GetHeaderData(folio_no);
+        //header_promise.then(function (response) {
+        //    let jsonHeader = JSON.parse(response.data.d);
+        //    console.log("JSON Header = ", jsonHeader);
+
+        //    let detail_promise = svc.svc_GetDetailsData(folio_no);
+        //    detail_promise.then(function (response1) {
+        //        let jsonDetail = JSON.parse(response1.data.d);
+        //        console.log("JSON Details = ", jsonDetail);
+        //    });
+        //});
+    };
+    // End region
+
+    $scope.GetRequestHeader = function (folio_no) {
+        let promise = svc.svc_GetHeaderData(folio_no);
+        promise.then(function (response) {
+            let jsonData = JSON.parse(response.data.d);
+            console.log('Header data = ', jsonData.Data);
+            let header_data = jsonData.Data;
+            $scope.folio_no = header_data.folio_no;
+            $scope.applicant = header_data.applicant;
+            $scope.department = header_data.department;
+            $scope.role = header_data.role;
+            $scope.employee_id = header_data.employee_id;
+            $scope.extension = header_data.extension;
+        });
+    };
+
+    $scope.GetRequestDetail = function (folio_no) {
+        let promise = svc.svc_GetDetailsData(folio_no);
+        promise.then(function (response) {
+            let jsonData = JSON.parse(response.data.d);
+            let detail_data = jsonData.Data;
+            /*$scope.rows = detail_data;*/
+            console.log('Detail data = ', detail_data);
+            let propToCopy = ['item_name', 'no', 'uom', 'stock', 'request_qty', 'reason'];
+            $scope.rows.shift();
+            for (item of detail_data) {
+                let newRow = {};
+                for (prop of propToCopy) {
+                    //console.log((prop + " = " + item[prop]));
+                    newRow[prop] = item[prop];
+                }
+                newRow.WarningMessage1 = false;
+                newRow.WarningMessage2 = false;
+
+                $scope.rows.push(newRow);
+                //$(".item-names").addClass("readonly");
+            }
+            
+        });
+    }
+
     var folio_no = GetQueryString()["folio_no"]
+    $scope.folio_no = folio_no;
     console.log('Folio No: ', folio_no);
 
     if ((folio_no === null) || (folio_no === undefined) || (folio_no === '')) {
@@ -384,6 +487,10 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     }
     else {
         $scope.CurrentRoleId_WithFolioNo();
+        $scope.GetStationaryItems();
+        $scope.GetRequestHeader(folio_no);
+        $scope.GetRequestDetail(folio_no);
+        $("#request_detail").addClass("readonly");
     }
     
     

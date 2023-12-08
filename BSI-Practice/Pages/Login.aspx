@@ -53,7 +53,7 @@
                                                 </div>
                                             </div>
                                             <button type="button" class="btn btn-danger btn-user btn-block" ng-click="AlertLoginButton()">Alert Login Check</button>
-                                            <button type="button" class="btn btn-primary btn-user btn-block" ng-click="LoginAction()">Login</button>
+                                            <button type="button" class="btn btn-primary btn-user btn-block" ng-click="LoginAction()" ng-disabled="login_email == '' || login_email == undefined || login_email == null">Login</button>
                                         </div>
                                     </div>
                                 </div>

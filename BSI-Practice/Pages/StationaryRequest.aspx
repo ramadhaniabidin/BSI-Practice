@@ -1,7 +1,7 @@
 ﻿ <%@ Page Title="" Language="C#" MasterPageFile="~/Main.Master" AutoEventWireup="true" CodeBehind="StationaryRequest.aspx.cs" Inherits="BSI_Practice.Pages.StationaryRequest" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <link rel="stylesheet" href="../Style/StationaryRequest.css"/>
-
+    <script src="../Scripts/jquery-3.4.1.min.js"></script>
     <script src="../Scripts/AngularJS/angular.min.js"></script>
     <script src="../Scripts/AngularJS/angular-filter.js"></script>
     <script src="../Scripts/Page/StationaryRequest.js"></script>
@@ -93,7 +93,7 @@
             <div class="row">
                 <label class="myLabel-detail">Request Detail</label>
                 <hr class="separator"/>
-                <table class="myTable">
+                <table class="myTable" id="request_detail">
                     <thead>
                         <tr>
                             <th style="width: 3%">No.</th>
@@ -109,7 +109,7 @@
                         <tr ng-repeat="row in rows">
                             <td><p style="text-align:center">{{ $index + 1 }}</p></td>
                             <td>
-                                <select ng-model="row.item_name" ng-change="GetStockAndUnit({{$index}})">
+                                <select ng-model="row.item_name" ng-change="GetStockAndUnit({{$index}})" class="item-names">
                                     <option value="" selected disabled style="text-align:center;"> == Select Stationary Item == </option>
                                     <option style="text-align:center;" ng-repeat="item in itemNames" value="{{item}}">{{item}}</option>
                                 </select>
@@ -151,7 +151,7 @@
                         </div>
                     </div>
                     <br />
-                    <div class="row" ng-show="role_id == 0">
+                    <div class="row" ng-show="((role_id == 0) && (folio_no == 'Generated On Submit'))">
                         <div class="col-3">
                             <strong>Next Approver : </strong>
                         </div>

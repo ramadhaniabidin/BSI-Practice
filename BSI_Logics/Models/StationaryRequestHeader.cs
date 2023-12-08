@@ -23,6 +23,6 @@ namespace BSI_Logics.Models
         public string modified_by { get; set; }
         public DateTime modified_date { get; set; }
         public int approver_target_role_id { get; set; }
-        public string current_approver_role { get; set; }
+        public int current_approver_role { get; set; }
     }
 }

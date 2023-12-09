@@ -246,5 +246,32 @@ namespace BSI_Practice.WebServices
             }
             return returnedOutput;
         }
+
+        [WebMethod]
+        public string GetCurrentStatusID(string folio_no)
+        {
+            var returnedOutput = "";
+            try
+            {
+                int status_id = controller.GetCurrentStatusID(folio_no);
+                var responseBody = new
+                {
+                    Success = true,
+                    Message = "OK",
+                    status_id
+                };
+                returnedOutput =  new JavaScriptSerializer().Serialize(responseBody);
+            }
+            catch(Exception ex)
+            {
+                var responseBody = new
+                {
+                    Success = false,
+                    Message = $"Error = {ex.Message}",
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            return returnedOutput;
+        }
     }
 }

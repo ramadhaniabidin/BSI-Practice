@@ -190,8 +190,6 @@ namespace BSI_Logics.Controller
                 db.AddInParameter(db.cmd, "modified_date", header.modified_date);
                 db.AddInParameter(db.cmd, "role", header.role);
 
-                //LastInsertedId = Convert.ToInt32(db.cmd.ExecuteScalar());
-                //Console.WriteLine(LastInsertedId);
                 reader = db.cmd.ExecuteReader();
                 while (reader.Read())
                 {
@@ -217,8 +215,6 @@ namespace BSI_Logics.Controller
                     db.cmd.ExecuteNonQuery();
                     db.CloseConnection(ref conn, false);
                 }
-                //db.CloseConnection(ref conn);
-                //return "OK";
             }
             catch(Exception ex)
             {
@@ -339,6 +335,29 @@ namespace BSI_Logics.Controller
                 db.CloseDataReader(reader);
 
                 return Common.Utility.ConvertDataTableToList<StationaryRequestDetail>(dt);
+            }
+            catch(Exception ex)
+            {
+                db.CloseConnection(ref conn);
+                throw ex;
+            }
+        }
+        public int GetCurrentStatusID(string folio_no)
+        {
+            int status_id = 0;
+            try
+            {
+                db.OpenConnection(ref conn);
+                db.cmd.CommandText = $"SELECT status_id FROM dbo.stationary_request_header WHERE folio_no = '{folio_no}'";
+                db.cmd.CommandType = CommandType.Text;
+                reader = db.cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    status_id = reader.GetInt32(0);
+                }
+                db.CloseConnection(ref conn);
+                db.CloseDataReader(reader);
+                return status_id;
             }
             catch(Exception ex)
             {

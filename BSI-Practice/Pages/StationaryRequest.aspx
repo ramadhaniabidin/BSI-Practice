@@ -177,7 +177,7 @@
             <%--Buttons--%>
             <div class="row" style="padding-top:2.75%">
                 <div class="col" style="padding-left: 0px">
-                    <button id="submit-btn" class="btn btn-primary" ng-click="ValidateRequest()">Submit</button>
+                    <button id="submit-btn" class="btn btn-primary" ng-click="ValidateRequest()" ng-show="request_status_id == 0">Submit</button>
                     <button id="close-btn" class="btn btn-danger" ng-show="request_status_id == 5">Close</button>
                     <button id="approval-btn" class="btn btn-primary" ng-show="role_id != 0">Submit</button>
                     <button id="deliver-btn" class="btn btn-primary" ng-show="role_id != 0">Delivered</button>

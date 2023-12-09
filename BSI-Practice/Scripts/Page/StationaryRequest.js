@@ -118,6 +118,20 @@ app.service("svc", function ($http) {
         });
         return response;
     };
+
+    this.svc_GetStatusID = function (folio_no) {
+        let param = {
+            'folio_no': folio_no
+        };
+        let response = $http({
+            method: 'POST',
+            url: '/WebServices/StationaryRequestWebService.asmx/GetCurrentStatusID',
+            data: JSON.stringify(param),
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json"
+        });
+        return response;
+    };
 });
 
 app.controller("StatinoaryRequestController", function ($scope, svc) {
@@ -453,25 +467,29 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         promise.then(function (response) {
             let jsonData = JSON.parse(response.data.d);
             let detail_data = jsonData.Data;
-            /*$scope.rows = detail_data;*/
             console.log('Detail data = ', detail_data);
             let propToCopy = ['item_name', 'no', 'uom', 'stock', 'request_qty', 'reason'];
             $scope.rows.shift();
             for (item of detail_data) {
                 let newRow = {};
                 for (prop of propToCopy) {
-                    //console.log((prop + " = " + item[prop]));
                     newRow[prop] = item[prop];
                 }
                 newRow.WarningMessage1 = false;
                 newRow.WarningMessage2 = false;
-
                 $scope.rows.push(newRow);
-                //$(".item-names").addClass("readonly");
             }
-            
         });
-    }
+    };
+
+    $scope.GetStatusID = function (folio_no) {
+        let promise = svc.svc_GetStatusID(folio_no);
+        promise.then(function (response) {
+            let jsonData = JSON.parse(response.data.d);
+            $scope.request_status_id = jsonData.status_id;
+            //console.log("JSON Data = ", jsonData);
+        });
+    };
 
     var folio_no = GetQueryString()["folio_no"]
     $scope.folio_no = folio_no;
@@ -483,9 +501,10 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         $scope.GetCurrentLoginData();
         $scope.GetStationaryItems();
         $scope.GetApproverList();
-        //$scope.ValidateRequest();
     }
     else {
+        $scope.GetStatusID(folio_no);
+        console.log("Request status id : ", $scope.request_status_id);
         $scope.CurrentRoleId_WithFolioNo();
         $scope.GetStationaryItems();
         $scope.GetRequestHeader(folio_no);

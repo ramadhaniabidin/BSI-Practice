@@ -164,6 +164,32 @@ namespace BSI_Practice.WebServices
         }
 
         [WebMethod]
+        public string InsertWorkflowHistory(int header_id)
+        {
+            var returnedOutput = "";
+            try
+            {
+                controller.InsertWorkflowHistoryLog(header_id);
+                var responseBody = new
+                {
+                    Success = true,
+                    Message = "OK"
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            catch(Exception ex)
+            {
+                var responseBody = new
+                {
+                    Success = false,
+                    Message = $"Error = {ex.Message}"
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            return returnedOutput;
+        }
+
+        [WebMethod]
         public string GetRequestData(string folio_no)
         {
             var returnedOutput = "";

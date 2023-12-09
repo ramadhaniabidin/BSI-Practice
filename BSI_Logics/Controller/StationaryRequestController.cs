@@ -118,7 +118,7 @@ namespace BSI_Logics.Controller
                 List<string> output = new List<string>();
 
                 db.OpenConnection(ref conn);
-                db.cmd.CommandText = "SELECT B.name FROM dbo.master_approver A LEFT JOIN dbo.master_roles B ON A.role_no = B.id";
+                db.cmd.CommandText = "SELECT B.name FROM dbo.master_approver A LEFT JOIN dbo.master_roles B ON A.order_no = B.id";
                 db.cmd.CommandType = CommandType.Text;
 
                 reader = db.cmd.ExecuteReader();
@@ -215,11 +215,32 @@ namespace BSI_Logics.Controller
                     db.cmd.ExecuteNonQuery();
                     db.CloseConnection(ref conn, false);
                 }
+                //InsertWorkflowHistoryLog(LastInsertedId);
             }
             catch(Exception ex)
             {
                 db.CloseConnection(ref conn, false);
                 throw new Exception(ex.Message);
+            }
+        }
+        public void InsertWorkflowHistoryLog(int header_id)
+        {
+            try
+            {
+                db.OpenConnection(ref conn, false);
+                db.cmd.CommandText = "INSERT INTO dbo.workflow_history_log\n" +
+                    "(folio_no, pic_name, comment, action_name, action_date)\n" +
+                    "SELECT folio_no folio_no, applicant pic_name, '' comment, 'First Submit' action_name, GETDATE() action_date\n" +
+                    $"FROM dbo.stationary_request_header WHERE id = {header_id}";
+                db.cmd.CommandType = CommandType.Text;
+                db.cmd.ExecuteNonQuery();
+
+                db.CloseConnection(ref conn, false);
+            }
+            catch(Exception ex)
+            {
+                db.OpenConnection(ref conn, false);
+                throw ex;
             }
         }
         public StationaryRequestHeader GetRequestHeader(string folio_no)

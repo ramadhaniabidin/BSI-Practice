@@ -151,7 +151,7 @@
                         </div>
                     </div>
                     <br />
-                    <div class="row" ng-show="((role_id == 0) && (folio_no == 'Generated On Submit'))">
+                    <div class="row" ng-show="IsRequestor || folio_no == 'Generated On Submit'">
                         <div class="col-3">
                             <strong>Next Approver : </strong>
                         </div>

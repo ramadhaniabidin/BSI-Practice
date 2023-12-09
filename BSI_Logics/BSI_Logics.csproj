@@ -97,6 +97,7 @@
     <Compile Include="Models\StationaryRequestDetail.cs" />
     <Compile Include="Models\StationaryRequestHeader.cs" />
     <Compile Include="Models\StockAndUnitModel.cs" />
+    <Compile Include="Models\WorkflowHistoryModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

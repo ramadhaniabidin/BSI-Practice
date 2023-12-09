@@ -327,7 +327,6 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
 
             if (req_qty > stock) {
                 alert("Permintaan Anda (baris ke " + (i + 1) + ") melebihi stok yang ada");
-                //submit_btn.classList.add("disabled");
                 $scope.isRequestValid = false;
             }
 
@@ -339,53 +338,58 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
             if ((req_qty == 0) || (req_qty == undefined) || (req_qty == undefined)) {
                 alert("Jumlah barang yang diminta tidak boleh kosong (baris " + (i + 1) + ")");
                 $scope.isRequestValid = false;
-                //submit_btn.classList.add("disabled");
             }
+        }
 
-            else {
-                $scope.isRequestValid = true;
-            }
+        if (($scope.next_approver == null) || ($scope.next_approver == undefined) || $scope.next_approver == '') {
+            alert("Next Approver tidak boleh kosong!");
+            $scope.isRequestValid = false;
+        }
 
-            if ($scope.isRequestValid == true) {
-                let header_data = {};
-                header_data.folio_no = $scope.folio_no;
-                header_data.applicant = $scope.applicant;
-                header_data.department = $scope.department
-                header_data.role = $scope.role;
-                header_data.role_id = $scope.role_id;
-                header_data.employee_id = $scope.employee_id;
-                header_data.extension = $scope.extension;
-                header_data.created_by = $scope.applicant;
-                header_data.created_date = $scope.getCurrentDateTime();
-                header_data.modified_by = $scope.applicant;
-                header_data.modified_date = $scope.getCurrentDateTime();
-                header_data.current_approver_role = $scope.next_approver;
+        else {
+            $scope.isRequestValid = true;
+        }
 
-                let detail_data = [];
-                for (var i = 0; i < $scope.rows.length; i++) {
-                    detail_data.push({
-                        item_name: $scope.rows[i].item_name,
-                        no: i + 1,
-                        uom: $scope.rows[i].uom,
-                        stock: $scope.rows[i].stock,
-                        request_qty: $scope.rows[i].request_qty,
-                        reason: $scope.rows[i].reason,
-                    });
-                }
+        if ($scope.isRequestValid == true) {
+            let header_data = {};
+            header_data.folio_no = $scope.folio_no;
+            header_data.applicant = $scope.applicant;
+            header_data.department = $scope.department
+            header_data.role = $scope.role;
+            header_data.role_id = $scope.role_id;
+            header_data.employee_id = $scope.employee_id;
+            header_data.extension = $scope.extension;
+            header_data.created_by = $scope.applicant;
+            header_data.created_date = $scope.getCurrentDateTime();
+            header_data.modified_by = $scope.applicant;
+            header_data.modified_date = $scope.getCurrentDateTime();
+            header_data.current_approver_role = $scope.next_approver;
 
-
-                var promise = svc.svc_SaveUpdate(header_data, detail_data);
-                promise.then(function (response) {
-                    let jsonData = JSON.parse(response.data.d);
-                    console.log('Json Data : ', jsonData);
-                    if (jsonData.Success) {
-                        alert('Berhasil memasukkan data header dan detail');
-                    }
-                    else {
-                        alert(jsonData.Message);
-                    }
+            let detail_data = [];
+            for (var i = 0; i < $scope.rows.length; i++) {
+                detail_data.push({
+                    item_name: $scope.rows[i].item_name,
+                    no: i + 1,
+                    uom: $scope.rows[i].uom,
+                    stock: $scope.rows[i].stock,
+                    request_qty: $scope.rows[i].request_qty,
+                    reason: $scope.rows[i].reason,
                 });
             }
+
+
+            var promise = svc.svc_SaveUpdate(header_data, detail_data);
+            promise.then(function (response) {
+                let jsonData = JSON.parse(response.data.d);
+                console.log('Json Data : ', jsonData);
+                if (jsonData.Success) {
+                    alert('Berhasil memasukkan data header dan detail');
+                    location.href = "/Pages/Home";
+                }
+                else {
+                    alert(jsonData.Message);
+                }
+            });
         }
     }
     // END REGION
@@ -492,7 +496,7 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     };
 
     var folio_no = GetQueryString()["folio_no"]
-    $scope.folio_no = folio_no;
+    //$scope.folio_no = folio_no;
     console.log('Folio No: ', folio_no);
 
     if ((folio_no === null) || (folio_no === undefined) || (folio_no === '')) {

@@ -24,6 +24,7 @@ app.controller("HomeController", function ($scope, svc) {
         var promise = svc.svc_GetRequestList(current_role_id);
         promise.then(function (response) {
             var jsonData = JSON.parse(response.data.d);
+            console.log("JSON Data = ", jsonData);
             $scope.RequestList = jsonData.ListItems;
             for (i of $scope.RequestList) {
                 i.created_date = new Date(parseInt(i.created_date.substring(6)));

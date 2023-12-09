@@ -215,7 +215,7 @@ namespace BSI_Logics.Controller
                     db.cmd.ExecuteNonQuery();
                     db.CloseConnection(ref conn, false);
                 }
-                //InsertWorkflowHistoryLog(LastInsertedId);
+                InsertWorkflowHistoryLog(LastInsertedId);
             }
             catch(Exception ex)
             {

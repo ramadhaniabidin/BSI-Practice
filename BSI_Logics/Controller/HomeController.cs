@@ -26,7 +26,7 @@ namespace BSI_Logics.Controller
                     "header.created_date, header.current_approver_role, isnull(r.name, '') current_approver, isnull(u.name, '') approver_name\n" +
                     "FROM stationary_request_header header\n" +
                     "JOIN master_status s ON header.status_id = s.id\n" +
-                    "LEFT JOIN master_roles r ON header.current_approver_role = r.id\n" +
+                    "LEFT JOIN master_roles r ON header.approver_target_role_id = r.id\n" +
                     "LEFT JOIN master_users u ON r.id = u.role_id\n" +
                     "WHERE header.status_id != 6";
 

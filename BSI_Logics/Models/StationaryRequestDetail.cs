@@ -8,7 +8,7 @@ namespace BSI_Logics.Models
 {
     public class StationaryRequestDetail
     {
-        public int id { get; set; }
+        //public int id { get; set; }
         public int header_id { get; set; }
         public int no { get; set; }
         public string item_name { get; set; }

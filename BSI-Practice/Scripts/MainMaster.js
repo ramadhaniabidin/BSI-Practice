@@ -52,7 +52,7 @@ function GetCurrentLoginData(loginToken) {
         success: function (data) {
             var jsonData = JSON.parse(data.d);
             var userData = jsonData.currentLoginData;
-            console.log('JSON Data : ', jsonData);
+            //console.log('JSON Data : ', jsonData);
             var username = userData.name;
             //console.log("username : ", jsonData);
             $("#username").text(username);

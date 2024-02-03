@@ -83,7 +83,7 @@ app.service("svc", function ($http) {
         };
         var response = $http({
             method: 'POST',
-            url: '/WebServices/StationaryRequestWebService.asmx/GetRequestData',
+            url: '/WebServices/StationaryRequestWebService.asmx/GetRequestDataByJoin',
             data: JSON.stringify(param),
             contentType: 'application/json; charset=utf-8',
             dataType: "json"
@@ -161,6 +161,28 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         WarningMessage1: false,
         WarningMessage2: false
     }];
+
+    $scope.request = {
+        header: {
+            folio_no: '',
+            applicant: '',
+            department: '',
+            role: '',
+            employee_id: -1,
+            extension: '',
+            role_id: -1,
+            status_id: -1
+        },
+
+        detail: {
+            item_name: '',
+            no: '',
+            uom: '',
+            stock: '',
+            request_qty: 0,
+            reason: ''
+        }
+    };
 
     $scope.next_approver = "";
     // End region
@@ -434,20 +456,14 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         var promise = svc.svc_GetRequestData(folio_no);
         promise.then(function (response) {
             var jsonData = JSON.parse(response.data.d);
+            var headerData = jsonData.data[0];
+            var detailData = jsonData.data;
+            $scope.request.header = headerData;
+            $scope.request.detail = detailData;
             console.log('JSON Data : ', jsonData);
+            console.log('Header data: ', $scope.request.header);
+            console.log('Detail data: ', $scope.request.detail);
         });
-
-        //let header_promise = svc.svc_GetHeaderData(folio_no);
-        //header_promise.then(function (response) {
-        //    let jsonHeader = JSON.parse(response.data.d);
-        //    console.log("JSON Header = ", jsonHeader);
-
-        //    let detail_promise = svc.svc_GetDetailsData(folio_no);
-        //    detail_promise.then(function (response1) {
-        //        let jsonDetail = JSON.parse(response1.data.d);
-        //        console.log("JSON Details = ", jsonDetail);
-        //    });
-        //});
     };
     // End region
 
@@ -483,6 +499,7 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
                 newRow.WarningMessage2 = false;
                 $scope.rows.push(newRow);
             }
+            //console.log($scope.rows);
         });
     };
 
@@ -491,13 +508,11 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         promise.then(function (response) {
             let jsonData = JSON.parse(response.data.d);
             $scope.request_status_id = jsonData.status_id;
-            //console.log("JSON Data = ", jsonData);
+            console.log("JSON Data = ", jsonData);
         });
     };
 
     var folio_no = GetQueryString()["folio_no"]
-    //$scope.folio_no = folio_no;
-    console.log('Folio No: ', folio_no);
 
     if ((folio_no === null) || (folio_no === undefined) || (folio_no === '')) {
         $scope.request_status_id = 0;
@@ -507,12 +522,8 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         $scope.GetApproverList();
     }
     else {
-        $scope.GetStatusID(folio_no);
-        console.log("Request status id : ", $scope.request_status_id);
-        $scope.CurrentRoleId_WithFolioNo();
+        $scope.GetRequestData(folio_no);
         $scope.GetStationaryItems();
-        $scope.GetRequestHeader(folio_no);
-        $scope.GetRequestDetail(folio_no);
         $("#request_detail").addClass("readonly");
     }
     

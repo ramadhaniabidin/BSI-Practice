@@ -36,7 +36,7 @@
                             <label class="header-label">Folio No</label>
                         </div>
                         <div class="col-8">
-                            <input id="folio_no" class="header-input" type="text" runat="server" ng-model="folio_no" readonly="readonly"/>
+                            <input id="folio_no" class="header-input" type="text" runat="server" ng-model="request.header.folio_no" readonly="readonly"/>
                         </div>
                     </div>
                     <br />
@@ -45,7 +45,7 @@
                             <label class="header-label">Applicant</label>
                         </div>
                         <div class="col-8">
-                            <input id="applicant" class="header-input" type="text" runat="server" ng-model="applicant" readonly="readonly"/>
+                            <input id="applicant" class="header-input" type="text" runat="server" ng-model="request.header.applicant" readonly="readonly"/>
                         </div>
                     </div>
                     <br />
@@ -54,7 +54,7 @@
                             <label class="header-label">Department</label>
                         </div>
                         <div class="col-8">
-                            <input id="department" class="header-input" type="text" runat="server" ng-model="department" readonly="readonly"/>
+                            <input id="department" class="header-input" type="text" runat="server" ng-model="request.header.department" readonly="readonly"/>
                         </div>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                             <label class="header-label">Role</label>
                         </div>
                         <div class="col-8">
-                            <input id="role" class="header-input" type="text" runat="server" ng-model="role" readonly="readonly"/>
+                            <input id="role" class="header-input" type="text" runat="server" ng-model="request.header.role" readonly="readonly"/>
                         </div>
                     </div>
                     <br />
@@ -74,7 +74,7 @@
                             <label class="header-label">Employee ID</label>
                         </div>
                         <div class="col-8">
-                            <input id="employee_id" class="header-input" type="text" runat="server" ng-model="employee_id" readonly="readonly"/>
+                            <input id="employee_id" class="header-input" type="text" runat="server" ng-model="request.header.employee_id" readonly="readonly"/>
                         </div>
                     </div>
                     <br />
@@ -106,7 +106,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="row in rows">
+                        <tr ng-repeat="row in request.detail">
                             <td><p style="text-align:center">{{ $index + 1 }}</p></td>
                             <td>
                                 <select ng-model="row.item_name" ng-change="GetStockAndUnit({{$index}})" class="item-names">
@@ -136,8 +136,8 @@
             </div>
             
             <%--Approval Action--%>
-            <div class="row">
-                <label class="myLabel" ng-show="role_id != 0">Approval Action</label>
+            <div class="row" ng-show="request.header.role !== 'Requestor'">
+                <label class="myLabel" ng-show="request.header.role !== 'Requestor'">Approval Action</label>
                 <hr class="separator"/>
                 <div class="col-6">
                     <div class="row" ng-show="role_id != 0">
@@ -177,10 +177,10 @@
             <%--Buttons--%>
             <div class="row" style="padding-top:2.75%">
                 <div class="col" style="padding-left: 0px">
-                    <button id="submit-btn" class="btn btn-primary" ng-click="ValidateRequest()" ng-show="request_status_id == 0">Submit</button>
+                    <button id="submit-btn" class="btn btn-primary" ng-click="ValidateRequest()" ng-disabled="request.header.status_id != -1">Submit</button>
                     <button id="close-btn" class="btn btn-danger" ng-show="request_status_id == 5">Close</button>
-                    <button id="approval-btn" class="btn btn-primary" ng-show="role_id != 0">Submit</button>
-                    <button id="deliver-btn" class="btn btn-primary" ng-show="role_id != 0">Delivered</button>
+                    <button id="approval-btn" class="btn btn-primary" ng-show="request.header.role !== 'Requestor'">Submit</button>
+                    <button id="deliver-btn" class="btn btn-primary" ng-show="request.header.role !== 'Requestor'">Delivered</button>
                 </div>
 
             </div>
@@ -188,7 +188,7 @@
             <%--<br /><br />--%>
 
             <%--Approval History Log--%>
-            <div class="row" style="padding-top:1%" ng-show="role_id != 0">
+            <div class="row" style="padding-top:1%" ng-show="request.header.status_id != -1">
                 <label class="myLabel">Approval History</label>
                 <hr class="separator"/>
                 <table class="myTable">

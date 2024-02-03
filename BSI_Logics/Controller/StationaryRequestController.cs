@@ -313,7 +313,7 @@ namespace BSI_Logics.Controller
             try
             {
                 db.OpenConnection(ref conn);
-                db.cmd.CommandText = "dbo.GetHeaderData";
+                db.cmd.CommandText = "dbo.get_header_data_by_folio_no";
                 db.cmd.CommandType = CommandType.StoredProcedure;
                 db.cmd.Parameters.Clear();
                 db.AddInParameter(db.cmd, "folio_no", folio_no);
@@ -344,7 +344,7 @@ namespace BSI_Logics.Controller
             try
             {
                 db.OpenConnection(ref conn);
-                db.cmd.CommandText = "dbo.GetDetailData";
+                db.cmd.CommandText = "dbo.get_detail_data_by_folio_no";
                 db.cmd.CommandType = CommandType.StoredProcedure;
                 db.cmd.Parameters.Clear();
                 db.AddInParameter(db.cmd, "folio_no", folio_no);
@@ -379,6 +379,30 @@ namespace BSI_Logics.Controller
                 db.CloseConnection(ref conn);
                 db.CloseDataReader(reader);
                 return status_id;
+            }
+            catch(Exception ex)
+            {
+                db.CloseConnection(ref conn);
+                throw ex;
+            }
+        }
+        public List<CombineModel> GetDataRequestDataByJoin(string folio_no)
+        {
+            try
+            {
+                db.OpenConnection(ref conn);
+                db.cmd.CommandText = "dbo.get_request_data_by_join";
+                db.cmd.CommandType = CommandType.StoredProcedure;
+
+                db.cmd.Parameters.Clear();
+                db.AddInParameter(db.cmd, "folio_no", folio_no);
+                reader = db.cmd.ExecuteReader();
+
+                dt.Load(reader);
+                db.CloseConnection(ref conn);
+                db.CloseDataReader(reader);
+
+                return Common.Utility.ConvertDataTableToList<CombineModel>(dt);
             }
             catch(Exception ex)
             {

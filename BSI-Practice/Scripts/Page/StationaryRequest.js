@@ -91,6 +91,21 @@ app.service("svc", function ($http) {
         return response;
     };
 
+    this.svc_GetWorkflowHistories = function (folio_no) {
+        var param = {
+            'folio_no': folio_no
+        };
+
+        var response = $http({
+            method: 'POST',
+            url: '/WebServices/StationaryRequestWebService.asmx/GetWorkflowHistories',
+            data: JSON.stringify(param),
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json"
+        });
+        return response;
+    };
+
     this.svc_GetHeaderData = function (folio_no) {
         let param = {
             'folio_no': folio_no
@@ -174,15 +189,22 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
             status_id: -1
         },
 
-        detail: {
+        detail: [{
             item_name: '',
             no: '',
             uom: '',
             stock: '',
             request_qty: 0,
             reason: ''
-        }
+        }]
     };
+
+    $scope.workflow_histories = [{
+        pic_name: '',
+        comment: '',
+        action_name: '',
+        action_date: ''
+    }];
 
     $scope.next_approver = "";
     // End region
@@ -463,6 +485,13 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
             console.log('JSON Data : ', jsonData);
             console.log('Header data: ', $scope.request.header);
             console.log('Detail data: ', $scope.request.detail);
+
+            var workflowPromise = svc.svc_GetWorkflowHistories(folio_no);
+            workflowPromise.then(function (resp) {
+                var jsonData_Workflow = JSON.parse(resp.data.d);
+                $scope.workflow_histories = jsonData_Workflow.data;
+                console.log($scope.workflow_histories);
+            });
         });
     };
     // End region

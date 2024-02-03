@@ -410,5 +410,27 @@ namespace BSI_Logics.Controller
                 throw ex;
             }
         }
+        public List<WorkflowHistoryModel> GetWorkflowHistories(string folio_no)
+        {
+            try
+            {
+                db.OpenConnection(ref conn);
+                db.cmd.CommandText = $"SELECT * FROM dbo.workflow_history_log WHERE folio_no = '{folio_no}' ORDER BY action_date ASC";
+                db.cmd.CommandType = CommandType.Text;
+
+                reader = db.cmd.ExecuteReader();
+                dt.Load(reader);
+
+                db.CloseConnection(ref conn);
+                db.CloseDataReader(reader);
+
+                return Common.Utility.ConvertDataTableToList<WorkflowHistoryModel>(dt);
+            }
+            catch(Exception ex)
+            {
+                db.CloseConnection(ref conn);
+                throw ex;
+            }
+        }
     }
 }

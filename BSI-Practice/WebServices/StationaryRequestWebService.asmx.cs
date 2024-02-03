@@ -330,5 +330,32 @@ namespace BSI_Practice.WebServices
             }
             return returnedOutput;
         }
+
+        [WebMethod]
+        public string GetWorkflowHistories(string folio_no)
+        {
+            string returnedOutput = "";
+            try
+            {
+                var workflowData = controller.GetWorkflowHistories(folio_no);
+                var responseBody = new
+                {
+                    Success = true,
+                    Message = "OK",
+                    data = workflowData
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            catch(Exception ex)
+            {
+                var responseBody = new
+                {
+                    Success = false,
+                    Message = $"Error : {ex.Message}"
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            return returnedOutput;
+        }
     }
 }

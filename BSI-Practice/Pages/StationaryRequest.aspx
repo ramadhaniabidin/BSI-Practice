@@ -202,12 +202,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                        <tr ng-repeat="wf in workflow_histories">
+                            <td><p style="text-align:center">{{ $index + 1 }}</td>
+                            <%--<td><input type="text" ng-model="wf.pic_name" readonly="readonly"/></td>--%>
+                            <td><p style="text-align:center">{{wf.pic_name}}</p></td>
+                            <td><p style="text-align: center">{{wf.comment}}</p></td>
+                            <td><p style="text-align: center">{{wf.action_name}}</p></td>
+                            <td><p style="text-align: center">{{wf.action_date}}</p></td>
                         </tr>
                     </tbody>
                 </table>

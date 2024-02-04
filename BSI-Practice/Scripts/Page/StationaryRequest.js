@@ -13,7 +13,7 @@ app.service("svc", function ($http) {
             contentType: 'application/json; charset=utf-8',
             dataType: "json"
         });
-        console.log(param);
+        //console.log(param);
 
         return response;
     }
@@ -215,15 +215,9 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         var promise = svc.svc_GetCurrentLoginData(token);
         promise.then(function (response) {
             var response_data = JSON.parse(response.data.d);
-            //console.log('Response data : ', response_data);
             var userData = response_data.currentLoginData;
-            console.log('User data: ', userData);
-            $scope.applicant = userData.name;
-            $scope.department = userData.department;
-            $scope.role = userData.role;
-            $scope.employee_id = userData.id;
+            //console.log('User data: ', userData);
             $scope.role_id = userData.role_id;
-            $scope.username = $scope.applicant;
 
             if ($scope.role_id == 0) {
                 $scope.IsRequestor = true;
@@ -482,15 +476,31 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
             var detailData = jsonData.data;
             $scope.request.header = headerData;
             $scope.request.detail = detailData;
-            console.log('JSON Data : ', jsonData);
+            //console.log('JSON Data : ', jsonData);
             console.log('Header data: ', $scope.request.header);
-            console.log('Detail data: ', $scope.request.detail);
+            //console.log('Detail data: ', $scope.request.detail);
 
             var workflowPromise = svc.svc_GetWorkflowHistories(folio_no);
             workflowPromise.then(function (resp) {
                 var jsonData_Workflow = JSON.parse(resp.data.d);
                 $scope.workflow_histories = jsonData_Workflow.data;
-                console.log($scope.workflow_histories);
+                //console.log($scope.workflow_histories);
+
+                for (i of $scope.workflow_histories) {
+                    var action_date = i.action_date;
+                    var timeStamp = parseInt(action_date.match(/\d+/)[0]);
+                    var date = new Date(timeStamp);
+
+                    var formattedDate = date.getFullYear() + '-' +
+                        ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
+                        ('0' + date.getDate()).slice(-2) + ' ' +
+                        ('0' + date.getHours()).slice(-2) + ':' +
+                        ('0' + date.getMinutes()).slice(-2) + ':' +
+                        ('0' + date.getSeconds()).slice(-2);
+
+                    i.action_date = formattedDate;
+                    //console.log(action_date);
+                }
             });
         });
     };
@@ -544,14 +554,13 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     var folio_no = GetQueryString()["folio_no"]
 
     if ((folio_no === null) || (folio_no === undefined) || (folio_no === '')) {
-        $scope.request_status_id = 0;
-        console.log("Request status id : ", $scope.request_status_id);
         $scope.GetCurrentLoginData();
         $scope.GetStationaryItems();
         $scope.GetApproverList();
     }
     else {
         $scope.GetRequestData(folio_no);
+        $scope.GetCurrentLoginData();
         $scope.GetStationaryItems();
         $("#request_detail").addClass("readonly");
     }

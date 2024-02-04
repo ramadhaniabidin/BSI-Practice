@@ -136,11 +136,11 @@
             </div>
             
             <%--Approval Action--%>
-            <div class="row" ng-show="request.header.role !== 'Requestor'">
-                <label class="myLabel" ng-show="request.header.role !== 'Requestor'">Approval Action</label>
+            <div class="row" ng-show="!IsRequestor">
+                <label class="myLabel">Approval Action</label>
                 <hr class="separator"/>
                 <div class="col-6">
-                    <div class="row" ng-show="role_id != 0">
+                    <div class="row">
                         <div class="col-2">
                             <input type="radio" value="Approve" name="action"/>
                             <label for="approve">Approve</label>
@@ -177,10 +177,16 @@
             <%--Buttons--%>
             <div class="row" style="padding-top:2.75%">
                 <div class="col" style="padding-left: 0px">
-                    <button id="submit-btn" class="btn btn-primary" ng-click="ValidateRequest()" ng-disabled="request.header.status_id != -1">Submit</button>
-                    <button id="close-btn" class="btn btn-danger" ng-show="request_status_id == 5">Close</button>
-                    <button id="approval-btn" class="btn btn-primary" ng-show="request.header.role !== 'Requestor'">Submit</button>
-                    <button id="deliver-btn" class="btn btn-primary" ng-show="request.header.role !== 'Requestor'">Delivered</button>
+                    <button id="submit-btn" class="btn btn-primary" ng-click="ValidateRequest()" ng-disabled="request.header.status_id != -1" ng-show="IsRequestor">Submit</button>
+                    
+                    <%--This button only appears if current login is requestor and status id of the request equals 5 (The request has been delivered)--%>
+                    <button id="close-btn" class="btn btn-danger" ng-show="IsRequestor && (request.header.status_id == 5)">Close</button>
+
+                    <%--This button only appears if current login is not requestor and status id of the request equals 2 (Waiting for approval process)--%>
+                    <button id="approval-btn" class="btn btn-primary" ng-show="!IsRequestor && (request.header.status_id == 2)">Submit</button>
+
+                    <%--This button only appears if current login is not requestor and status id of the request equals 3 (The request is fully approved)--%>
+                    <button id="deliver-btn" class="btn btn-primary" ng-show="!IsRequestor && (request.header.status_id == 3)">Delivered</button>
                 </div>
 
             </div>

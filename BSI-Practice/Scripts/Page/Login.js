@@ -38,6 +38,7 @@ app.controller('LoginController', function ($scope, svc) {
             console.log('Response Data: ', response_data);
             if (response_data.Success) {
                 sessionStorage.setItem('LoginToken', response_data.LoginToken);
+                localStorage.setItem('LoginToken', response_data.LoginToken);
                 //alert('Login Success with token: ' + response_data.LoginToken);
                 location.href = "/Pages/Home";
             }

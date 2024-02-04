@@ -135,7 +135,7 @@
                 </table>
             </div>
 
-            <div class="row">
+            <div class="row" ng-show="IsRequestor && request.header.status_id == -1">
                 <div class="col-2">
                     <strong>Next Approver : </strong>
                 </div>
@@ -176,7 +176,7 @@
             <%--Buttons--%>
             <div class="row" style="padding-top:2.75%">
                 <div class="col" style="padding-left: 0px">
-                    <button id="submit-btn" class="btn btn-primary" ng-click="ValidateRequest()" ng-show="IsRequestor">Submit</button>
+                    <button id="submit-btn" class="btn btn-primary" ng-click="ValidateRequest()" ng-show="IsRequestor && request.header.status_id == -1">Submit</button>
                     
                     <%--This button only appears if current login is requestor and status id of the request equals 5 (The request has been delivered)--%>
                     <button id="close-btn" class="btn btn-danger" ng-show="IsRequestor && (request.header.status_id == 5)">Close</button>

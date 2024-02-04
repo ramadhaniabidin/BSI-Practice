@@ -52,10 +52,12 @@ function GetCurrentLoginData(loginToken) {
         success: function (data) {
             var jsonData = JSON.parse(data.d);
             var userData = jsonData.currentLoginData;
-            //console.log('JSON Data : ', jsonData);
+            console.log('JSON Data : ', jsonData);
             var username = userData.name;
             //console.log("username : ", jsonData);
             $("#username").text(username);
+            $("#role_id").text(userData.role_id);
+            //localStorage.setItem("RoleId", userData.role_id);
             //console.log('Data from API : ', JSON.parse(data.d));
         }
     });
@@ -63,6 +65,9 @@ function GetCurrentLoginData(loginToken) {
 
 function SignOut() {
     sessionStorage.removeItem('LoginToken');
+    //$("#username").text('');
+    //$("#role_id").text('');
+    //localStorage.removeItem("RoleId");
     location.href = "/Pages/Login";
 }
 

@@ -1,10 +1,28 @@
 ﻿var app = angular.module("HomePage", []);
 
 app.service("svc", function ($http) {
+    this.svc_GetCurrentLoginData = function (loginToken) {
+        var param = {
+            'loginToken': loginToken
+        };
+
+        var response = $http({
+            method: 'POST',
+            url: '/WebServices/StationaryRequestWebService.asmx/GetCurrentLoginData',
+            data: JSON.stringify(param),
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json"
+        });
+        //console.log(param);
+
+        return response;
+    }
+
     this.svc_GetRequestList = function (current_login_role_id) {
         var param = {
             'current_login_role_id': current_login_role_id
         }
+        console.log(param);
         var response = $http({
             method: 'POST',
             url: '/WebServices/HomeWebService.asmx/GetRequestList',
@@ -32,8 +50,27 @@ app.controller("HomeController", function ($scope, svc) {
             }
             console.log('Request List = ', $scope.RequestList);
         });
-    }
+    };
 
-    
-    GetRequestList(0);
+    $scope.GetCurrentLoginData = function () {
+        var token = sessionStorage.getItem('LoginToken');
+        var promise = svc.svc_GetCurrentLoginData(token);
+        promise.then(function (response) {
+            var response_data = JSON.parse(response.data.d);
+            var userData = response_data.currentLoginData;
+            //console.log('User data: ', userData);
+            var role_id = userData.role_id;
+
+            //console.log(role_id);
+            GetRequestList(role_id);
+        });
+    };
+
+
+    $scope.GetCurrentLoginData();
+
+
+    //var currentLoginRoleId = localStorage.getItem("RoleId");
+    //console.log(currentLoginRoleId);
+    //GetRequestList(currentLoginRoleId);
 });

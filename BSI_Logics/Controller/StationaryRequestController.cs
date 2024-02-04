@@ -8,9 +8,12 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 
 namespace BSI_Logics.Controller
 {
@@ -216,8 +219,15 @@ namespace BSI_Logics.Controller
                     db.CloseConnection(ref conn, false);
                 }
                 InsertWorkflowHistoryLog(LastInsertedId);
+
+                #region Start workflow
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                NintexWorkflowCloud nwc = new NintexWorkflowCloud();
+                nwc.url = "https://npp-elistec.workflowcloud.com/api/v1/workflow/published/6f9f19b2-53ff-4062-80a9-c0e0ddc6241a/instances?token=EzFRP4GtqwENU57H1JEReZq0VvlLsMPQf0LrVFNKiUBqRQ0OAyMGN00aqGCbjySxHFFtY1";
+                Task.Run(async () => { await StartWorkflow(nwc, LastInsertedId); }).Wait();
+                #endregion
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 db.CloseConnection(ref conn, false);
                 throw new Exception(ex.Message);
@@ -240,6 +250,35 @@ namespace BSI_Logics.Controller
             catch(Exception ex)
             {
                 db.OpenConnection(ref conn, false);
+                throw ex;
+            }
+        }
+        public static async Task<string> StartWorkflow(NintexWorkflowCloud nwc, int transaction_id)
+        {
+            try
+            {
+                nwc.param = new NWCParamModel();
+                nwc.param.startData = new StartData();
+                nwc.param.startData.se_transactionid = transaction_id;
+
+                string requestBody = new JavaScriptSerializer().Serialize(nwc.param);
+
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri(nwc.url);
+
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, nwc.url);
+                request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
+
+                using (var response = await client.SendAsync(request))
+                {
+                    response.EnsureSuccessStatusCode();
+                    var result = await response.Content.ReadAsStringAsync();
+                    return result;
+                }
+            }
+            catch(Exception ex)
+            {
                 throw ex;
             }
         }

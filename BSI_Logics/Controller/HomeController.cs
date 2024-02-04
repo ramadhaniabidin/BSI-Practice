@@ -37,7 +37,7 @@ namespace BSI_Logics.Controller
                 }
                 else
                 {
-                    condition = $" AND current_approver_role = {current_login_role_id}";
+                    condition = $" AND approver_target_role_id = {current_login_role_id}";
                 }
 
                 query += condition;

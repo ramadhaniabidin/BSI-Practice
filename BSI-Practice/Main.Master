@@ -28,6 +28,7 @@
             <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle" style="color: white"></i> </div>
             
             <span id="username" style="width: 100%; color: white; text-align: right; padding-right: 1%"></span>
+            <span id="role_id" style="display: none"></span>
             <div class="header_img"> 
                 <img src="https://i.imgur.com/hczKIze.jpg" alt=""> 
                 

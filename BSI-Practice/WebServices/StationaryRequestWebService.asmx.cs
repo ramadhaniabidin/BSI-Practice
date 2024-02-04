@@ -190,6 +190,32 @@ namespace BSI_Practice.WebServices
         }
 
         [WebMethod]
+        public string InsertApprovalLog(WorkflowHistoryModel model)
+        {
+            string returnedOutput = "";
+            try
+            {
+                controller.InsertApprovalLog(model);
+                var responseBody = new
+                {
+                    Success = true,
+                    Message = "OK"
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            catch(Exception ex)
+            {
+                var responseBody = new
+                {
+                    Success = false,
+                    Message = $"Error = {ex.Message}"
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+            }
+            return returnedOutput;
+        }
+
+        [WebMethod]
         public string GetRequestData(string folio_no)
         {
             var returnedOutput = "";

@@ -243,6 +243,26 @@ namespace BSI_Logics.Controller
                 throw ex;
             }
         }
+        public void InsertApprovalLog(WorkflowHistoryModel model)
+        {
+            try
+            {
+                db.OpenConnection(ref conn, false);
+                db.cmd.CommandText = $"INSERT INTO dbo.workflow_history_log\n" +
+                    $"(folio_no, pic_name, comment, action_name, action_date)\n" +
+                    $"VALUES\n" +
+                    $"('{model.folio_no}', '{model.pic_name}', '{model.comment}', '{model.action_name}', '{model.action_date}')";
+                db.cmd.CommandType = CommandType.Text;
+                db.cmd.ExecuteNonQuery();
+
+                db.CloseConnection(ref conn, false);
+            }
+            catch(Exception ex)
+            {
+                db.CloseConnection(ref conn, false);
+                throw ex;
+            }
+        }
         public StationaryRequestHeader GetRequestHeader(string folio_no)
         {
             try

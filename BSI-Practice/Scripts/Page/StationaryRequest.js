@@ -107,10 +107,14 @@ app.service("svc", function ($http) {
     };
 
     this.svc_InsertApprovalLog = function (param) {
+        var parameters = {
+            model: param
+        };
+
         var response = $http({
             method: 'POST',
             url: '/WebServices/StationaryRequestWebService.asmx/InsertApprovalLog',
-            data: JSON.stringify(param),
+            data: JSON.stringify(parameters),
             contentType: 'application/json; charset=utf-8',
             dataType: "json"
         });
@@ -569,7 +573,7 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         var param = {
             folio_no: $scope.request.header.folio_no,
             comment: $scope.comment,
-            action: $scope.ApprovalAction,
+            action_name: $scope.ApprovalAction,
             pic_name: $("#username").text(),
             action_date: new Date().toLocaleString()
         };

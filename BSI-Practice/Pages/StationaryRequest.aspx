@@ -83,7 +83,7 @@
                             <label class="header-label">Extension</label>
                         </div>
                         <div class="col-8">
-                            <input id="extension" class="header-input" type="text" runat="server" ng-model="extension" readonly="readonly"/>
+                            <input id="extension" class="header-input" type="text" runat="server" ng-model="request.header.extension" readonly="readonly"/>
                         </div>
                     </div>
                 </div>
@@ -119,7 +119,7 @@
                             <td>
                                 <p ng-show="row.WarningMessage1" style="color:red; margin-bottom:0px;">Permintaan Anda melebihi stok</p>
                                 <p ng-show="row.WarningMessage2" style="color:red; margin-bottom:0px;">Jumlah permintaan tidak boleh kosong</p>
-                                <input type="number" ng-model="row.request_qty" ng-change="CekRequestQty({{$index}})">
+                                <input type="text" ng-model="row.request_qty" ng-change="CekRequestQty({{$index}})">
                             </td>
                             <td>
                                 <textarea ng-model="row.reason"></textarea>
@@ -133,6 +133,18 @@
                         <span>&#43</span> Add New Row
                     </caption>
                 </table>
+            </div>
+
+            <div class="row">
+                <div class="col-2">
+                    <strong>Next Approver : </strong>
+                </div>
+                <div class="col-5">
+                    <select ng-model="next_approver">
+                        <option value="" selected disabled style="text-align:center">== Choose The Next Approver ==</option>
+                        <option style="text-align:center;" ng-repeat="app in approver_list" value="{{app}}">{{app}}</option>
+                    </select>
+                </div>
             </div>
             
             <%--Approval Action--%>
@@ -150,19 +162,6 @@
                             <label for="reject">Reject</label>
                         </div>
                     </div>
-                    <br />
-                    <div class="row" ng-show="IsRequestor || folio_no == 'Generated On Submit'">
-                        <div class="col-3">
-                            <strong>Next Approver : </strong>
-                        </div>
-                        <div class="col-5">
-                            <select ng-model="next_approver"> 
-                                <option value="" selected disabled style="text-align:center">== Choose The Next Approver ==</option>
-                                <option style="text-align:center;" ng-repeat="app in approver_list" value="{{app}}">{{app}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <br />
                 </div>
                 <div class="col-6" ng-show="role_id != 0">
                     <div>
@@ -177,7 +176,7 @@
             <%--Buttons--%>
             <div class="row" style="padding-top:2.75%">
                 <div class="col" style="padding-left: 0px">
-                    <button id="submit-btn" class="btn btn-primary" ng-click="ValidateRequest()" ng-disabled="request.header.status_id != -1" ng-show="IsRequestor">Submit</button>
+                    <button id="submit-btn" class="btn btn-primary" ng-click="ValidateRequest()" ng-show="IsRequestor">Submit</button>
                     
                     <%--This button only appears if current login is requestor and status id of the request equals 5 (The request has been delivered)--%>
                     <button id="close-btn" class="btn btn-danger" ng-show="IsRequestor && (request.header.status_id == 5)">Close</button>

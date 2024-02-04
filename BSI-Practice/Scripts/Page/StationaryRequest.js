@@ -234,11 +234,17 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         promise.then(function (response) {
             var response_data = JSON.parse(response.data.d);
             var userData = response_data.currentLoginData;
-            //console.log('User data: ', userData);
+            console.log('User data: ', userData);
             $scope.role_id = userData.role_id;
 
             if ($scope.role_id == 0) {
                 $scope.IsRequestor = true;
+                $scope.request.header.folio_no = 'Generated On Submit';
+                $scope.request.header.applicant = userData.name;
+                $scope.request.header.department = userData.department;
+                $scope.request.header.role = userData.role;
+                $scope.request.header.employee_id = userData.id;
+                $scope.request.header.extension = '';
             }
             //console.log(response_data);
         });
@@ -266,21 +272,21 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
 
     // This function enables the user to add row in request detail table
     $scope.AddRow = function () {
-        $scope.rows.push({
+        $scope.request.detail.push({
             item_name: '',
             no: '',
             uom: '',
             stock: '',
             request_qty: 0,
             reason: '',
-            WarningMessage: false
+            //WarningMessage: false
         });
     };
     // End region
 
     // This function enables user to delete a particular row in the request detail
     $scope.DeleteRow = function (index) {
-        $scope.rows.splice(index, 1);
+        $scope.request.detail.splice(index, 1);
     };
     // End region
 
@@ -319,22 +325,23 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
 
     // This function is for retieving stock and unit of a particular item
     $scope.GetStockAndUnit = function (index) {
-        var item_name = $scope.rows[index].item_name;
+        var item_name = $scope.request.detail[index].item_name;
         var promise = svc.svc_GetStockAndUnit(item_name);
         promise.then(function (response) {
             var response_data = JSON.parse(response.data.d);
+            console.log(response_data);
             var StockAndUnit = response_data.StockAndUnit;
-            $scope.rows[index].uom = StockAndUnit.uom;
-            $scope.rows[index].stock = StockAndUnit.stock;
+            $scope.request.detail[index].uom = StockAndUnit.uom;
+            $scope.request.detail[index].stock = StockAndUnit.stock;
         });
     };
     // End region
 
     // THIS FUNCTION VALIDATES THE REQUEST QUANTITY
     $scope.CekRequestQty = function (index) {
-        
-        var stock = $scope.rows[index].stock;
-        var req_qty = $scope.rows[index].request_qty;
+
+        var stock = $scope.request.detail[index].stock;
+        var req_qty = $scope.request.detail[index].request_qty;
 
         console.log('stock = ', stock);
         console.log('request quantity = ', req_qty);
@@ -348,19 +355,19 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         // END REGION
 
         if (validation1) {
-            $scope.rows[index].WarningMessage1 = true;
+            //$scope.rows[index].WarningMessage1 = true;
             document.getElementById("submit-btn").classList.add("disabled");
         }
 
         else if (validation2) {
-            $scope.rows[index].WarningMessage2 = true;
+            //$scope.rows[index].WarningMessage2 = true;
             document.getElementById("submit-btn").classList.add("disabled");
         }
 
 
         else {
-            $scope.rows[index].WarningMessage1 = false;
-            $scope.rows[index].WarningMessage2 = false;
+            //$scope.rows[index].WarningMessage1 = false;
+            //$scope.rows[index].WarningMessage2 = false;
             var submit_btn = document.getElementById("submit-btn");
             if (submit_btn.classList.contains("disabled")) {
                 submit_btn.classList.remove("disabled");
@@ -376,10 +383,10 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         var item_name;
         var submit_btn = document.getElementById("submit-btn");
 
-        for (var i = 0; i < $scope.rows.length; i++) {
-            stock = $scope.rows[i].stock;
-            req_qty = $scope.rows[i].request_qty;
-            item_name = $scope.rows[i].item_name;
+        for (var i = 0; i < $scope.request.detail.length; i++) {
+            stock = $scope.request.detail[i].stock;
+            req_qty = $scope.request.detail[i].request_qty;
+            item_name = $scope.request.detail[i].item_name;
 
             if (req_qty > stock) {
                 alert("Permintaan Anda (baris ke " + (i + 1) + ") melebihi stok yang ada");
@@ -408,31 +415,32 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
 
         if ($scope.isRequestValid == true) {
             let header_data = {};
-            header_data.folio_no = $scope.folio_no;
-            header_data.applicant = $scope.applicant;
-            header_data.department = $scope.department
-            header_data.role = $scope.role;
-            header_data.role_id = $scope.role_id;
-            header_data.employee_id = $scope.employee_id;
-            header_data.extension = $scope.extension;
-            header_data.created_by = $scope.applicant;
+            header_data.folio_no = $scope.request.header.folio_no;
+            header_data.applicant = $scope.request.header.applicant;
+            header_data.department = $scope.request.header.department;
+            header_data.role = $scope.request.header.role;
+            header_data.role_id = $scope.request.header.role_id;
+            header_data.employee_id = $scope.request.header.employee_id;
+            header_data.extension = $scope.request.header.extension;
+            header_data.created_by = $scope.request.header.applicant;
             header_data.created_date = $scope.getCurrentDateTime();
-            header_data.modified_by = $scope.applicant;
+            header_data.modified_by = $scope.request.header.applicant;
             header_data.modified_date = $scope.getCurrentDateTime();
             header_data.current_approver_role = $scope.next_approver;
 
             let detail_data = [];
-            for (var i = 0; i < $scope.rows.length; i++) {
+            for (var i = 0; i < $scope.request.detail.length; i++) {
                 detail_data.push({
-                    item_name: $scope.rows[i].item_name,
+                    item_name: $scope.request.detail[i].item_name,
                     no: i + 1,
-                    uom: $scope.rows[i].uom,
-                    stock: $scope.rows[i].stock,
-                    request_qty: $scope.rows[i].request_qty,
-                    reason: $scope.rows[i].reason,
+                    uom: $scope.request.detail[i].uom,
+                    stock: $scope.request.detail[i].stock,
+                    request_qty: $scope.request.detail[i].request_qty,
+                    reason: $scope.request.detail[i].reason,
                 });
             }
-
+            console.log('Param header: ', header_data);
+            console.log('Param detail: ', detail_data);
 
             var promise = svc.svc_SaveUpdate(header_data, detail_data);
             promise.then(function (response) {
@@ -579,6 +587,12 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         };
 
         console.log(param);
+
+        var promise = svc.svc_InsertApprovalLog(param);
+        promise.then(function (response) {
+            var jsonData = JSON.parse(response.data.d);
+            console.log("Json Data after insert approval log: ", jsonData);
+        });
     };
 
 

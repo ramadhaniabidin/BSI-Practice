@@ -230,7 +230,7 @@ namespace BSI_Logics.Controller
                 db.OpenConnection(ref conn, false);
                 db.cmd.CommandText = "INSERT INTO dbo.workflow_history_log\n" +
                     "(folio_no, pic_name, comment, action_name, action_date)\n" +
-                    "SELECT folio_no folio_no, applicant pic_name, '' comment, 'First Submit' action_name, GETDATE() action_date\n" +
+                    "SELECT folio_no folio_no, applicant pic_name, 'First Submit' comment, 'First Submit' action_name, GETDATE() action_date\n" +
                     $"FROM dbo.stationary_request_header WHERE id = {header_id}";
                 db.cmd.CommandType = CommandType.Text;
                 db.cmd.ExecuteNonQuery();

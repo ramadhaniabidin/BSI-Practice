@@ -142,11 +142,11 @@
                 <div class="col-6">
                     <div class="row">
                         <div class="col-2">
-                            <input type="radio" value="Approve" name="action"/>
+                            <input type="radio" value="Approve" name="action" ng-model="ApprovalAction"/>
                             <label for="approve">Approve</label>
                         </div>
                         <div class="col-2">
-                            <input type="radio" value="Reject" name="action"/>
+                            <input type="radio" value="Reject" name="action" ng-model="ApprovalAction"/>
                             <label for="reject">Reject</label>
                         </div>
                     </div>
@@ -169,7 +169,7 @@
                         <label>Comments:</label>
                     </div>
                     <div class="row" style="width: 70%; height:90%">
-                        <textarea></textarea>
+                        <textarea ng-model="comment"></textarea>
                     </div>                    
                 </div>
             </div>
@@ -183,7 +183,7 @@
                     <button id="close-btn" class="btn btn-danger" ng-show="IsRequestor && (request.header.status_id == 5)">Close</button>
 
                     <%--This button only appears if current login is not requestor and status id of the request equals 2 (Waiting for approval process)--%>
-                    <button id="approval-btn" class="btn btn-primary" ng-show="!IsRequestor && (request.header.status_id == 2)">Submit</button>
+                    <button id="approval-btn" class="btn btn-primary" ng-show="!IsRequestor && (request.header.status_id == 2)" ng-click="InsertApprovalLog()">Submit</button>
 
                     <%--This button only appears if current login is not requestor and status id of the request equals 3 (The request is fully approved)--%>
                     <button id="deliver-btn" class="btn btn-primary" ng-show="!IsRequestor && (request.header.status_id == 3)">Delivered</button>

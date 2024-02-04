@@ -106,6 +106,17 @@ app.service("svc", function ($http) {
         return response;
     };
 
+    this.svc_InsertApprovalLog = function (param) {
+        var response = $http({
+            method: 'POST',
+            url: '/WebServices/StationaryRequestWebService.asmx/InsertApprovalLog',
+            data: JSON.stringify(param),
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json"
+        });
+        return response;
+    };
+
     this.svc_GetHeaderData = function (folio_no) {
         let param = {
             'folio_no': folio_no
@@ -159,6 +170,9 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     $scope.extension = "";
     $scope.role_id = -1;
     $scope.request_status_id = 0;
+
+    $scope.comment = '';
+    $scope.ApprovalAction = '';
 
     $scope.username = "";
 
@@ -550,6 +564,20 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
             console.log("JSON Data = ", jsonData);
         });
     };
+
+    $scope.InsertApprovalLog = function () {
+        var param = {
+            folio_no: $scope.request.header.folio_no,
+            comment: $scope.comment,
+            action: $scope.ApprovalAction,
+            pic_name: $("#username").text(),
+            action_date: new Date().toLocaleString()
+        };
+
+        console.log(param);
+    };
+
+
 
     var folio_no = GetQueryString()["folio_no"]
 

@@ -1,8 +1,11 @@
 ﻿using BSI_Logics.Controller;
 using BSI_Logics.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
 using System.Web.Script.Services;
@@ -26,6 +29,79 @@ namespace BSI_Practice.WebServices
         public string HelloWorld()
         {
             return "Hello World";
+        }
+
+        [WebMethod]
+        public string GetTaskAndAssignmentID(int header_id)
+        {
+            string returnedOutput = "";
+            try
+            {
+                var tasks = controller.GetWorkflowTasks();
+                var task = tasks.FirstOrDefault(t => t.name.ToString().Contains($"{header_id}"));
+                string task_id = Convert.ToString(task["id"]);
+                string assignment_id = Convert.ToString(task["taskAssignments"][0]["id"]);
+
+                var result = new
+                {
+                    Success = true,
+                    Message = "OK",
+                    task_id,
+                    assignment_id
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(result);
+            }
+            catch(Exception ex)
+            {
+                var result = new
+                {
+                    Success = false,
+                    Message = $"{ex.Message}"
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(result);
+            }
+            return returnedOutput;
+        }
+
+        [WebMethod]
+        public string ApprovalAction(string action_name, string task_id, string assignment_id)
+        {
+            string returnedOutput = "";
+            try
+            {
+                string token = controller.GetWorkflowToken();
+                HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+                var payload = new { outcome = action_name };
+                var jsonPayload = JsonConvert.SerializeObject(payload);
+                var stringContent = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+                string url = $"https://us.nintex.io/workflows/v2/tasks/{task_id}/assignments/{assignment_id}";
+
+                var request = new HttpRequestMessage(new HttpMethod("PATCH"), url);
+                request.Content = stringContent;
+
+                var response = client.SendAsync(request).Result;
+                var responseBody = response.Content.ReadAsStringAsync();
+
+                var result = new
+                {
+                    Success = true,
+                    Message = "OK",
+                    Body = responseBody
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(result);
+            }
+            catch(Exception ex)
+            {
+                var result = new
+                {
+                    Success = false,
+                    Message = $"{ex.Message}"
+                };
+                returnedOutput = new JavaScriptSerializer().Serialize(result);
+            }
+            return returnedOutput;
         }
 
         [WebMethod]

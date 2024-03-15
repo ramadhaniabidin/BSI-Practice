@@ -1,6 +1,7 @@
 ﻿using BSI_Logics.Common;
 using BSI_Logics.Models;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -28,6 +29,37 @@ namespace BSI_Logics.Controller
         SqlDataReader reader = null;
         DataTable dt = new DataTable();
 
+        public string GetWorkflowToken()
+        {
+            string url = "https://us.nintex.io/authentication/v1/token";
+            HttpClient client = new HttpClient();
+            var requestBody = new
+            {
+                client_id = "f7bbb84b-b114-4120-9a5f-b0557b6dbee2",
+                client_secret = "sNNtUWsKIRJtSsOtTsJPLtSsMNJMLtUsMPtUsI2VsJtWsINMtPsNtW2MtVsRtUUsFRtSTWsFMtTVsPFtRsK2osFtTsP2jsLOKtRsMM2p",
+                grant_type = "client_credentials"
+            };
+            var jsonBody = JsonConvert.SerializeObject(requestBody);
+            var HttpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+            var response = client.PostAsync(url, HttpContent).Result;
+            var responseJson = response.Content.ReadAsStringAsync().Result;
+            var responseObject = JsonConvert.DeserializeObject<dynamic>(responseJson);
+            string accessToken = responseObject.access_token;
+            return accessToken;
+        }
+        public IEnumerable<dynamic> GetWorkflowTasks()
+        {
+            string url = "https://us.nintex.io/workflows/v2/tasks";
+            string token = GetWorkflowToken();
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+            var response = client.GetAsync(url).Result;
+            var responseJson = response.Content.ReadAsStringAsync().Result;
+            dynamic responseObject = JsonConvert.DeserializeObject(responseJson);
+            var tasks = responseObject.tasks;
+
+            return tasks;
+        }
         public AccountModel GetCurrentLoginData(string loginToken)
         {
             try

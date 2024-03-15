@@ -162,6 +162,41 @@ app.service("svc", function ($http) {
         });
         return response;
     };
+
+    this.svc_GetTaskAndAssignmentID = function (header_id) {
+        var param = {
+            'header_id': header_id,
+        }
+
+        var response = $http({
+            method: "post",
+            url: "/WebServices/StationaryRequest.asmx/GetTaskAndAssignmentID",
+            data: JSON.stringify(param),
+            dataType: "json",
+        });
+
+        return response;
+    };
+
+    this.svc_ApproveRequest = function (approval_value, task_id, assignmnet_id) {
+        var param = {
+            'action_name': approval_value,
+            'task_id': task_id,
+            'assignment_id': assignmnet_id
+        }
+
+        var config = {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+
+        var url = "/WebServices/StationaryRequest.asmx/ApprovalAction";
+        var response = $http.post(url, param, config);
+        console.log(response);
+
+        return response;
+    }
 });
 
 app.controller("StatinoaryRequestController", function ($scope, svc) {
@@ -228,6 +263,11 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     // End region
 
     // This function is for retrieving user data
+    $scope.ApprovalAction = function () {
+        //var header_i
+        var approval_value = $scope.workflow_histories.action_name;
+
+    };
     $scope.GetCurrentLoginData = function () {
         var token = sessionStorage.getItem('LoginToken');
         var promise = svc.svc_GetCurrentLoginData(token);

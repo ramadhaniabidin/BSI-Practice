@@ -1,7 +1,11 @@
-﻿using System;
+﻿using BSI_Logics.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -9,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace BSI_Logics.Common
 {
-    public class Utility
+    public static class Utility
     {
         public static string DecryptString(string encrString)
         {
@@ -204,6 +208,33 @@ namespace BSI_Logics.Common
                 }
             }
             return obj;
+        }
+        public static string TestAppConfig()
+        {
+            return ConfigurationManager.AppSettings["txtFilePath"].ToString();
+        }
+        public static string GetSQLConnection()
+        {
+            string path = TestAppConfig();
+            return File.ReadAllText(path).Trim();
+        }
+        public static List<StationaryItemsModel> TestFetchItems()
+        {
+            using(var conn = new SqlConnection(GetSQLConnection()))
+            {
+                conn.Open();
+                using(var cmd = new SqlCommand("usp_Inventory_GetAllItems", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+                    using(var reader = cmd.ExecuteReader())
+                    {
+                        DataTable dt = new DataTable();
+                        dt.Load(reader);
+                        return ConvertDataTableToList<StationaryItemsModel>(dt);
+                    }
+                }
+            }
         }
     }
 }

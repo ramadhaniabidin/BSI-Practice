@@ -17,7 +17,7 @@ namespace BSI_Practice.Pages
         {
             string email = txtEmail.Text.Trim();
             Session["UserID"] = email;
-            Response.Redirect("Pages/AfterLogin.aspx");
+            Response.Redirect("/Pages/AfterLogin.aspx");
             HttpContext.Current.ApplicationInstance.CompleteRequest();
         }
     }

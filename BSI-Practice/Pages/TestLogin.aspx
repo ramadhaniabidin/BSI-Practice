@@ -17,6 +17,8 @@
     <link href="../Style/sb-admin-2.css" rel="stylesheet" />
     <link href="../Style/Login.css" rel="stylesheet"/>
 
+    <script type="text/javascript" src="../Scripts/AngularJS/angular.min.js"></script>
+    <script type="text/javascript" src="../Scripts/Page/Login.js"></script>
 
 
 </head>
@@ -41,8 +43,8 @@
                                                  <%--<input type="text" runat="server" class="form-control form-control-user" placeholder="Enter Email Address..."/>--%>
                                                 <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control form-control-user" placeHolder="Enter Email.."></asp:TextBox>
                                             </div>
-                                            <%--<button type="button" class="btn btn-primary btn-user btn-block">Login</button>--%>
-                                            <asp:Button runat="server" ID="loginButton" Text="Login" CssClass="btn btn-primary btn-user btn-block" OnClick="loginAction"/>
+                                            <button type="button" class="btn btn-primary btn-user btn-block">Login</button>
+                                            <%--<asp:Button runat="server" ID="loginButton" Text="Login" CssClass="btn btn-primary btn-user btn-block" OnClick="loginAction"/>--%>
                                         </div>
                                     </div>
                                 </div>

@@ -44,8 +44,12 @@
                                             <div class="form-group">
                                                 <input type="text" runat="server" class="form-control form-control-user" placeholder="Enter Email Address..." ng-model="login_email"/>
                                             </div>
-                                            <button type="button" class="btn btn-danger btn-user btn-block" ng-click="VerifyPassword()">Verify Password</button>
+                                            <button type="button" class="btn btn-danger btn-user btn-block" ng-click="HashPassword()">Verify Password</button>
                                             <button type="button" class="btn btn-primary btn-user btn-block" ng-click="TestFetchItems()" ng-disabled="login_email == '' || login_email == undefined || login_email == null">Login</button>
+                                        
+                                            <div class="text-center">
+                                                <p>Don't have an account? <a href="" target="_blank">Sign Up</a></p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

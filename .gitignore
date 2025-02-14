@@ -15,4 +15,10 @@ BSI_Logics/bin/
 packages/
 BSI_Practice/obj/
 BSI_Logics/obj/
+# Ignore compiled files
+bin/
+obj/
+*.exe
+*.dll
+
 

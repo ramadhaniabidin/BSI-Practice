@@ -13,3 +13,9 @@ README.txt
 packages/
 BSI_Practice/bin/
 BSI_Logics/bin
+# Ignore compiled files
+bin/
+obj/
+*.exe
+*.dll
+

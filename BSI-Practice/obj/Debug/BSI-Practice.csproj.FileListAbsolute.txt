@@ -263,6 +263,7 @@ C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI-Practice\bin\roslyn\VBC
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI-Practice\bin\Antlr3.Runtime.dll
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI-Practice\bin\AspNet.ScriptManager.bootstrap.dll
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI-Practice\bin\AspNet.ScriptManager.jQuery.dll
+C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI-Practice\bin\BCrypt.Net-Next.dll
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI-Practice\bin\BSI_Logics.dll
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI-Practice\bin\Microsoft.AspNet.FriendlyUrls.dll
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI-Practice\bin\Microsoft.AspNet.Web.Optimization.WebForms.dll
@@ -289,6 +290,7 @@ C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI-Practice\bin\System.Web
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI-Practice\bin\WebGrease.dll
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI-Practice\bin\BSI_Logics.pdb
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI-Practice\bin\BSI_Logics.dll.config
+C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI-Practice\bin\BCrypt.Net-Next.xml
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI-Practice\bin\Microsoft.Bcl.AsyncInterfaces.xml
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI-Practice\bin\Microsoft.IdentityModel.Abstractions.xml
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI-Practice\bin\Microsoft.IdentityModel.JsonWebTokens.xml

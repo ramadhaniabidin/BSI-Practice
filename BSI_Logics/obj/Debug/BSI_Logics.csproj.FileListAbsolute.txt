@@ -75,6 +75,7 @@ C:\Users\ramad\OneDrive\Documents\Belajar\BSI-Practice\BSI_Logics\bin\Debug\Newt
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI_Logics\bin\Debug\BSI_Logics.dll.config
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI_Logics\bin\Debug\BSI_Logics.dll
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI_Logics\bin\Debug\BSI_Logics.pdb
+C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI_Logics\bin\Debug\BCrypt.Net-Next.dll
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI_Logics\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI_Logics\bin\Debug\Microsoft.IdentityModel.Abstractions.dll
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI_Logics\bin\Debug\Microsoft.IdentityModel.JsonWebTokens.dll
@@ -90,6 +91,7 @@ C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI_Logics\bin\Debug\System
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI_Logics\bin\Debug\System.Text.Json.dll
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI_Logics\bin\Debug\System.Threading.Tasks.Extensions.dll
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI_Logics\bin\Debug\System.ValueTuple.dll
+C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI_Logics\bin\Debug\BCrypt.Net-Next.xml
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI_Logics\bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI_Logics\bin\Debug\Microsoft.IdentityModel.Abstractions.xml
 C:\Users\Administrator\Documents\GitHub\BSI-Practice\BSI_Logics\bin\Debug\Microsoft.IdentityModel.JsonWebTokens.xml

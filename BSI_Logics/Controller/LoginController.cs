@@ -15,7 +15,7 @@ namespace BSI_Logics.Controller
 {
     public class LoginController
     {
-        DatabaseManager db = new DatabaseManager();
+        readonly DatabaseManager db = new DatabaseManager();
         SqlConnection conn = new SqlConnection();
         SqlDataReader reader = null;
 
@@ -121,6 +121,16 @@ namespace BSI_Logics.Controller
                 LoginToken = "";
             }
             return LoginToken;
+        }
+
+        public string HashPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
+        public bool VerifyPassword(string inputPassword, string hashedPassword)
+        {
+            return BCrypt.Net.BCrypt.Verify(inputPassword, hashedPassword);
         }
     }
 }

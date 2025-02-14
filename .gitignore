@@ -10,12 +10,15 @@ textpattern/
 HISTORY.txt
 README.txt
 .vs/
-packages/
 BSI_Practice/bin/
-BSI_Logics/bin
+BSI_Logics/bin/
+packages/
+BSI_Practice/obj/
+BSI_Logics/obj/
 # Ignore compiled files
 bin/
 obj/
 *.exe
 *.dll
+
 

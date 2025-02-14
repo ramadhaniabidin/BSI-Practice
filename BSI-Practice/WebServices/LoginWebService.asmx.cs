@@ -1,4 +1,5 @@
-﻿using BSI_Logics.Controller;
+﻿using BSI_Logics.Common;
+using BSI_Logics.Controller;
 using BSI_Logics.Models;
 using Newtonsoft.Json;
 using System;
@@ -28,6 +29,75 @@ namespace BSI_Practice.WebServices
         public string HelloWorld()
         {
             return "Hello World";
+        }
+
+        [WebMethod]
+        public string TextAppConfig()
+        {
+            try
+            {
+                string path = Utility.TestAppConfig();
+                return new JavaScriptSerializer().Serialize(new
+                {
+                    Success = true,
+                    Message = "OK",
+                    Path = path
+                });
+            }
+            catch(Exception ex)
+            {
+                return new JavaScriptSerializer().Serialize(new
+                {
+                    Success = false,
+                    ex.Message
+                });
+            }
+        }
+
+        [WebMethod]
+        public string TestConnectionString()
+        {
+            try
+            {
+                string connString = Utility.GetSQLConnection();
+                return new JavaScriptSerializer().Serialize(new
+                {
+                    Success = true,
+                    Message = "OK",
+                    ConnectionString = connString
+                });
+            }
+            catch(Exception ex)
+            {
+                return new JavaScriptSerializer().Serialize(new
+                {
+                    Success = false,
+                    ex.Message
+                });
+            }
+        }
+
+        [WebMethod]
+        public string TestFetchItems()
+        {
+            try
+            {
+                var items = Utility.TestFetchItems();
+                return new JavaScriptSerializer().Serialize(new
+                {
+                    Success = true,
+                    Message = "OK",
+                    FetchedItems = items
+                });
+            }
+            catch(Exception ex)
+            {
+                return new JavaScriptSerializer().Serialize(new
+                {
+                    Success = false,
+                    ex.Message
+                });
+            }
         }
 
         [WebMethod]
@@ -151,6 +221,53 @@ namespace BSI_Practice.WebServices
                 returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
             }
             return returnedOutput;
+        }
+
+        [WebMethod]
+        public string HashPassword(string password)
+        {
+            try
+            {
+                string hashedPassword = controller.HashPassword(password);
+                return new JavaScriptSerializer().Serialize(new
+                {
+                    Success = true,
+                    Message = "OK",
+                    HashedPassowd = hashedPassword
+                });
+            }
+            catch(Exception ex)
+            {
+                return new JavaScriptSerializer().Serialize(new
+                {
+                    Success = false,
+                    ex.Message
+                });
+            }
+        }
+
+        [WebMethod]
+        public string VerifyPassword(string inputPassword, string hashedPassword)
+        {
+            try
+            {
+                bool verified = controller.VerifyPassword(inputPassword, hashedPassword);
+                return new JavaScriptSerializer().Serialize(new 
+                { 
+                    Success = true,
+                    Message = "OK",
+                    PasswordVerified = verified
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return new JavaScriptSerializer().Serialize(new
+                {
+                    Success = false,
+                    ex.Message
+                });
+            }
         }
     }
 }

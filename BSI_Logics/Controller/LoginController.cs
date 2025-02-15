@@ -10,6 +10,7 @@ using System.Data;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
+using Utility = BSI_Logics.Common.Utility;
 
 namespace BSI_Logics.Controller
 {
@@ -22,6 +23,46 @@ namespace BSI_Logics.Controller
         private readonly string JwtKey = "LO6i4DuNxIpmGIpjCPRuPwx1NpA2Deuryh7HOsaw_b0";
         private readonly string JwtIssuer = "https://localhost:44313/";
         private readonly string JwtAudience = "https://localhost:44313/";
+
+        public bool CheckEmailExists(string email)
+        {
+            int itemCount = 0;
+            using(var conn = new SqlConnection(Utility.GetSQLConnection()))
+            {
+                conn.Open();
+                using(var cmd = new SqlCommand("usp_Users_CheckEmailExists", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@email", email);
+                    using(var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            itemCount = reader.GetInt32(0);
+                        }
+                        return itemCount > 0;
+                    }
+                }
+            }
+        }
+
+        public void SignUp(string email, string password)
+        {
+            using(var conn = new SqlConnection(Utility.GetSQLConnection()))
+            {
+                conn.Open();
+                using(var cmd = new SqlCommand("usp_Users_Insert", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@email", email);
+                    cmd.Parameters.AddWithValue("@password", HashPassword(password));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         public int GetRoleId(string email)
         {
             //var returnedOutput = "";

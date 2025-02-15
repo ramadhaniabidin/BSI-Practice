@@ -80,7 +80,7 @@ app.service("svc", function ($http) {
 app.controller('LoginController', function ($scope, svc) {
     //Variable Declaration
     $scope.login_email = "";
-    $scope.hashed_password = "$2a$11$o2an1pMmBvZn8qkWMNJG4OvFf7zvKgJSV.BWsO45i/LQR5Z2OCfLu";
+    $scope.hashed_password = "$2a$11$9z68ukGGAqQ7xJPcJqviz.YuKi.fnpN9Pj9Nz6ra0V9TxJ8sHJc8a";
     //End Region
 
     //This function is for displaying alert with the email in it

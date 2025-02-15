@@ -5,6 +5,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
 using System.Web.Script.Services;
@@ -29,6 +32,60 @@ namespace BSI_Practice.WebServices
         public string HelloWorld()
         {
             return "Hello World";
+        }
+
+        [WebMethod]
+        public string CheckEmailExists(string email)
+        {
+            try
+            {
+                bool emailExists = controller.CheckEmailExists(email);
+                return new JavaScriptSerializer().Serialize(new
+                {
+                    Success = true,
+                    InfoMessage = "OK",
+                    EmailExists = emailExists
+                });
+            }
+            catch(Exception ex)
+            {
+                return new JavaScriptSerializer().Serialize(new
+                {
+                    Success = false,
+                    InfoMessage = ex.Message
+                });
+            }
+        }
+
+        [WebMethod]
+        public string SignUp(string email, string password)
+        {
+            try
+            {
+                bool emailExists = controller.CheckEmailExists(email);
+                if (emailExists)
+                {
+                    return new JavaScriptSerializer().Serialize(new
+                    {
+                        Success = false,
+                        InfoMessage = "Email already registered, please use different email"
+                    });
+                }
+                controller.SignUp(email, password);
+                return new JavaScriptSerializer().Serialize(new
+                {
+                    Success = true,
+                    InfoMessage = "OK"
+                });
+            }
+            catch(Exception ex)
+            {
+                return new JavaScriptSerializer().Serialize(new
+                {
+                    Success = false,
+                    InfoMessage = ex.Message
+                });
+            }
         }
 
         [WebMethod]

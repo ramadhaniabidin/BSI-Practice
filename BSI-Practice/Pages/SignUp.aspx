@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="BSI_Practice.Pages.Login" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="SignUp.aspx.cs" Inherits="BSI_Practice.Pages.SignUp" %>
 
 <!DOCTYPE html>
 
@@ -10,21 +10,18 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
 
-    <title>Login</title>
+    <title>Sign Up</title>
 
     <link rel="stylesheet" href="../Style/Fonts/FontAwesome/all.min.css"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" />
     <link href="../Style/sb-admin-2.css" rel="stylesheet" />
     <link href="../Style/Login.css" rel="stylesheet"/>
 
-
     <script src="../Scripts/AngularJS/angular.min.js"></script>
     <script src="../Scripts/AngularJS/angular-filter.js"></script>
-    <script src="../Scripts/Page/Login.js"></script>
-
-
+    <script src="../Scripts/Page/SignUp.js"></script>
 </head>
-<body ng-app="LoginPage" ng-controller="LoginController" class="bg-gradient-primary" style="background-color:rgb(22 22 21)">
+<body style="background-color:rgb(22 22 21)" ng-app="SignUpPage" ng-controller="SignUpController">
     <form id="form1" runat="server">
         <div class="custom-centered">
             <div class="row justify-content-center">
@@ -38,17 +35,25 @@
                                 <div class="col-lg-8">
                                     <div class="p-5">
                                         <div class="text-center">
-                                            <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                                            <h1 class="h4 text-gray-900 mb-4">Sign Up!</h1>
                                         </div>
                                         <div class="user">
                                             <div class="form-group">
-                                                <input type="text" runat="server" class="form-control form-control-user" placeholder="Enter Email Address..." ng-model="login_email"/>
+                                                <input type="text" runat="server" class="form-control form-control-user" placeholder="Enter Email Address..." ng-model="email_input" ng-keyup="onKeyUp()"/>                                                
                                             </div>
-                                            <button type="button" class="btn btn-danger btn-user btn-block" ng-click="VerifyPassword()">Verify Password</button>
-                                            <button type="button" class="btn btn-primary btn-user btn-block" ng-click="TestFetchItems()" ng-disabled="login_email == '' || login_email == undefined || login_email == null">Login</button>
+                                            <div class="form-group">
+                                                <input type="password" runat="server" class="form-control form-control-user" placeholder="Enter Your Password..." ng-model="password_input" ng-keyup="PasswordOnKeyUp()"/>
+                                                <p ng-show="!PasswordLengthValid" style="text-align: center;">Password must contains at least 8 characters</p>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="password" runat="server" class="form-control form-control-user" placeholder="Verify Password..." ng-model="password_verif" ng-keyup="onKeyUp()"/>
+                                            </div>
+                                            <button type="button" 
+                                                class="btn btn-primary btn-user btn-block" ng-click="SignUp()" 
+                                                ng-disabled="isDisabled">Sign Up</button>
                                         
                                             <div class="text-center">
-                                                <p>Don't have an account? <a href="SignUp.aspx">Sign Up</a></p>
+                                                <p>Already have an account? <a href="Login.aspx">Sign In</a></p>
                                             </div>
                                         </div>
                                     </div>

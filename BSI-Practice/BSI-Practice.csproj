@@ -160,6 +160,7 @@
     <Content Include="Images\logo.png" />
     <Content Include="Pages\AfterLogin.aspx" />
     <Content Include="Pages\Home.aspx" />
+    <Content Include="Pages\SignUp.aspx" />
     <Content Include="Pages\StationaryRequest.aspx" />
     <Content Include="Pages\TestLogin.aspx" />
     <Content Include="Scripts\BaseLogic.js" />
@@ -183,6 +184,7 @@
     <Content Include="Scripts\AngularJS\angular.min.js.map" />
     <Content Include="Scripts\MainMaster.js" />
     <Content Include="Scripts\Page\Home.js" />
+    <Content Include="Scripts\Page\SignUp.js" />
     <Content Include="Scripts\Page\StationaryRequest.js" />
     <Content Include="Style\Home.css" />
     <Content Include="Style\MainMaster.css" />
@@ -289,6 +291,13 @@
     </Compile>
     <Compile Include="Pages\Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SignUp.aspx.cs">
+      <DependentUpon>SignUp.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SignUp.aspx.designer.cs">
+      <DependentUpon>SignUp.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\StationaryRequest.aspx.cs">
       <DependentUpon>StationaryRequest.aspx</DependentUpon>

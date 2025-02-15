@@ -1,9 +1,9 @@
 ﻿var app = angular.module('StationaryRequestPage', []);
 
 app.service("svc", function ($http) {
-    this.svc_GetCurrentLoginData = function (loginToken) {
+    this.svc_GetCurrentLoginData = function (email) {
         var param = {
-            'loginToken': loginToken
+            'email': email
         };
 
         var response = $http({
@@ -218,6 +218,7 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     $scope.isRequestValid = false;
 
     $scope.IsRequestor = false;
+    $scope.isCurrentApprover = false;
 
     $scope.rows = [{
         item_name: '',
@@ -259,34 +260,42 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         action_date: ''
     }];
 
+    $scope.approver_list = ["Internal Section Head", "Internal Dept Head"];
+
     $scope.next_approver = "";
+    $scope.req_qty_total = {
+        'A4 Paper': 0,
+        'Pencil': 0,
+        'Marker': 0,
+        'Envelope': 0
+    };
     // End region
 
-    // This function is for retrieving user data
+    
     $scope.ApprovalAction = function () {
         //var header_i
         var approval_value = $scope.workflow_histories.action_name;
 
     };
-    $scope.GetCurrentLoginData = function () {
-        var token = sessionStorage.getItem('LoginToken');
-        var promise = svc.svc_GetCurrentLoginData(token);
-        promise.then(function (response) {
-            var response_data = JSON.parse(response.data.d);
-            var userData = response_data.currentLoginData;
-            console.log('User data: ', userData);
-            $scope.role_id = userData.role_id;
 
-            if ($scope.role_id == 0) {
+    // This function is for retrieving user data
+    $scope.GetCurrentLoginData = function () {
+        const email = $("#username").text();
+        const promise = svc.svc_GetCurrentLoginData(email);
+        promise.then(function (resp) {
+            const responseJSON = JSON.parse(resp.data.d);
+            const userData = responseJSON.Data;
+            if (userData.RoleID == 0) {
                 $scope.IsRequestor = true;
                 $scope.request.header.folio_no = 'Generated On Submit';
-                $scope.request.header.applicant = userData.name;
-                $scope.request.header.department = userData.department;
-                $scope.request.header.role = userData.role;
-                $scope.request.header.employee_id = userData.id;
+                $scope.request.header.applicant = userData.Name;
+                $scope.request.header.department = userData.Department;
+                $scope.request.header.role = userData.Role;
+                $scope.request.header.employee_id = userData.ID;
                 $scope.request.header.extension = '';
             }
-            //console.log(response_data);
+        }).catch(function (err) {
+            console.log(err);
         });
     };
     // End region
@@ -353,7 +362,6 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         promise.then(function (response) {
             let JsonData = JSON.parse(response.data.d);
             let approver = JsonData.approver_name;
-            //console.log('Json Data : ', JsonData);
             $scope.approver_list = [];
             for (i of approver) {
                 if (!$scope.approver_list.includes(i)) {
@@ -366,12 +374,14 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
 
     // This function is for retieving stock and unit of a particular item
     $scope.GetStockAndUnit = function (index) {
-        var item_name = $scope.request.detail[index].item_name;
-        var promise = svc.svc_GetStockAndUnit(item_name);
+        const item_name = $scope.request.detail[index].item_name;
+        if (!item_name) {
+            return;
+        }
+        const promise = svc.svc_GetStockAndUnit(item_name);
         promise.then(function (response) {
-            var response_data = JSON.parse(response.data.d);
-            console.log(response_data);
-            var StockAndUnit = response_data.StockAndUnit;
+            const response_data = JSON.parse(response.data.d);
+            const StockAndUnit = response_data.StockAndUnit;
             $scope.request.detail[index].uom = StockAndUnit.uom;
             $scope.request.detail[index].stock = StockAndUnit.stock;
         });
@@ -383,9 +393,6 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
 
         var stock = $scope.request.detail[index].stock;
         var req_qty = $scope.request.detail[index].request_qty;
-
-        console.log('stock = ', stock);
-        console.log('request quantity = ', req_qty);
 
         // THIS CHECKS WHETHER THE REQUEST QUANTITY EXCEEDS THE STOCK
         var validation1 = req_qty > stock;
@@ -418,84 +425,133 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     // END REGION
 
     // THIS FUNCTION VALIDATES THE OVERALL REQUEST SUBMISSION
-    $scope.ValidateRequest = function () {
-        var stock;
-        var req_qty;
-        var item_name;
-        var submit_btn = document.getElementById("submit-btn");
 
-        for (var i = 0; i < $scope.request.detail.length; i++) {
-            stock = $scope.request.detail[i].stock;
-            req_qty = $scope.request.detail[i].request_qty;
-            item_name = $scope.request.detail[i].item_name;
-
-            if (req_qty > stock) {
+    $scope.RequestDetails_ValidateEachLine = () => {
+        for (let i = 0; i < $scope.request.detail.length; i++) {
+            if ($scope.request.detail[i].request_qty > $scope.request.detail[i].stock) {
                 alert("Permintaan Anda (baris ke " + (i + 1) + ") melebihi stok yang ada");
-                $scope.isRequestValid = false;
+                return false;
             }
 
-            if ((item_name == null) || (item_name == undefined)) {
+            if (!$scope.request.detail[i].item_name) {
                 alert("Mohon pilih barang yang akan diminta (baris " + (i + 1) + ")");
-                $scope.isRequestValid = false;
+                return false;
             }
 
-            if ((req_qty == 0) || (req_qty == undefined) || (req_qty == undefined)) {
+            if (!$scope.request.detail[i].request_qty) {
                 alert("Jumlah barang yang diminta tidak boleh kosong (baris " + (i + 1) + ")");
-                $scope.isRequestValid = false;
+                return false;
             }
         }
+        return true;
+    };
 
-        if (($scope.next_approver == null) || ($scope.next_approver == undefined) || $scope.next_approver == '') {
-            alert("Next Approver tidak boleh kosong!");
-            $scope.isRequestValid = false;
-        }
-
-        else {
-            $scope.isRequestValid = true;
-        }
-
-        if ($scope.isRequestValid == true) {
-            let header_data = {};
-            header_data.folio_no = $scope.request.header.folio_no;
-            header_data.applicant = $scope.request.header.applicant;
-            header_data.department = $scope.request.header.department;
-            header_data.role = $scope.request.header.role;
-            header_data.role_id = $scope.request.header.role_id;
-            header_data.employee_id = $scope.request.header.employee_id;
-            header_data.extension = $scope.request.header.extension;
-            header_data.created_by = $scope.request.header.applicant;
-            header_data.created_date = $scope.getCurrentDateTime();
-            header_data.modified_by = $scope.request.header.applicant;
-            header_data.modified_date = $scope.getCurrentDateTime();
-            header_data.current_approver_role = $scope.next_approver;
-
-            let detail_data = [];
-            for (var i = 0; i < $scope.request.detail.length; i++) {
-                detail_data.push({
-                    item_name: $scope.request.detail[i].item_name,
-                    no: i + 1,
-                    uom: $scope.request.detail[i].uom,
-                    stock: $scope.request.detail[i].stock,
-                    request_qty: $scope.request.detail[i].request_qty,
-                    reason: $scope.request.detail[i].reason,
-                });
+    $scope.SubmitRequest = () => {
+        if ($scope.ValidateRequest()) {
+            if (confirm("Submit Data?")) {
+                const header_data = $scope.SubmitRequest_GenerateHeader();
+                console.log(header_data);
+                const details = $scope.SubmitRequest_GenerateDetails();
+                console.log(details);
             }
-            console.log('Param header: ', header_data);
-            console.log('Param detail: ', detail_data);
+        }
+    };
 
-            var promise = svc.svc_SaveUpdate(header_data, detail_data);
-            promise.then(function (response) {
-                let jsonData = JSON.parse(response.data.d);
-                console.log('Json Data : ', jsonData);
-                if (jsonData.Success) {
-                    alert('Berhasil memasukkan data header dan detail');
-                    location.href = "/Pages/Home";
-                }
-                else {
-                    alert(jsonData.Message);
-                }
+    $scope.SubmitRequest_GenerateHeader = () => {
+        const header = {
+            folio_no: $scope.request.header.folio_no,
+            applicant: $scope.request.header.applicant,
+            department: $scope.request.header.department,
+            role: $scope.request.header.role,
+            role_id: $scope.request.header.role_id,
+            employee_id: $scope.request.header.employee_id,
+            extension: $scope.request.header.extension,
+            created_by: $scope.request.header.applicant,
+            created_date: $scope.getCurrentDateTime(),
+            modified_by: $scope.request.header.applicant,
+            modified_date: $scope.getCurrentDateTime(),
+            current_approver_role: $scope.next_approver
+        };
+        return header;
+    };
+
+    $scope.SubmitRequest_GenerateDetails = () => {
+        let detail = [];
+        $scope.request.detail.map((item,i) => {
+            detail.push({
+                item_name: item.item_name,
+                no: i + 1,
+                uom: item.uom,
+                stock: item.stock,
+                request_qty: parseInt(item.request_qty),
+                reason: item.reason
             });
+        });
+        return detail;
+    };
+
+    $scope.ValidateRequest = function () {
+        if (!$scope.RequestDetails_ValidateEachLine()) {
+            return false;
         }
+
+        if (!$scope.next_approver) {
+            alert("Next Approver tidak boleh kosong!");
+            return false;
+        }        
+
+        if (!$scope.ValidateTotalRequestPerItem()) {
+            return false;
+        }
+
+        return true;
+
+        //if (confirm("Submit data?")) {
+        //    alert("Submit data sukses!");
+        //}
+
+        //if ($scope.isRequestValid == true) {
+        //    let header_data = {};
+        //    header_data.folio_no = $scope.request.header.folio_no;
+        //    header_data.applicant = $scope.request.header.applicant;
+        //    header_data.department = $scope.request.header.department;
+        //    header_data.role = $scope.request.header.role;
+        //    header_data.role_id = $scope.request.header.role_id;
+        //    header_data.employee_id = $scope.request.header.employee_id;
+        //    header_data.extension = $scope.request.header.extension;
+        //    header_data.created_by = $scope.request.header.applicant;
+        //    header_data.created_date = $scope.getCurrentDateTime();
+        //    header_data.modified_by = $scope.request.header.applicant;
+        //    header_data.modified_date = $scope.getCurrentDateTime();
+        //    header_data.current_approver_role = $scope.next_approver;
+
+        //    let detail_data = [];
+        //    for (var i = 0; i < $scope.request.detail.length; i++) {
+        //        detail_data.push({
+        //            item_name: $scope.request.detail[i].item_name,
+        //            no: i + 1,
+        //            uom: $scope.request.detail[i].uom,
+        //            stock: $scope.request.detail[i].stock,
+        //            request_qty: $scope.request.detail[i].request_qty,
+        //            reason: $scope.request.detail[i].reason,
+        //        });
+        //    }
+        //    console.log('Param header: ', header_data);
+        //    console.log('Param detail: ', detail_data);
+
+        //    var promise = svc.svc_SaveUpdate(header_data, detail_data);
+        //    promise.then(function (response) {
+        //        let jsonData = JSON.parse(response.data.d);
+        //        console.log('Json Data : ', jsonData);
+        //        if (jsonData.Success) {
+        //            alert('Berhasil memasukkan data header dan detail');
+        //            location.href = "/Pages/Home";
+        //        }
+        //        else {
+        //            alert(jsonData.Message);
+        //        }
+        //    });
+        //}
     }
     // END REGION
 
@@ -573,6 +629,41 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     };
     // End region
 
+    $scope.RequestDetails_GetDistinctItems = function () {
+        const distinctItems = $scope.request.detail.reduce((acc, item) => {
+            if (!acc.some(x => x.item_name === item.item_name)) {
+                acc.push({ item_name: item.item_name, stock: item.stock });
+            }
+            return acc;
+        }, []);
+        return distinctItems;
+    };
+
+    $scope.RequestDetails_GetTotalRequestPerItem = (distinctItems) => {
+        let arr = [];
+        distinctItems.map(item => {
+            const total = $scope.request.detail.reduce((sum, req) =>
+                req.item_name === item.item_name ? sum + parseInt(req.request_qty) : sum, 0
+            );
+            arr.push({ item_name: item.item_name, total_request_qty: total, stock: item.stock });
+        });
+        return arr;
+    };
+
+    $scope.ValidateTotalRequestPerItem = function () {
+        const distinctItems = $scope.RequestDetails_GetDistinctItems();
+        const totalRequestPerItem = $scope.RequestDetails_GetTotalRequestPerItem(distinctItems);
+
+        const isValid = !totalRequestPerItem.some(item => {
+            if (item.total_request_qty > item.stock) {
+                alert(`Jumlah request Anda melebihi stock yang ada untuk item ${item.item_name}`);
+                return true;
+            }
+            return false;
+        });
+        return isValid;
+    };
+
     $scope.GetRequestHeader = function (folio_no) {
         let promise = svc.svc_GetHeaderData(folio_no);
         promise.then(function (response) {
@@ -636,10 +727,9 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         });
     };
 
-
-
-    var folio_no = GetQueryString()["folio_no"]
+    const folio_no = GetQueryString()["folio_no"]
     $scope.GetStationaryItems();
+    $scope.GetCurrentLoginData();
     //if ((folio_no === null) || (folio_no === undefined) || (folio_no === '')) {
     //    $scope.GetCurrentLoginData();
     //    $scope.GetStationaryItems();

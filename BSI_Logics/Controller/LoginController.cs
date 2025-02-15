@@ -169,6 +169,26 @@ namespace BSI_Logics.Controller
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
 
+        public LoginModel GetUser(string email)
+        {
+            DataTable dt = new DataTable();
+            using(var conn = new SqlConnection(Utility.GetSQLConnection()))
+            {
+                conn.Open();
+                using(var cmd = new SqlCommand("usp_GetUser", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@email", email);
+                    using(var reader = cmd.ExecuteReader())
+                    {
+                        dt.Load(reader);
+                        return Utility.ConvertDataTableToList<LoginModel>(dt)[0];
+                    }
+                }
+            }
+        }
+
         public bool VerifyPassword(string inputPassword, string hashedPassword)
         {
             return BCrypt.Net.BCrypt.Verify(inputPassword, hashedPassword);

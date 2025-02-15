@@ -75,11 +75,26 @@ app.service("svc", function ($http) {
             dataType: "json"
         });
     };
+
+    this.svc_AuthenticateUser = function (email, password) {
+        const param = {
+            'email': email,
+            'password': password
+        };
+        return $http({
+            method: 'POST',
+            url: '/WebServices/LoginWebService.asmx/AuthenticateUser',
+            data: JSON.stringify(param),
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json"
+        });
+    };
 });
 
 app.controller('LoginController', function ($scope, svc) {
     //Variable Declaration
     $scope.login_email = "";
+    $scope.login_password;
     $scope.hashed_password = "$2a$11$9z68ukGGAqQ7xJPcJqviz.YuKi.fnpN9Pj9Nz6ra0V9TxJ8sHJc8a";
     //End Region
 
@@ -176,6 +191,18 @@ app.controller('LoginController', function ($scope, svc) {
             }).catch(function (err) {
                 console.log(err);
             });
+    };
+
+    $scope.LoginClick = () => {
+        const promise = svc.svc_AuthenticateUser($scope.login_email, $scope.login_password);
+        promise.then(function (resp) {
+            const responseJSON = JSON.parse(resp.data.d);
+            console.log(responseJSON);
+            location.href = "/Pages/Home";
+        }).catch(function (err) {
+            console.log(err);
+        });
+        
     };
 
 });

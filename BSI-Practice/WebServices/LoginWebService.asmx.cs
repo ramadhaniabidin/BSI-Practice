@@ -326,5 +326,44 @@ namespace BSI_Practice.WebServices
                 });
             }
         }
+
+        [WebMethod(EnableSession = true)]
+        public string AuthenticateUser(string email, string password)
+        {
+            try
+            {
+                if (!controller.CheckEmailExists(email))
+                {
+                    return new JavaScriptSerializer().Serialize(new
+                    {
+                        Success = false,
+                        InfoMessage = "Account not found!"
+                    });
+                }
+                var user = controller.GetUser(email);
+                if(!controller.VerifyPassword(password, user.Password))
+                {
+                    return new JavaScriptSerializer().Serialize(new
+                    {
+                        Success = false,
+                        InfoMessage = "Invalid password!"
+                    });
+                }
+                Session["UserID"] = email;
+                return new JavaScriptSerializer().Serialize(new
+                {
+                    Success = true,
+                    InfoMessage = "OK"
+                });
+            }
+            catch(Exception ex)
+            {
+                return new JavaScriptSerializer().Serialize(new
+                {
+                    Success = false,
+                    InfoMessage = ex.Message
+                });
+            }
+        }
     }
 }

@@ -334,7 +334,8 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     $scope.GetStationaryItems = function () {
         var promise = svc.svc_GetStationaryItems();
         promise.then(function (response) {
-            var response_data = JSON.parse(response.data.d);
+            const response_data = JSON.parse(response.data.d);
+            console.log(response_data);
             var StationaryItems = response_data.StationaryItems;
             $scope.itemNames = [];
             for (i of StationaryItems) {
@@ -638,18 +639,18 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
 
 
     var folio_no = GetQueryString()["folio_no"]
-
-    if ((folio_no === null) || (folio_no === undefined) || (folio_no === '')) {
-        $scope.GetCurrentLoginData();
-        $scope.GetStationaryItems();
-        $scope.GetApproverList();
-    }
-    else {
-        $scope.GetRequestData(folio_no);
-        $scope.GetCurrentLoginData();
-        $scope.GetStationaryItems();
-        $("#request_detail").addClass("readonly");
-    }
+    $scope.GetStationaryItems();
+    //if ((folio_no === null) || (folio_no === undefined) || (folio_no === '')) {
+    //    $scope.GetCurrentLoginData();
+    //    $scope.GetStationaryItems();
+    //    $scope.GetApproverList();
+    //}
+    //else {
+    //    $scope.GetRequestData(folio_no);
+    //    $scope.GetCurrentLoginData();
+    //    $scope.GetStationaryItems();
+    //    $("#request_detail").addClass("readonly");
+    //}
     
     
 });

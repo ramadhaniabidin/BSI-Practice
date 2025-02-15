@@ -15,6 +15,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
+using Utility = BSI_Logics.Common.Utility;
 
 namespace BSI_Logics.Controller
 {
@@ -119,31 +120,20 @@ namespace BSI_Logics.Controller
         }
         public List<StationaryItemsModel> GetAllStationary()
         {
-            try
+            using(var conn = new SqlConnection(Utility.GetSQLConnection()))
             {
-                dt = new DataTable();
-                db.OpenConnection(ref conn);
-                db.cmd.CommandText = "SELECT * FROM dbo.inventory_stationary";
-                db.cmd.CommandType = CommandType.Text;
-
-                reader = db.cmd.ExecuteReader();
-                dt.Load(reader);
-                db.CloseDataReader(reader);
-                db.CloseConnection(ref conn);
-
-                if (dt.Rows.Count > 0)
+                conn.Open();
+                string query = "SELECT * FROM dbo.inventory_stationary";
+                using(var cmd = new SqlCommand(query, conn))
                 {
-                    return Common.Utility.ConvertDataTableToList<StationaryItemsModel>(dt);
+                    cmd.CommandType = CommandType.Text;
+                    DataTable dt = new DataTable();
+                    using(var reader = cmd.ExecuteReader())
+                    {
+                        dt.Load(reader);
+                        return Utility.ConvertDataTableToList<StationaryItemsModel>(dt);
+                    }
                 }
-                else
-                {
-                    return new List<StationaryItemsModel>();
-                }
-            }
-            catch(Exception ex)
-            {
-                db.CloseConnection(ref conn);
-                throw ex;
             }
         }
         public List<string> GetApproverList()
@@ -176,32 +166,22 @@ namespace BSI_Logics.Controller
         }
         public StockAndUnitModel GetStockAndUnit(string item_name)
         {
-            try
+            dt = new DataTable();
+            using(var conn = new SqlConnection(Utility.GetSQLConnection()))
             {
-                dt = new DataTable();
-                db.OpenConnection(ref conn);
-                db.cmd.CommandText = "SELECT SUM(stock) stock, uom FROM dbo.inventory_stationary" +
-                    $" WHERE item_name = '{item_name}'" +
-                    " GROUP BY uom";
-                db.cmd.CommandType = CommandType.Text;
-                reader = db.cmd.ExecuteReader();
-                dt.Load(reader);
-                db.CloseDataReader(reader);
-                db.CloseConnection(ref conn);
-
-                if (dt.Rows.Count > 0)
+                conn.Open();
+                string query = "SELECT SUM(stock) stock, uom FROM dbo.inventory_stationary WHERE item_name = @item_name GROUP BY stock, uom";
+                using(var cmd = new SqlCommand(query, conn))
                 {
-                    return Common.Utility.ConvertDataTableToList<StockAndUnitModel>(dt)[0];
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@item_name", item_name);
+                    using(var reader = cmd.ExecuteReader())
+                    {
+                        dt.Load(reader);
+                        return Utility.ConvertDataTableToList<StockAndUnitModel>(dt)[0];
+                    }
                 }
-                else
-                {
-                    return new StockAndUnitModel();
-                }
-            }
-            catch(Exception ex)
-            {
-                db.CloseConnection(ref conn);
-                throw ex;
             }
         }
         public void SaveUpdate(StationaryRequestHeader header, List<StationaryRequestDetail> details)

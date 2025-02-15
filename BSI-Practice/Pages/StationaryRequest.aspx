@@ -135,7 +135,7 @@
                 </table>
             </div>
 
-            <div class="row" ng-show="IsRequestor && request.header.status_id == -1">
+            <div class="row">
                 <div class="col-2">
                     <strong>Next Approver : </strong>
                 </div>
@@ -148,7 +148,7 @@
             </div>
             
             <%--Approval Action--%>
-            <div class="row" ng-show="!IsRequestor">
+            <div class="row">
                 <label class="myLabel">Approval Action</label>
                 <hr class="separator"/>
                 <div class="col-6">
@@ -163,7 +163,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6" ng-show="role_id != 0">
+                <div class="col-6">
                     <div>
                         <label>Comments:</label>
                     </div>
@@ -176,16 +176,16 @@
             <%--Buttons--%>
             <div class="row" style="padding-top:2.75%">
                 <div class="col" style="padding-left: 0px">
-                    <button id="submit-btn" class="btn btn-primary" ng-click="ValidateRequest()" ng-show="IsRequestor && request.header.status_id == -1">Submit</button>
+                    <button id="submit-btn" class="btn btn-primary" ng-click="ValidateRequest()">Submit</button>
                     
                     <%--This button only appears if current login is requestor and status id of the request equals 5 (The request has been delivered)--%>
-                    <button id="close-btn" class="btn btn-danger" ng-show="IsRequestor && (request.header.status_id == 5)">Close</button>
+                    <button id="close-btn" class="btn btn-danger">Close</button>
 
                     <%--This button only appears if current login is not requestor and status id of the request equals 2 (Waiting for approval process)--%>
-                    <button id="approval-btn" class="btn btn-primary" ng-show="!IsRequestor && (request.header.status_id == 2)" ng-click="InsertApprovalLog()">Submit</button>
+                    <button id="approval-btn" class="btn btn-primary" ng-click="InsertApprovalLog()">Submit</button>
 
                     <%--This button only appears if current login is not requestor and status id of the request equals 3 (The request is fully approved)--%>
-                    <button id="deliver-btn" class="btn btn-primary" ng-show="!IsRequestor && (request.header.status_id == 3)">Delivered</button>
+                    <button id="deliver-btn" class="btn btn-primary">Delivered</button>
                 </div>
 
             </div>
@@ -193,7 +193,7 @@
             <%--<br /><br />--%>
 
             <%--Approval History Log--%>
-            <div class="row" style="padding-top:1%" ng-show="request.header.status_id != -1">
+            <div class="row" style="padding-top:1%">
                 <label class="myLabel">Approval History</label>
                 <hr class="separator"/>
                 <table class="myTable">

@@ -71,4 +71,4 @@ function SignOut() {
     location.href = "/Pages/Login";
 }
 
-GetCurrentLoginData(sessionStorage.getItem('LoginToken'));
+//GetCurrentLoginData(sessionStorage.getItem('LoginToken'));

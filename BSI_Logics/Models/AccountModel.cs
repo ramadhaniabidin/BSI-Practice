@@ -8,11 +8,11 @@ namespace BSI_Logics.Models
 {
     public class AccountModel
     {
-        public int id { get; set; }
-        public string name { get; set; }
-        public int role_id { get; set; }
-        public string email { get; set; }
-        public string department { get; set; }
-        public string role { get; set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public int RoleID { get; set; }
+        public string Email { get; set; }
+        public string Department { get; set; }
+        public string Role { get; set; }
     }
 }

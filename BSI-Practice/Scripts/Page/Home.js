@@ -67,7 +67,7 @@ app.controller("HomeController", function ($scope, svc) {
     };
 
 
-    $scope.GetCurrentLoginData();
+    //$scope.GetCurrentLoginData();
 
 
     //var currentLoginRoleId = localStorage.getItem("RoleId");

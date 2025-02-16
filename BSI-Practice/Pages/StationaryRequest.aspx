@@ -1,4 +1,4 @@
-﻿ <%@ Page Title="" Language="C#" MasterPageFile="~/Main.Master" AutoEventWireup="true" CodeBehind="StationaryRequest.aspx.cs" Inherits="BSI_Practice.Pages.StationaryRequest" %>
+﻿ <%@ Page Title="Stationary Request" Language="C#" MasterPageFile="~/Main.Master" AutoEventWireup="true" CodeBehind="StationaryRequest.aspx.cs" Inherits="BSI_Practice.Pages.StationaryRequest" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <link rel="stylesheet" href="../Style/StationaryRequest.css"/>
     <script src="../Scripts/jquery-3.4.1.min.js"></script>
@@ -148,7 +148,7 @@
             </div>
             
             <%--Approval Action--%>
-            <div class="row">
+            <div class="row" ng-show="request_status_id == 3 && isCurrentApprover">
                 <label class="myLabel">Approval Action</label>
                 <hr class="separator"/>
                 <div class="col-6">
@@ -176,16 +176,16 @@
             <%--Buttons--%>
             <div class="row" style="padding-top:2.75%">
                 <div class="col" style="padding-left: 0px">
-                    <button id="submit-btn" class="btn btn-primary" ng-click="ValidateRequest()">Submit</button>
+                    <button ng-show="request_status_id == 0" id="submit-btn" class="btn btn-primary" ng-click="SubmitRequest()">Submit</button>
                     
                     <%--This button only appears if current login is requestor and status id of the request equals 5 (The request has been delivered)--%>
-                    <button id="close-btn" class="btn btn-danger">Close</button>
+                    <button id="close-btn" class="btn btn-danger" ng-click="Close()">Close</button>
 
                     <%--This button only appears if current login is not requestor and status id of the request equals 2 (Waiting for approval process)--%>
-                    <button id="approval-btn" class="btn btn-primary" ng-click="InsertApprovalLog()">Submit</button>
+                    <button ng-show="request_status_id == 2" id="approval-btn" class="btn btn-primary" ng-click="InsertApprovalLog()">Submit</button>
 
                     <%--This button only appears if current login is not requestor and status id of the request equals 3 (The request is fully approved)--%>
-                    <button id="deliver-btn" class="btn btn-primary">Delivered</button>
+                    <button ng-show="request_status_id == 3" id="deliver-btn" class="btn btn-primary">Delivered</button>
                 </div>
 
             </div>
@@ -193,8 +193,8 @@
             <%--<br /><br />--%>
 
             <%--Approval History Log--%>
-            <div class="row" style="padding-top:1%">
-                <label class="myLabel">Approval History</label>
+            <div class="row" style="padding-top:1%" ng-show="request_status_id != 0">
+                <label class="myLabel">Log History</label>
                 <hr class="separator"/>
                 <table class="myTable">
                     <thead>
@@ -209,7 +209,6 @@
                     <tbody>
                         <tr ng-repeat="wf in workflow_histories">
                             <td><p style="text-align:center">{{ $index + 1 }}</td>
-                            <%--<td><input type="text" ng-model="wf.pic_name" readonly="readonly"/></td>--%>
                             <td><p style="text-align:center">{{wf.pic_name}}</p></td>
                             <td><p style="text-align: center">{{wf.comment}}</p></td>
                             <td><p style="text-align: center">{{wf.action_name}}</p></td>
@@ -220,8 +219,6 @@
             </div>
         </div>
         <br /><br />
-        <button type="button" class="btn btn-primary" ng-click="CekRequestDetails()">Cek Details</button>
-        <button type="button" class="btn btn-primary" ng-click="CheckSubmittedData()">Cek Data</button>
     </form>
     
     

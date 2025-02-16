@@ -350,6 +350,7 @@ namespace BSI_Practice.WebServices
                     });
                 }
                 Session["UserID"] = email;
+                Session["RoleID"] = user.RoleID;
                 return new JavaScriptSerializer().Serialize(new
                 {
                     Success = true,

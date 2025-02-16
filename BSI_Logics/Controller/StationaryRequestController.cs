@@ -61,62 +61,24 @@ namespace BSI_Logics.Controller
 
             return tasks;
         }
-        public AccountModel GetCurrentLoginData(string loginToken)
+        public AccountModel GetCurrentLoginData(string email)
         {
-            try
+            using(var conn = new SqlConnection(Utility.GetSQLConnection()))
             {
-                int account_id = -1;
-                TokenValidationParameters validationParameters = new TokenValidationParameters
+                conn.Open();
+                using(var cmd = new SqlCommand("usp_GetUser", conn))
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidIssuer = JwtIssuer,
-                    ValidAudience = JwtAudience,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtKey)),
-                };
-
-                var tokenHandler = new JwtSecurityTokenHandler();
-                ClaimsPrincipal claimsPrincipal = tokenHandler.
-                    ValidateToken(loginToken, validationParameters, out SecurityToken validatedToken);
-                var claims = claimsPrincipal.Claims;
-                if(claims != null)
-                {
-                    account_id = Convert.ToInt32(claims.FirstOrDefault(c => c.Type == "Account Id")?.Value);
-                }
-                else
-                {
-                    account_id = -1;
-                }
-
-                Debug.WriteLine($"Account Id = {account_id}");
-
-                dt = new DataTable();
-                db.OpenConnection(ref conn);
-                db.cmd.CommandText = "SELECT u.*, r.name role FROM dbo.master_users u " +
-                    "LEFT JOIN dbo.master_roles r ON u.role_id = r.id " +
-                    $"WHERE u.id = '{account_id}'";
-                db.cmd.CommandType = CommandType.Text;
-                reader = db.cmd.ExecuteReader();
-                dt.Load(reader);
-                db.CloseDataReader(reader);
-                db.CloseConnection(ref conn);
-
-                if(dt.Rows.Count > 0)
-                {
-                    return Common.Utility.ConvertDataTableToList < AccountModel > (dt)[0];
-                }
-                else
-                {
-                    return new AccountModel();
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@email", email);
+                    using(var reader = cmd.ExecuteReader())
+                    {
+                        DataTable dt = new DataTable();
+                        dt.Load(reader);
+                        return Utility.ConvertDataTableToList<AccountModel>(dt)[0];
+                    }
                 }
             }
-
-            catch (Exception ex)
-            {
-                db.CloseConnection(ref conn);
-                throw ex;
-            }
-
         }
         public List<StationaryItemsModel> GetAllStationary()
         {

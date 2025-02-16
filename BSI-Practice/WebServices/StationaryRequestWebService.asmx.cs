@@ -105,31 +105,27 @@ namespace BSI_Practice.WebServices
         }
 
         [WebMethod]
-        public string GetCurrentLoginData(string loginToken)
+        public string GetCurrentLoginData(string email)
         {
-            var returnedOutput = "";
             try
             {
-                var currentLoginData = controller.GetCurrentLoginData(loginToken);
-                var responseBody = new
+                var currentLoginData = controller.GetCurrentLoginData(email);
+                return new JavaScriptSerializer().Serialize(new
                 {
                     Success = true,
                     Message = "OK",
-                    currentLoginData
-                };
-                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+                    Data = currentLoginData
+                });                
             }
 
             catch(Exception ex)
             {
-                var responseBody = new
+                return new JavaScriptSerializer().Serialize(new
                 {
                     Success = false,
                     Message = $"Error: {ex.Message}",
-                };
-                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+                });
             }
-            return returnedOutput;
         }
 
         [WebMethod]

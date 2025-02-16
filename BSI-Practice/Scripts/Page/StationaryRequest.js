@@ -344,7 +344,6 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         var promise = svc.svc_GetStationaryItems();
         promise.then(function (response) {
             const response_data = JSON.parse(response.data.d);
-            console.log(response_data);
             var StationaryItems = response_data.StationaryItems;
             $scope.itemNames = [];
             for (i of StationaryItems) {
@@ -453,6 +452,7 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
                 console.log(header_data);
                 const details = $scope.SubmitRequest_GenerateDetails();
                 console.log(details);
+                const promise = svc.svc_SaveUpdate(header_data, details);
             }
         }
     };
@@ -505,39 +505,6 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         }
 
         return true;
-
-        //if (confirm("Submit data?")) {
-        //    alert("Submit data sukses!");
-        //}
-
-        //if ($scope.isRequestValid == true) {
-        //    let header_data = {};
-        //    header_data.folio_no = $scope.request.header.folio_no;
-        //    header_data.applicant = $scope.request.header.applicant;
-        //    header_data.department = $scope.request.header.department;
-        //    header_data.role = $scope.request.header.role;
-        //    header_data.role_id = $scope.request.header.role_id;
-        //    header_data.employee_id = $scope.request.header.employee_id;
-        //    header_data.extension = $scope.request.header.extension;
-        //    header_data.created_by = $scope.request.header.applicant;
-        //    header_data.created_date = $scope.getCurrentDateTime();
-        //    header_data.modified_by = $scope.request.header.applicant;
-        //    header_data.modified_date = $scope.getCurrentDateTime();
-        //    header_data.current_approver_role = $scope.next_approver;
-
-        //    let detail_data = [];
-        //    for (var i = 0; i < $scope.request.detail.length; i++) {
-        //        detail_data.push({
-        //            item_name: $scope.request.detail[i].item_name,
-        //            no: i + 1,
-        //            uom: $scope.request.detail[i].uom,
-        //            stock: $scope.request.detail[i].stock,
-        //            request_qty: $scope.request.detail[i].request_qty,
-        //            reason: $scope.request.detail[i].reason,
-        //        });
-        //    }
-        //    console.log('Param header: ', header_data);
-        //    console.log('Param detail: ', detail_data);
 
         //    var promise = svc.svc_SaveUpdate(header_data, detail_data);
         //    promise.then(function (response) {
@@ -725,6 +692,10 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
             var jsonData = JSON.parse(response.data.d);
             console.log("Json Data after insert approval log: ", jsonData);
         });
+    };
+
+    $scope.Close = () => {
+        location.href = "/Pages/Home";
     };
 
     const folio_no = GetQueryString()["folio_no"]

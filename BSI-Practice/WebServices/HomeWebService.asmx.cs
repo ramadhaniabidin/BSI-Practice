@@ -21,11 +21,6 @@ namespace BSI_Practice.WebServices
     public class HomeWebService : System.Web.Services.WebService
     {
         private readonly HomeController controller = new HomeController();
-        [WebMethod]
-        public string HelloWorld()
-        {
-            return "Hello World";
-        }
 
         [WebMethod]
         public string GetRequestList(int current_login_role_id)

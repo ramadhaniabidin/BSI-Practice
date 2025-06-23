@@ -261,11 +261,13 @@ namespace BSI_Logics.Controller
             try
             {
                 db.OpenConnection(ref conn, false);
-                db.cmd.CommandText = $"INSERT INTO dbo.workflow_history_log\n" +
-                    $"(folio_no, pic_name, comment, action_name, action_date)\n" +
-                    $"VALUES\n" +
-                    $"('{model.folio_no}', '{model.pic_name}', '{model.comment}', '{model.action_name}', '{model.action_date}')";
-                db.cmd.CommandType = CommandType.Text;
+                db.cmd.CommandText = "usp_InsertHistoryLog";
+                db.cmd.CommandType = CommandType.StoredProcedure;
+                db.cmd.Parameters.Clear();
+                db.AddInParameter(db.cmd, "folio_no", model.folio_no);
+                db.AddInParameter(db.cmd, "pic_name", model.pic_name);
+                db.AddInParameter(db.cmd, "comment", model.comment);
+                db.AddInParameter(db.cmd, "action_name", model.action_name);
                 db.cmd.ExecuteNonQuery();
 
                 db.CloseConnection(ref conn, false);

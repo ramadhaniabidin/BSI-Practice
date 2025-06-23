@@ -278,35 +278,16 @@ namespace BSI_Practice.WebServices
         [WebMethod]
         public string GetRequestData(string folio_no)
         {
-            var returnedOutput = "";
             try
             {
                 StationaryRequestHeader header = controller.GetHeaderData(folio_no);
                 List<StationaryRequestDetail> details = controller.GetDetailData(folio_no);
-                //CombineModel combineModel = new CombineModel();
-                //combineModel.Header = controller.GetHeaderData(folio_no);
-                //combineModel.Details = controller.GetDetailData(folio_no);
-                Console.WriteLine("Bla bla");
-                var responseBody = new
-                {
-                    Success = true,
-                    Message = "OK",
-                    //_header = combineModel.Header,
-                    _header = header,
-                    //_details = details
-                };
-                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+                return new JavaScriptSerializer().Serialize(new { Success = true, Message = "OK", _header = header });
             }
             catch(Exception ex)
             {
-                var responseBody = new
-                {
-                    Success = false,
-                    Message = $"Error : {ex.Message}"
-                };
-                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+                return new JavaScriptSerializer().Serialize(new { Success = false, Message = $"Error : {ex.Message}" });
             }
-            return returnedOutput;
         }
 
         [WebMethod]

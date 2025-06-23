@@ -212,27 +212,15 @@ namespace BSI_Practice.WebServices
         [WebMethod]
         public string SaveUpdate(StationaryRequestHeader header, List<StationaryRequestDetail> details)
         {
-            var returnedOutput = "Bitch Ass";
             try
             {
                 controller.SaveUpdate(header, details);
-                var responseBody = new
-                {
-                    Success = true,
-                    Message = "OK"
-                };
-                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+                return new JavaScriptSerializer().Serialize(new { Success = true, Message = "OK" });
             }
             catch (Exception ex)
             {
-                var responseBody = new
-                {
-                    Success = false,
-                    Message = $"Error : {ex.Message}"
-                };
-                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
+                return new JavaScriptSerializer().Serialize(new { Success = false, Message = $"Error: {ex.Message}" });
             }
-            return returnedOutput;
         }
 
         [WebMethod]

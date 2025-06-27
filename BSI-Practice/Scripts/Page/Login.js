@@ -94,7 +94,7 @@ app.service("svc", function ($http) {
 app.controller('LoginController', function ($scope, svc) {
     //Variable Declaration
     $scope.login_email = "";
-    $scope.login_password;
+    $scope.login_password = "";
     $scope.hashed_password = "$2a$11$9z68ukGGAqQ7xJPcJqviz.YuKi.fnpN9Pj9Nz6ra0V9TxJ8sHJc8a";
     //End Region
 

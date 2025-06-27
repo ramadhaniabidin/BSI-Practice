@@ -26,6 +26,7 @@ namespace BSI_Logics.Controller
 
         public bool CheckEmailExists(string email)
         {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email)) return false;
             int itemCount = 0;
             using(var conn = new SqlConnection(Utility.GetSQLConnection()))
             {

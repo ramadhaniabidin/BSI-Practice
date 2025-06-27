@@ -22,7 +22,6 @@
     <script src="../Scripts/AngularJS/angular-filter.js"></script>
     <script src="../Scripts/Page/Login.js"></script>
 
-
 </head>
 <body ng-app="LoginPage" ng-controller="LoginController" class="bg-gradient-primary" style="background-color:rgb(22 22 21)">
     <form id="form1" runat="server">
@@ -42,14 +41,15 @@
                                         </div>
                                         <div class="user">
                                             <div class="form-group">
-                                                <input type="text" runat="server" class="form-control form-control-user" placeholder="Enter Email Address..." ng-model="login_email"/>
+                                                <input runat="server" type="text" id="txtEmail" class="form-control form-control-user" placeholder="Enter Email Address..." ng-model="login_email"/>
                                             </div>
                                             <div class="form-group">
-                                                <input type="password" runat="server" class="form-control form-control-user" placeholder="Enter Password..." ng-model="login_password"/>
+                                                <input type="password" runat="server" class="form-control form-control-user" placeholder="Enter Password..." id="txtPassword" ng-model="login_password"/>
                                             </div>
-                                            <button type="button" class="btn btn-primary btn-user btn-block" ng-click="LoginClick()" ng-disabled="login_email == '' || login_email == undefined || login_email == null">Login</button>
+                                            <asp:Button ID="btnSubmit" runat="server" OnClick="Btn_Login" Text="Submit" CssClass="btn btn-primary btn-user btn-block" ng-disabled="login_email == '' || login_email == undefined || login_email == null"/>
                                         
                                             <div class="text-center">
+                                                <p style="color: red" id="txtError" runat="server">Invalid credentials!</p>
                                                 <p>Don't have an account? <a href="SignUp.aspx">Sign Up</a></p>
                                             </div>
                                         </div>

@@ -121,22 +121,30 @@ namespace BSI_Logics.Controller
         }
         public StockAndUnitModel GetStockAndUnit(string item_name)
         {
-            dt = new DataTable();
-            using(var conn = new SqlConnection(Utility.GetSQLConnection()))
+            DataTable dt = new DataTable();
+            try
             {
-                conn.Open();
-                string query = "SELECT SUM(stock) stock, uom FROM dbo.inventory_stationary WHERE item_name = @item_name GROUP BY stock, uom";
-                using(var cmd = new SqlCommand(query, conn))
+                using (var conn = new SqlConnection(Utility.GetSQLConnection()))
                 {
-                    cmd.CommandType = CommandType.Text;
-                    cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@item_name", item_name);
-                    using(var reader = cmd.ExecuteReader())
+                    conn.Open();
+                    string query = "usp_GetItemStockAndUnit";
+                    using (var cmd = new SqlCommand(query, conn))
                     {
-                        dt.Load(reader);
-                        return Utility.ConvertDataTableToList<StockAndUnitModel>(dt)[0];
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Parameters.Clear();
+                        cmd.Parameters.AddWithValue("@item_name", item_name);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            dt.Load(reader);
+                            return Utility.ConvertDataTableToList<StockAndUnitModel>(dt)[0];
+                        }
                     }
                 }
+            }
+            catch(Exception ex)
+            {
+                Utility.InsertErrorLog("Get Item Stock and Unit", Module_Name, 0, ex.Message);
+                return new StockAndUnitModel { stock = 0, uom = string.Empty };
             }
         }
         public void SaveUpdate(StationaryRequestHeader header, List<StationaryRequestDetail> details)

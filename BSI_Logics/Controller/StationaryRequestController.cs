@@ -21,10 +21,6 @@ namespace BSI_Logics.Controller
 {
     public class StationaryRequestController
     {
-        private readonly string JwtKey = "LO6i4DuNxIpmGIpjCPRuPwx1NpA2Deuryh7HOsaw_b0";
-        private readonly string JwtIssuer = "https://localhost:44313/";
-        private readonly string JwtAudience = "https://localhost:44313/";
-
         DatabaseManager db = new DatabaseManager();
         SqlConnection conn = new SqlConnection();
         SqlDataReader reader = null;

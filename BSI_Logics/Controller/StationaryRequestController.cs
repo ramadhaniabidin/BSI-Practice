@@ -22,10 +22,6 @@ namespace BSI_Logics.Controller
     public class StationaryRequestController
     {
         DatabaseManager db = new DatabaseManager();
-        SqlConnection conn = new SqlConnection();
-        SqlDataReader reader = null;
-        DataTable dt = new DataTable();
-
         public string GetWorkflowToken()
         {
             string url = "https://us.nintex.io/authentication/v1/token";
@@ -98,23 +94,23 @@ namespace BSI_Logics.Controller
         {
             try
             {
-                List<string> output = new List<string>();
-
-                db.OpenConnection(ref conn);
-                db.cmd.CommandText = "SELECT B.name FROM dbo.master_approver A LEFT JOIN dbo.master_roles B ON A.order_no = B.id";
-                db.cmd.CommandType = CommandType.Text;
-
-                reader = db.cmd.ExecuteReader();
-                while (reader.Read())
+                List<string> Approvers = new List<string>();
+                using(var conn = new SqlConnection(Utility.GetSQLConnection()))
                 {
-                    output.Add(reader.GetString(0));
+                    conn.Open();
+                    using(var cmd = new SqlCommand("usp_GetListApproval", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        using(var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Approvers.Add(reader.GetString(0));
+                            }
+                        }
+                    }
                 }
-
-                db.CloseDataReader(reader);
-                db.CloseConnection(ref conn);
-
-                return output;
-
+                return Approvers;
             }
             catch(Exception ex)
             {

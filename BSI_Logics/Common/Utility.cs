@@ -236,5 +236,22 @@ namespace BSI_Logics.Common
                 }
             }
         }
+
+        public static void InsertErrorLog(string Process_Name, string Module_Name, int Transaction_ID, string Error_Message)
+        {
+            using(var conn = new SqlConnection(GetSQLConnection()))
+            {
+                conn.Open();
+                using(var cmd = new SqlCommand("usp_InsertLogError", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Process_Name", Process_Name);
+                    cmd.Parameters.AddWithValue("@Module_Name", Module_Name);
+                    cmd.Parameters.AddWithValue("@Transaction_ID", Transaction_ID);
+                    cmd.Parameters.AddWithValue("@Error_Message", Error_Message);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

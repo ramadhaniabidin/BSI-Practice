@@ -22,6 +22,7 @@ namespace BSI_Logics.Controller
     public class StationaryRequestController
     {
         DatabaseManager db = new DatabaseManager();
+        private readonly string Module_Name = "Stationary Request";
         public string GetWorkflowToken()
         {
             string url = "https://us.nintex.io/authentication/v1/token";
@@ -92,9 +93,9 @@ namespace BSI_Logics.Controller
         }
         public List<string> GetApproverList()
         {
+            List<string> Approvers = new List<string>();
             try
             {
-                List<string> Approvers = new List<string>();
                 using(var conn = new SqlConnection(Utility.GetSQLConnection()))
                 {
                     conn.Open();
@@ -114,8 +115,8 @@ namespace BSI_Logics.Controller
             }
             catch(Exception ex)
             {
-                db.CloseConnection(ref conn);
-                throw ex;
+                Utility.InsertErrorLog("Get Approver List", Module_Name, 0, ex.Message);
+                return Approvers;
             }
         }
         public StockAndUnitModel GetStockAndUnit(string item_name)

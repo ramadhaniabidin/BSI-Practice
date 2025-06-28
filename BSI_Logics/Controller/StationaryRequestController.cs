@@ -1,5 +1,6 @@
 ﻿using BSI_Logics.Common;
 using BSI_Logics.Models;
+using BSI_Logics.Models.Stationary_Request;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System;
@@ -147,67 +148,188 @@ namespace BSI_Logics.Controller
                 return new StockAndUnitModel { stock = 0, uom = string.Empty };
             }
         }
-        public void SaveUpdate(StationaryRequestHeader header, List<StationaryRequestDetail> details)
+
+        public SaveHeaderModel SaveHeader(StationaryRequestHeader header)
         {
             try
             {
-                int LastInsertedId = 0;
-                db.OpenConnection(ref conn, false);
-                db.cmd.CommandText = "SaveUpdateHeader";
-                db.cmd.CommandType = CommandType.StoredProcedure;
-                db.cmd.Parameters.Clear();
-                db.AddInParameter(db.cmd, "applicant", header.applicant);
-                db.AddInParameter(db.cmd, "created_by", header.created_by);
-                db.AddInParameter(db.cmd, "created_date", header.created_date);
-                db.AddInParameter(db.cmd, "current_approver_role", header.current_approver_role);
-                db.AddInParameter(db.cmd, "department", header.department);
-                db.AddInParameter(db.cmd, "employee_id", header.employee_id);
-                db.AddInParameter(db.cmd, "extension", header.extension);
-                db.AddInParameter(db.cmd, "folio_no", header.folio_no);
-                db.AddInParameter(db.cmd, "modified_by", header.modified_by);
-                db.AddInParameter(db.cmd, "modified_date", header.modified_date);
-                db.AddInParameter(db.cmd, "role", header.role);
-
-                reader = db.cmd.ExecuteReader();
-                while (reader.Read())
+                int InsertedID = 0;
+                using(var conn = new SqlConnection(Utility.GetSQLConnection()))
                 {
-                    LastInsertedId = (int)reader["id"];
+                    conn.Open();
+                    using(var cmd = new SqlCommand("usp_SaveUpdateHeader", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@applicant", header.applicant);
+                        cmd.Parameters.AddWithValue("@created_by", header.created_by);
+                        cmd.Parameters.AddWithValue("@current_approver_role", header.current_approver_role);
+                        cmd.Parameters.AddWithValue("@department", header.department);
+                        cmd.Parameters.AddWithValue("@employee_id", header.employee_id);
+                        cmd.Parameters.AddWithValue("@extension", header.extension);
+                        cmd.Parameters.AddWithValue("@folio_no", header.folio_no);
+                        cmd.Parameters.AddWithValue("@modified_by", header.modified_by);
+                        cmd.Parameters.AddWithValue("@role", header.role);
+                        var outputParam = new SqlParameter("@out_id", SqlDbType.Int)
+                        {
+                            Direction = ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(outputParam);
+                        cmd.ExecuteNonQuery();
+                        InsertedID = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
+                    }
                 }
-
-                db.CloseDataReader(reader);
-                db.CloseConnection(ref conn, false);
-                for (int i = 0; i < details.Count; i++)
+                return new SaveHeaderModel
                 {
-                    db.OpenConnection(ref conn, false);
-                    db.cmd.CommandText = "SaveUpdateDetail";
-                    db.cmd.CommandType = CommandType.StoredProcedure;
-                    db.cmd.Parameters.Clear();
-                    db.AddInParameter(db.cmd, "header_id", LastInsertedId);
-                    db.AddInParameter(db.cmd, "no", details[i].no);
-                    db.AddInParameter(db.cmd, "item_name", details[i].item_name);
-                    db.AddInParameter(db.cmd, "uom", details[i].uom);
-                    db.AddInParameter(db.cmd, "stock", details[i].stock);
-                    db.AddInParameter(db.cmd, "request_qty", details[i].request_qty);
-                    db.AddInParameter(db.cmd, "reason", details[i].reason);
-
-                    db.cmd.ExecuteNonQuery();
-                    db.CloseConnection(ref conn, false);
-                }
-                InsertWorkflowHistoryLog(LastInsertedId);
-
-                #region Start workflow
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                NintexWorkflowCloud nwc = new NintexWorkflowCloud();
-                nwc.url = "https://npp-elistec.workflowcloud.com/api/v1/workflow/published/6f9f19b2-53ff-4062-80a9-c0e0ddc6241a/instances?token=EzFRP4GtqwENU57H1JEReZq0VvlLsMPQf0LrVFNKiUBqRQ0OAyMGN00aqGCbjySxHFFtY1";
-                Task.Run(async () => { await StartWorkflow(nwc, LastInsertedId); }).Wait();
-                #endregion
+                    Success = InsertedID > 0,
+                    Message = InsertedID > 0 ? "OK" : "Save header failed",
+                    InsertedID = InsertedID
+                };
+                
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                db.CloseConnection(ref conn, false);
-                throw new Exception(ex.Message);
+                Utility.InsertErrorLog("Save Header", Module_Name, 0, ex.Message);
+                return new SaveHeaderModel { InsertedID = 0, Message = ex.Message, Success = false };
             }
         }
+
+        public CommonResponseModel SaveDetail(int Header_ID, StationaryRequestDetail detail, int no)
+        {
+            try
+            {
+                using(var conn = new SqlConnection(Utility.GetSQLConnection()))
+                {
+                    conn.Open();
+                    using(var cmd = new SqlCommand("[usp_SaveUpdateDetail]", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@header_id", Header_ID);
+                        cmd.Parameters.AddWithValue("@no", no);
+                        cmd.Parameters.AddWithValue("@item_name", detail.item_name);
+                        cmd.Parameters.AddWithValue("@stock", detail.stock);
+                        cmd.Parameters.AddWithValue("@request_qty", detail.request_qty);
+                        cmd.Parameters.AddWithValue("@reason", detail.reason);
+                        cmd.ExecuteNonQuery();
+                        return new CommonResponseModel { Message = "OK", Success = true };
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                return new CommonResponseModel { Message = ex.Message, Success = false };
+            }
+        }
+
+        public CommonResponseModel SaveUpdate(StationaryRequestHeader header, List<StationaryRequestDetail> details)
+        {
+            try
+            {
+                var SaveHeaderResponse = SaveHeader(header);
+                if (!SaveHeaderResponse.Success) return new CommonResponseModel { Success = false, Message = SaveHeaderResponse.Message };
+                foreach(var detail in details)
+                {
+                    var SaveDetailResponse = SaveDetail(SaveHeaderResponse.InsertedID, detail, detail.no);
+                    if (!SaveDetailResponse.Success)
+                    {
+                        return new CommonResponseModel { 
+                            Success = false, 
+                            Message = $"Erorr Save Detail at row {detail.no + 1} | {SaveDetailResponse.Message}" 
+                        };
+                    }
+                }
+                return new CommonResponseModel { Message = "OK", Success = true };
+            }
+            catch(Exception ex)
+            {
+                return new CommonResponseModel { Message = ex.Message, Success = false };
+            }
+        }
+
+        //public void SaveUpdate(StationaryRequestHeader header, List<StationaryRequestDetail> details)
+        //{
+        //    int LastInsertedId = 0;
+        //    try
+        //    {
+        //        using(var conn = new SqlConnection(Utility.GetSQLConnection()))
+        //        {
+        //            conn.Open();
+        //            using(var cmd = new SqlCommand("[usp_SaveUpdateHeader]", conn))
+        //            {
+        //                cmd.CommandType = CommandType.StoredProcedure;
+        //                cmd.Parameters.AddWithValue("@applicant", header.applicant);
+        //                cmd.Parameters.AddWithValue("@created_by", header.created_by);
+        //                cmd.Parameters.AddWithValue("@current_approver_role", header.current_approver_role);
+        //                cmd.Parameters.AddWithValue("@department", header.department);
+        //                cmd.Parameters.AddWithValue("@employee_id", header.employee_id);
+        //                cmd.Parameters.AddWithValue("@extension", header.extension);
+        //                cmd.Parameters.AddWithValue("@folio_no", header.folio_no);
+        //                cmd.Parameters.AddWithValue("@modified_by", header.modified_by);
+        //                cmd.Parameters.AddWithValue("@role", header.role);
+        //                using(var reader = cmd.ExecuteReader())
+        //                {
+        //                    while (reader.Read())
+        //                    {
+        //                        LastInsertedId = (int)reader["id"];
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        db.OpenConnection(ref conn, false);
+        //        db.cmd.CommandText = "[usp_SaveUpdateHeader]";
+        //        db.cmd.CommandType = CommandType.StoredProcedure;
+        //        db.cmd.Parameters.Clear();
+        //        db.AddInParameter(db.cmd, "applicant", header.applicant);
+        //        db.AddInParameter(db.cmd, "created_by", header.created_by);
+        //        db.AddInParameter(db.cmd, "created_date", header.created_date);
+        //        db.AddInParameter(db.cmd, "current_approver_role", header.current_approver_role);
+        //        db.AddInParameter(db.cmd, "department", header.department);
+        //        db.AddInParameter(db.cmd, "employee_id", header.employee_id);
+        //        db.AddInParameter(db.cmd, "extension", header.extension);
+        //        db.AddInParameter(db.cmd, "folio_no", header.folio_no);
+        //        db.AddInParameter(db.cmd, "modified_by", header.modified_by);
+        //        db.AddInParameter(db.cmd, "modified_date", header.modified_date);
+        //        db.AddInParameter(db.cmd, "role", header.role);
+
+        //        reader = db.cmd.ExecuteReader();
+        //        while (reader.Read())
+        //        {
+        //            LastInsertedId = (int)reader["id"];
+        //        }
+
+        //        db.CloseDataReader(reader);
+        //        db.CloseConnection(ref conn, false);
+        //        for (int i = 0; i < details.Count; i++)
+        //        {
+        //            db.OpenConnection(ref conn, false);
+        //            db.cmd.CommandText = "SaveUpdateDetail";
+        //            db.cmd.CommandType = CommandType.StoredProcedure;
+        //            db.cmd.Parameters.Clear();
+        //            db.AddInParameter(db.cmd, "header_id", LastInsertedId);
+        //            db.AddInParameter(db.cmd, "no", details[i].no);
+        //            db.AddInParameter(db.cmd, "item_name", details[i].item_name);
+        //            db.AddInParameter(db.cmd, "uom", details[i].uom);
+        //            db.AddInParameter(db.cmd, "stock", details[i].stock);
+        //            db.AddInParameter(db.cmd, "request_qty", details[i].request_qty);
+        //            db.AddInParameter(db.cmd, "reason", details[i].reason);
+
+        //            db.cmd.ExecuteNonQuery();
+        //            db.CloseConnection(ref conn, false);
+        //        }
+        //        InsertWorkflowHistoryLog(LastInsertedId);
+
+        //        #region Start workflow
+        //        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+        //        NintexWorkflowCloud nwc = new NintexWorkflowCloud();
+        //        nwc.url = "https://npp-elistec.workflowcloud.com/api/v1/workflow/published/6f9f19b2-53ff-4062-80a9-c0e0ddc6241a/instances?token=EzFRP4GtqwENU57H1JEReZq0VvlLsMPQf0LrVFNKiUBqRQ0OAyMGN00aqGCbjySxHFFtY1";
+        //        Task.Run(async () => { await StartWorkflow(nwc, LastInsertedId); }).Wait();
+        //        #endregion
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        db.CloseConnection(ref conn, false);
+        //        throw new Exception(ex.Message);
+        //    }
+        //}
         public void InsertWorkflowHistoryLog(int header_id)
         {
             try

@@ -22,7 +22,6 @@ namespace BSI_Logics.Controller
 {
     public class StationaryRequestController
     {
-        DatabaseManager db = new DatabaseManager();
         private readonly string Module_Name = "Stationary Request";
 
         public AccountModel GetCurrentLoginData(string email)
@@ -268,109 +267,6 @@ namespace BSI_Logics.Controller
                 Utility.InsertErrorLog("Get Data Detail", Module_Name, Header_ID, ex.Message);
                 return new List<StationaryRequestDetail>();
             }
-        }
-        public StationaryRequestHeader GetHeaderData(string folio_no)
-        {
-            try
-            {
-                db.OpenConnection(ref conn);
-                db.cmd.CommandText = "dbo.get_header_data_by_folio_no";
-                db.cmd.CommandType = CommandType.StoredProcedure;
-                db.cmd.Parameters.Clear();
-                db.AddInParameter(db.cmd, "folio_no", folio_no);
-
-                reader = db.cmd.ExecuteReader();
-                dt.Load(reader);
-
-                db.CloseConnection(ref conn);
-                db.CloseDataReader(reader);
-
-                if(dt.Rows.Count > 0)
-                {
-                    return Common.Utility.ConvertDataTableToList<StationaryRequestHeader>(dt)[0];
-                }
-                else
-                {
-                    return new StationaryRequestHeader();
-                }
-            }
-            catch(Exception ex)
-            {
-                db.CloseConnection(ref conn);
-                throw ex;
-            }
-        }
-        public List<StationaryRequestDetail> GetDetailData(string folio_no)
-        {
-            try
-            {
-                db.OpenConnection(ref conn);
-                db.cmd.CommandText = "dbo.get_detail_data_by_folio_no";
-                db.cmd.CommandType = CommandType.StoredProcedure;
-                db.cmd.Parameters.Clear();
-                db.AddInParameter(db.cmd, "folio_no", folio_no);
-
-                reader = db.cmd.ExecuteReader();
-                dt.Load(reader);
-
-                db.CloseConnection(ref conn);
-                db.CloseDataReader(reader);
-
-                return Common.Utility.ConvertDataTableToList<StationaryRequestDetail>(dt);
-            }
-            catch(Exception ex)
-            {
-                db.CloseConnection(ref conn);
-                throw ex;
-            }
-        }
-        public int GetCurrentStatusID(string folio_no)
-        {
-            int status_id = 0;
-            try
-            {
-                db.OpenConnection(ref conn);
-                db.cmd.CommandText = $"SELECT status_id FROM dbo.stationary_request_header WHERE folio_no = '{folio_no}'";
-                db.cmd.CommandType = CommandType.Text;
-                reader = db.cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    status_id = reader.GetInt32(0);
-                }
-                db.CloseConnection(ref conn);
-                db.CloseDataReader(reader);
-                return status_id;
-            }
-            catch(Exception ex)
-            {
-                db.CloseConnection(ref conn);
-                throw ex;
-            }
-        }
-        public List<CombineModel> GetDataRequestDataByJoin(string folio_no)
-        {
-            try
-            {
-                db.OpenConnection(ref conn);
-                db.cmd.CommandText = "dbo.get_request_data_by_join";
-                db.cmd.CommandType = CommandType.StoredProcedure;
-
-                db.cmd.Parameters.Clear();
-                db.AddInParameter(db.cmd, "folio_no", folio_no);
-                reader = db.cmd.ExecuteReader();
-
-                dt.Load(reader);
-                db.CloseConnection(ref conn);
-                db.CloseDataReader(reader);
-
-                return Common.Utility.ConvertDataTableToList<CombineModel>(dt);
-            }
-            catch(Exception ex)
-            {
-                db.CloseConnection(ref conn);
-                throw ex;
-            }
-        }
-        
+        }        
     }
 }

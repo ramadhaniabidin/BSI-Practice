@@ -232,8 +232,9 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     }];
 
     $scope.request = {
+        //header: {}, detail: []
         header: {
-            folio_no: '',
+            folio_no: 'GENERATED ON SUBMIT',
             applicant: '',
             department: '',
             role: '',
@@ -287,7 +288,7 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
             const userData = responseJSON.Data;
             if (userData.RoleID == 0) {
                 $scope.IsRequestor = true;
-                $scope.request.header.folio_no = 'Generated On Submit';
+                $scope.request.header.folio_no = 'GENERATED ON SUBMIT';
                 $scope.request.header.applicant = userData.Name;
                 $scope.request.header.department = userData.Department;
                 $scope.request.header.role = userData.Role;
@@ -449,6 +450,12 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
                 const details = $scope.SubmitRequest_GenerateDetails();
                 console.log(details);
                 const promise = svc.svc_SaveUpdate(header_data, details);
+                promise.then((response) => {
+                    console.log(response);
+                },
+                    (err) => {
+                    console.error(err);
+                })
             }
         }
     };
@@ -675,9 +682,22 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         location.href = "/Pages/Home";
     };
 
-    const folio_no = GetQueryString()["folio_no"]
-    $scope.GetStationaryItems();
-    $scope.GetCurrentLoginData();
-    
+    $scope.GetFormRequestData = (ID) => {
+        // to be implemented
+    };
+
+    $scope.PopulateFormData = () => {
+        const ID = GetQueryString()["ID"];
+        if (ID) {
+            $scope.GetFormRequestData(ID);
+        }
+        else {
+            $scope.GetCurrentLoginData();
+            $scope.GetStationaryItems();
+        }
+    };
+
+    //$scope.GetCurrentLoginData();
+    $scope.PopulateFormData();
     
 });

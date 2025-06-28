@@ -176,6 +176,7 @@ namespace BSI_Logics.Controller
                         cmd.Parameters.AddWithValue("@no", no);
                         cmd.Parameters.AddWithValue("@item_name", detail.item_name);
                         cmd.Parameters.AddWithValue("@stock", detail.stock);
+                        cmd.Parameters.AddWithValue("@uom", detail.uom);
                         cmd.Parameters.AddWithValue("@request_qty", detail.request_qty);
                         cmd.Parameters.AddWithValue("@reason", detail.reason);
                         cmd.ExecuteNonQuery();

@@ -215,43 +215,32 @@ namespace BSI_Logics.Controller
             }
         }
 
-        public StationaryRequestHeader GetRequestHeader(string folio_no)
+        public StationaryRequestHeader GetDataHeader(int ID)
         {
             try
             {
-                string query = $"SELECT id, folio_no, applicant, department, role, employee_id, employee_name, extension, status_id,\n" +
-                    $"remarks, created_by, created_date, modified_by, modified_date, approver_target_role_id" +
-                    $" FROM stationary_request_header WHERE folio_no = '{folio_no}'";
-                db.OpenConnection(ref conn, true);
-                db.cmd.CommandText = query;
-                db.cmd.CommandType = CommandType.Text;
-
-                reader = db.cmd.ExecuteReader();
-                dt.Load(reader);
-
-                db.CloseConnection(ref conn, true);
-                db.CloseDataReader(reader);
-
-                StationaryRequestHeader output = new StationaryRequestHeader();
-
-                if(dt.Rows.Count > 0)
+                using(var conn = new SqlConnection())
                 {
-                    output = Common.Utility.ConvertDataTableToList<StationaryRequestHeader>(dt)[0];
-                    Console.WriteLine(output);
-                    //return Common.Utility.ConvertDataTableToList<StationaryRequestHeader>(dt)[0];
-                    return output;
-                }
-                else
-                {
-                    output = new StationaryRequestHeader();
-                    //return new StationaryRequestHeader();
-                    return output;
+                    conn.Open();
+                    using(var cmd = new SqlCommand("usp_GetHeaderData", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ID", ID);
+                        using(var reader = cmd.ExecuteReader())
+                        {
+                            DataTable dataTable = new DataTable();
+                            dataTable.Load(reader);
+                            return dataTable.Rows.Count > 0 ?
+                                Utility.ConvertDataTableToList<StationaryRequestHeader>(dataTable)[0] :
+                                new StationaryRequestHeader();
+                        }
+                    }
                 }
             }
             catch(Exception ex)
             {
-                db.CloseConnection(ref conn, true);
-                throw ex;
+                Utility.InsertErrorLog("Get Data Header", Module_Name, ID, ex.Message);
+                return new StationaryRequestHeader();
             }
         }
         public List<StationaryRequestDetail> GetRequestDetails(string folio_no)

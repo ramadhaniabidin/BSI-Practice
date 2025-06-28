@@ -24,37 +24,7 @@ namespace BSI_Logics.Controller
     {
         DatabaseManager db = new DatabaseManager();
         private readonly string Module_Name = "Stationary Request";
-        public string GetWorkflowToken()
-        {
-            string url = "https://us.nintex.io/authentication/v1/token";
-            HttpClient client = new HttpClient();
-            var requestBody = new
-            {
-                client_id = "f7bbb84b-b114-4120-9a5f-b0557b6dbee2",
-                client_secret = "sNNtUWsKIRJtSsOtTsJPLtSsMNJMLtUsMPtUsI2VsJtWsINMtPsNtW2MtVsRtUUsFRtSTWsFMtTVsPFtRsK2osFtTsP2jsLOKtRsMM2p",
-                grant_type = "client_credentials"
-            };
-            var jsonBody = JsonConvert.SerializeObject(requestBody);
-            var HttpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-            var response = client.PostAsync(url, HttpContent).Result;
-            var responseJson = response.Content.ReadAsStringAsync().Result;
-            var responseObject = JsonConvert.DeserializeObject<dynamic>(responseJson);
-            string accessToken = responseObject.access_token;
-            return accessToken;
-        }
-        public IEnumerable<dynamic> GetWorkflowTasks()
-        {
-            string url = "https://us.nintex.io/workflows/v2/tasks";
-            string token = GetWorkflowToken();
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
-            var response = client.GetAsync(url).Result;
-            var responseJson = response.Content.ReadAsStringAsync().Result;
-            dynamic responseObject = JsonConvert.DeserializeObject(responseJson);
-            var tasks = responseObject.tasks;
 
-            return tasks;
-        }
         public AccountModel GetCurrentLoginData(string email)
         {
             using(var conn = new SqlConnection(Utility.GetSQLConnection()))
@@ -245,77 +215,6 @@ namespace BSI_Logics.Controller
             }
         }
 
-        public void InsertWorkflowHistoryLog(int header_id)
-        {
-            try
-            {
-                db.OpenConnection(ref conn, false);
-                db.cmd.CommandText = "INSERT INTO dbo.workflow_history_log\n" +
-                    "(folio_no, pic_name, comment, action_name, action_date)\n" +
-                    "SELECT folio_no folio_no, applicant pic_name, 'First Submit' comment, 'First Submit' action_name, GETDATE() action_date\n" +
-                    $"FROM dbo.stationary_request_header WHERE id = {header_id}";
-                db.cmd.CommandType = CommandType.Text;
-                db.cmd.ExecuteNonQuery();
-
-                db.CloseConnection(ref conn, false);
-            }
-            catch(Exception ex)
-            {
-                db.OpenConnection(ref conn, false);
-                throw ex;
-            }
-        }
-        public static async Task<string> StartWorkflow(NintexWorkflowCloud nwc, int transaction_id)
-        {
-            try
-            {
-                nwc.param = new NWCParamModel();
-                nwc.param.startData = new StartData();
-                nwc.param.startData.se_transactionid = transaction_id;
-
-                string requestBody = new JavaScriptSerializer().Serialize(nwc.param);
-
-                HttpClient client = new HttpClient();
-                client.BaseAddress = new Uri(nwc.url);
-
-                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, nwc.url);
-                request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
-
-                using (var response = await client.SendAsync(request))
-                {
-                    response.EnsureSuccessStatusCode();
-                    var result = await response.Content.ReadAsStringAsync();
-                    return result;
-                }
-            }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
-        }
-        public void InsertApprovalLog(WorkflowHistoryModel model)
-        {
-            try
-            {
-                db.OpenConnection(ref conn, false);
-                db.cmd.CommandText = "usp_InsertHistoryLog";
-                db.cmd.CommandType = CommandType.StoredProcedure;
-                db.cmd.Parameters.Clear();
-                db.AddInParameter(db.cmd, "folio_no", model.folio_no);
-                db.AddInParameter(db.cmd, "pic_name", model.pic_name);
-                db.AddInParameter(db.cmd, "comment", model.comment);
-                db.AddInParameter(db.cmd, "action_name", model.action_name);
-                db.cmd.ExecuteNonQuery();
-
-                db.CloseConnection(ref conn, false);
-            }
-            catch(Exception ex)
-            {
-                db.CloseConnection(ref conn, false);
-                throw ex;
-            }
-        }
         public StationaryRequestHeader GetRequestHeader(string folio_no)
         {
             try
@@ -483,27 +382,6 @@ namespace BSI_Logics.Controller
                 throw ex;
             }
         }
-        public List<WorkflowHistoryModel> GetWorkflowHistories(string folio_no)
-        {
-            try
-            {
-                db.OpenConnection(ref conn);
-                db.cmd.CommandText = $"SELECT * FROM dbo.workflow_history_log WHERE folio_no = '{folio_no}' ORDER BY action_date ASC";
-                db.cmd.CommandType = CommandType.Text;
-
-                reader = db.cmd.ExecuteReader();
-                dt.Load(reader);
-
-                db.CloseConnection(ref conn);
-                db.CloseDataReader(reader);
-
-                return Common.Utility.ConvertDataTableToList<WorkflowHistoryModel>(dt);
-            }
-            catch(Exception ex)
-            {
-                db.CloseConnection(ref conn);
-                throw ex;
-            }
-        }
+        
     }
 }

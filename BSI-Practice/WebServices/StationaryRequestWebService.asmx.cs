@@ -131,8 +131,8 @@ namespace BSI_Practice.WebServices
         {
             try
             {
-                controller.SaveUpdate(header, details);
-                return new JavaScriptSerializer().Serialize(new { Success = true, Message = "OK" });
+                var response = controller.SaveUpdate(header, details);
+                return new JavaScriptSerializer().Serialize(new { Success = response.Success, Message = response.Message });
             }
             catch (Exception ex)
             {

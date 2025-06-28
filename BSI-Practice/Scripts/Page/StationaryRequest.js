@@ -402,19 +402,15 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         // END REGION
 
         if (validation1) {
-            //$scope.rows[index].WarningMessage1 = true;
             document.getElementById("submit-btn").classList.add("disabled");
         }
 
         else if (validation2) {
-            //$scope.rows[index].WarningMessage2 = true;
             document.getElementById("submit-btn").classList.add("disabled");
         }
 
 
         else {
-            //$scope.rows[index].WarningMessage1 = false;
-            //$scope.rows[index].WarningMessage2 = false;
             var submit_btn = document.getElementById("submit-btn");
             if (submit_btn.classList.contains("disabled")) {
                 submit_btn.classList.remove("disabled");
@@ -505,20 +501,6 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         }
 
         return true;
-
-        //    var promise = svc.svc_SaveUpdate(header_data, detail_data);
-        //    promise.then(function (response) {
-        //        let jsonData = JSON.parse(response.data.d);
-        //        console.log('Json Data : ', jsonData);
-        //        if (jsonData.Success) {
-        //            alert('Berhasil memasukkan data header dan detail');
-        //            location.href = "/Pages/Home";
-        //        }
-        //        else {
-        //            alert(jsonData.Message);
-        //        }
-        //    });
-        //}
     }
     // END REGION
 
@@ -566,15 +548,12 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
             var detailData = jsonData.data;
             $scope.request.header = headerData;
             $scope.request.detail = detailData;
-            //console.log('JSON Data : ', jsonData);
             console.log('Header data: ', $scope.request.header);
-            //console.log('Detail data: ', $scope.request.detail);
 
             var workflowPromise = svc.svc_GetWorkflowHistories(folio_no);
             workflowPromise.then(function (resp) {
                 var jsonData_Workflow = JSON.parse(resp.data.d);
                 $scope.workflow_histories = jsonData_Workflow.data;
-                //console.log($scope.workflow_histories);
 
                 for (i of $scope.workflow_histories) {
                     var action_date = i.action_date;
@@ -589,7 +568,6 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
                         ('0' + date.getSeconds()).slice(-2);
 
                     i.action_date = formattedDate;
-                    //console.log(action_date);
                 }
             });
         });
@@ -663,7 +641,6 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
                 newRow.WarningMessage2 = false;
                 $scope.rows.push(newRow);
             }
-            //console.log($scope.rows);
         });
     };
 
@@ -701,17 +678,6 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     const folio_no = GetQueryString()["folio_no"]
     $scope.GetStationaryItems();
     $scope.GetCurrentLoginData();
-    //if ((folio_no === null) || (folio_no === undefined) || (folio_no === '')) {
-    //    $scope.GetCurrentLoginData();
-    //    $scope.GetStationaryItems();
-    //    $scope.GetApproverList();
-    //}
-    //else {
-    //    $scope.GetRequestData(folio_no);
-    //    $scope.GetCurrentLoginData();
-    //    $scope.GetStationaryItems();
-    //    $("#request_detail").addClass("readonly");
-    //}
     
     
 });

@@ -243,30 +243,30 @@ namespace BSI_Logics.Controller
                 return new StationaryRequestHeader();
             }
         }
-        public List<StationaryRequestDetail> GetRequestDetails(string folio_no)
+        public List<StationaryRequestDetail> GetDataDetails(int Header_ID)
         {
             try
             {
-                string query = $"DECLARE @header_id INT = (SELECT id FROM stationary_request_header WHERE folio_no = '{folio_no}')\n" +
-                    $"SELECT * FROM stationary_request_detail WHERE header_id = @header_id";
-                db.OpenConnection(ref conn, true);
-                db.cmd.CommandText = query;
-                db.cmd.CommandType = CommandType.Text;
-
-                reader = db.cmd.ExecuteReader();
-                dt.Load(reader);
-
-                //var output = Common.Utility.ConvertDataTableToList<StationaryRequestDetail>(dt);
-                db.CloseConnection(ref conn, true);
-                db.CloseDataReader(reader);
-
-                return Common.Utility.ConvertDataTableToList<StationaryRequestDetail>(dt);
-                //return output;
+                using(var conn = new SqlConnection(Utility.GetSQLConnection()))
+                {
+                    conn.Open();
+                    using(var cmd = new SqlCommand("[usp_GetDetailData]", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@header_id", Header_ID);
+                        using(var reader = cmd.ExecuteReader())
+                        {
+                            DataTable dataTable = new DataTable();
+                            dataTable.Load(reader);
+                            return Utility.ConvertDataTableToList<StationaryRequestDetail>(dataTable);
+                        }
+                    }
+                }
             }
             catch(Exception ex)
             {
-                db.CloseConnection(ref conn, true);
-                throw ex;
+                Utility.InsertErrorLog("Get Data Detail", Module_Name, Header_ID, ex.Message);
+                return new List<StationaryRequestDetail>();
             }
         }
         public StationaryRequestHeader GetHeaderData(string folio_no)

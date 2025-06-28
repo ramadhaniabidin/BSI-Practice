@@ -100,8 +100,10 @@
     <Compile Include="Controller\StationaryRequestController.cs" />
     <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\CombineModel.cs" />
+    <Compile Include="Models\CommonResponseModel.cs" />
     <Compile Include="Models\HomeModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\Stationary Request\SaveHeaderModel.cs" />
     <Compile Include="Models\StationaryItemsModel.cs" />
     <Compile Include="Models\StationaryRequestDetail.cs" />
     <Compile Include="Models\StationaryRequestHeader.cs" />

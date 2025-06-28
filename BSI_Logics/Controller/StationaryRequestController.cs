@@ -194,7 +194,10 @@ namespace BSI_Logics.Controller
             try
             {
                 var SaveHeaderResponse = SaveHeader(header);
-                if (!SaveHeaderResponse.Success) return new CommonResponseModel { Success = false, Message = SaveHeaderResponse.Message };
+                if (!SaveHeaderResponse.Success)
+                {
+                    return new CommonResponseModel { Success = false, Message = SaveHeaderResponse.Message };
+                }
                 foreach(var detail in details)
                 {
                     var SaveDetailResponse = SaveDetail(SaveHeaderResponse.InsertedID, detail, detail.no);

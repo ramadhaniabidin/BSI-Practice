@@ -16,7 +16,6 @@ namespace BSI_Logics.Controller
         SqlConnection conn = new SqlConnection();
         SqlDataReader reader = null;
         DataTable dt = new DataTable();
-        string st = "test";
 
         public List<HomeModel> GetRequestList(int current_login_role_id)
         {

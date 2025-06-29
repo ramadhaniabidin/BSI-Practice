@@ -62,19 +62,14 @@ app.service("svc", function ($http) {
     };
 
     this.svc_GetStockAndUnit = function (item_name) {
-        var param = {
-            'item_name': item_name
-        };
-
-        var response = $http({
+        const param = { 'item_name': item_name };
+        return $http({
             method: 'POST',
             url: '/WebServices/StationaryRequestWebService.asmx/GetStockAndUnit',
             data: JSON.stringify(param),
             contentType: 'application/json; charset=utf-8',
             dataType: "json"
         });
-
-        return response;
     };
 
     this.svc_GetRequestData = function (folio_no) {
@@ -342,16 +337,17 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
 
     // This function is for retrieving stationary items from database
     $scope.GetStationaryItems = function () {
-        var promise = svc.svc_GetStationaryItems();
+        const promise = svc.svc_GetStationaryItems();
         promise.then(function (response) {
             const response_data = JSON.parse(response.data.d);
-            var StationaryItems = response_data.StationaryItems;
+            const StationaryItems = response_data.StationaryItems;
             $scope.itemNames = [];
-            for (i of StationaryItems) {
+            for (const i of StationaryItems) {
                 if (!$scope.itemNames.includes(i.item_name)) {
                     $scope.itemNames.push(i.item_name);
                 }
             }
+            console.log($scope.itemNames);
         });
     };
     // End region
@@ -382,6 +378,8 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         promise.then(function (response) {
             const response_data = JSON.parse(response.data.d);
             const StockAndUnit = response_data.StockAndUnit;
+            console.log(StockAndUnit);
+            console.log(item_name);
             $scope.request.detail[index].uom = StockAndUnit.uom;
             $scope.request.detail[index].stock = StockAndUnit.stock;
         });

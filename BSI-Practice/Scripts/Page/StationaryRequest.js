@@ -62,19 +62,14 @@ app.service("svc", function ($http) {
     };
 
     this.svc_GetStockAndUnit = function (item_name) {
-        var param = {
-            'item_name': item_name
-        };
-
-        var response = $http({
+        const param = { 'item_name': item_name };
+        return $http({
             method: 'POST',
             url: '/WebServices/StationaryRequestWebService.asmx/GetStockAndUnit',
             data: JSON.stringify(param),
             contentType: 'application/json; charset=utf-8',
             dataType: "json"
         });
-
-        return response;
     };
 
     this.svc_GetRequestData = function (folio_no) {
@@ -232,8 +227,9 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     }];
 
     $scope.request = {
+        //header: {}, detail: []
         header: {
-            folio_no: '',
+            folio_no: 'GENERATED ON SUBMIT',
             applicant: '',
             department: '',
             role: '',
@@ -287,7 +283,7 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
             const userData = responseJSON.Data;
             if (userData.RoleID == 0) {
                 $scope.IsRequestor = true;
-                $scope.request.header.folio_no = 'Generated On Submit';
+                $scope.request.header.folio_no = 'GENERATED ON SUBMIT';
                 $scope.request.header.applicant = userData.Name;
                 $scope.request.header.department = userData.Department;
                 $scope.request.header.role = userData.Role;
@@ -341,16 +337,17 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
 
     // This function is for retrieving stationary items from database
     $scope.GetStationaryItems = function () {
-        var promise = svc.svc_GetStationaryItems();
+        const promise = svc.svc_GetStationaryItems();
         promise.then(function (response) {
             const response_data = JSON.parse(response.data.d);
-            var StationaryItems = response_data.StationaryItems;
+            const StationaryItems = response_data.StationaryItems;
             $scope.itemNames = [];
-            for (i of StationaryItems) {
+            for (const i of StationaryItems) {
                 if (!$scope.itemNames.includes(i.item_name)) {
                     $scope.itemNames.push(i.item_name);
                 }
             }
+            console.log($scope.itemNames);
         });
     };
     // End region
@@ -381,6 +378,8 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         promise.then(function (response) {
             const response_data = JSON.parse(response.data.d);
             const StockAndUnit = response_data.StockAndUnit;
+            console.log(StockAndUnit);
+            console.log(item_name);
             $scope.request.detail[index].uom = StockAndUnit.uom;
             $scope.request.detail[index].stock = StockAndUnit.stock;
         });
@@ -402,19 +401,15 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         // END REGION
 
         if (validation1) {
-            //$scope.rows[index].WarningMessage1 = true;
             document.getElementById("submit-btn").classList.add("disabled");
         }
 
         else if (validation2) {
-            //$scope.rows[index].WarningMessage2 = true;
             document.getElementById("submit-btn").classList.add("disabled");
         }
 
 
         else {
-            //$scope.rows[index].WarningMessage1 = false;
-            //$scope.rows[index].WarningMessage2 = false;
             var submit_btn = document.getElementById("submit-btn");
             if (submit_btn.classList.contains("disabled")) {
                 submit_btn.classList.remove("disabled");
@@ -449,10 +444,18 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         if ($scope.ValidateRequest()) {
             if (confirm("Submit Data?")) {
                 const header_data = $scope.SubmitRequest_GenerateHeader();
-                console.log(header_data);
                 const details = $scope.SubmitRequest_GenerateDetails();
-                console.log(details);
                 const promise = svc.svc_SaveUpdate(header_data, details);
+                promise.then((response) => {
+                    const responseJSON = JSON.parse(response.data.d);
+                    if (responseJSON.Success) {
+                        alert("Save data success");
+                        location.href = "/Pages/Home";
+                    }
+                },
+                    (err) => {
+                    console.error(err);
+                })
             }
         }
     };
@@ -505,20 +508,6 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         }
 
         return true;
-
-        //    var promise = svc.svc_SaveUpdate(header_data, detail_data);
-        //    promise.then(function (response) {
-        //        let jsonData = JSON.parse(response.data.d);
-        //        console.log('Json Data : ', jsonData);
-        //        if (jsonData.Success) {
-        //            alert('Berhasil memasukkan data header dan detail');
-        //            location.href = "/Pages/Home";
-        //        }
-        //        else {
-        //            alert(jsonData.Message);
-        //        }
-        //    });
-        //}
     }
     // END REGION
 
@@ -566,15 +555,12 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
             var detailData = jsonData.data;
             $scope.request.header = headerData;
             $scope.request.detail = detailData;
-            //console.log('JSON Data : ', jsonData);
             console.log('Header data: ', $scope.request.header);
-            //console.log('Detail data: ', $scope.request.detail);
 
             var workflowPromise = svc.svc_GetWorkflowHistories(folio_no);
             workflowPromise.then(function (resp) {
                 var jsonData_Workflow = JSON.parse(resp.data.d);
                 $scope.workflow_histories = jsonData_Workflow.data;
-                //console.log($scope.workflow_histories);
 
                 for (i of $scope.workflow_histories) {
                     var action_date = i.action_date;
@@ -589,7 +575,6 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
                         ('0' + date.getSeconds()).slice(-2);
 
                     i.action_date = formattedDate;
-                    //console.log(action_date);
                 }
             });
         });
@@ -663,7 +648,6 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
                 newRow.WarningMessage2 = false;
                 $scope.rows.push(newRow);
             }
-            //console.log($scope.rows);
         });
     };
 
@@ -698,20 +682,22 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         location.href = "/Pages/Home";
     };
 
-    const folio_no = GetQueryString()["folio_no"]
-    $scope.GetStationaryItems();
-    $scope.GetCurrentLoginData();
-    //if ((folio_no === null) || (folio_no === undefined) || (folio_no === '')) {
-    //    $scope.GetCurrentLoginData();
-    //    $scope.GetStationaryItems();
-    //    $scope.GetApproverList();
-    //}
-    //else {
-    //    $scope.GetRequestData(folio_no);
-    //    $scope.GetCurrentLoginData();
-    //    $scope.GetStationaryItems();
-    //    $("#request_detail").addClass("readonly");
-    //}
-    
+    $scope.GetFormRequestData = (ID) => {
+        // to be implemented
+    };
+
+    $scope.PopulateFormData = () => {
+        const ID = GetQueryString()["ID"];
+        if (ID) {
+            $scope.GetFormRequestData(ID);
+        }
+        else {
+            $scope.GetCurrentLoginData();
+            $scope.GetStationaryItems();
+        }
+    };
+
+    //$scope.GetCurrentLoginData();
+    $scope.PopulateFormData();
     
 });

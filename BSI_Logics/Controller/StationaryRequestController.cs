@@ -100,8 +100,7 @@ namespace BSI_Logics.Controller
                     string query = "usp_GetItemStockAndUnit";
                     using (var cmd = new SqlCommand(query, conn))
                     {
-                        cmd.CommandType = CommandType.Text;
-                        cmd.Parameters.Clear();
+                        cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@item_name", item_name);
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -176,6 +175,7 @@ namespace BSI_Logics.Controller
                         cmd.Parameters.AddWithValue("@no", no);
                         cmd.Parameters.AddWithValue("@item_name", detail.item_name);
                         cmd.Parameters.AddWithValue("@stock", detail.stock);
+                        cmd.Parameters.AddWithValue("@uom", detail.uom);
                         cmd.Parameters.AddWithValue("@request_qty", detail.request_qty);
                         cmd.Parameters.AddWithValue("@reason", detail.reason);
                         cmd.ExecuteNonQuery();

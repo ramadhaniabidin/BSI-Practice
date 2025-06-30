@@ -23,30 +23,26 @@ namespace BSI_Practice.WebServices
         private readonly HomeController controller = new HomeController();
 
         [WebMethod]
-        public string GetRequestList(int current_login_role_id)
+        public string GetRequestList()
         {
-            var returnedOutput = "";
             try
             {
-                var requestList = controller.GetRequestList(current_login_role_id);
-                var response = new
+                var requestList = controller.GetRequestList();
+                return new JavaScriptSerializer().Serialize(new
                 {
                     Success = true,
                     Message = "OK",
                     ListItems = requestList
-                };
-                returnedOutput = new JavaScriptSerializer().Serialize(response);
+                });
             }
             catch(Exception ex)
             {
-                var response = new
+                return new JavaScriptSerializer().Serialize(new
                 {
                     Success = false,
                     Message = $"Error = {ex.Message}"
-                };
-                returnedOutput = new JavaScriptSerializer().Serialize(response);
+                });
             }
-            return returnedOutput;
         }
     }
 }

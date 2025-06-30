@@ -66,30 +66,27 @@ namespace BSI_Logics.Controller
 
         public int GetRoleId(string email)
         {
-            //var returnedOutput = "";
             int role_id = -1;
-
-            db.OpenConnection(ref conn);
-            db.cmd.CommandText = $"SELECT TOP 1 role_id FROM master_users WHERE email = '{email}'";
-            db.cmd.CommandType = CommandType.Text;
-            reader = db.cmd.ExecuteReader();
-
-            if(reader != null)
+            try
             {
-                while (reader.Read())
+                using(var _conn = new SqlConnection(Utility.GetSQLConnection()))
                 {
-                    role_id = reader.GetInt32(0);
+                    _conn.Open();
+                    var query = @"SELECT TOP 1 role_id FROM users WHERE email = @email";
+                    using(var command = new SqlCommand(query, _conn))
+                    {
+                        command.CommandType = CommandType.Text;
+                        command.Parameters.AddWithValue("@email", email);
+                        var result = command.ExecuteScalar();
+                        return result != null ? Convert.ToInt32(result) : role_id;
+                    }
                 }
             }
-
-            else
+            catch(Exception ex)
             {
-                role_id = -1;
+                Utility.InsertErrorLog("Get Role ID", "Stationary Request", 0, ex.Message);
+                return role_id;
             }
-
-            reader.Close();
-            db.CloseConnection(ref conn);
-            return role_id;
         }
 
         public string GenerateLoginToken(string email)

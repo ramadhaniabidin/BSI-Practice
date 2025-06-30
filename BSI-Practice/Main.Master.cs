@@ -17,5 +17,6 @@ namespace BSI_Practice
                 username.InnerText = Context.User.Identity.Name;
             }
         }
+
     }
 }

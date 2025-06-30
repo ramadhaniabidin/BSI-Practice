@@ -45,117 +45,42 @@
                                     <th scope="col">Requestor</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Current Approver</th>
+                                    <th scope="col">Progress</th>
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <tr>
-                                    <td scope="row">
-                                      <div class="media align-items-center">
-                                        <div class="media-body">
-                                          <span class="mb-0 text-sm">Argon Design System</span>
-                                        </div>
-                                      </div>
-                                    </td>
-                                    <td>
-                                      $2,500 USD
-                                    </td>
-                                    <td>
-                                      <span class="badge badge-dot mr-4">
-                                        <i class="bg-warning"></i> pending
-                                      </span>
-                                    </td>
-                                    <td>
-                                      <div class="d-flex align-items-center">
-                                        <span class="mr-2">60%</span>
-                                        <div>
-                                          <div class="progress">
-                                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td scope="row">
-                                      <div class="media align-items-center">
-                                        <div class="media-body">
-                                          <span class="mb-0 text-sm">Angular Now UI Kit PRO</span>
-                                        </div>
-                                      </div>
-                                    </td>
-                                    <td>
-                                      $1,800 USD
-                                    </td>
-                                    <td>
-                                      <span class="badge badge-dot">
-                                        <i class="bg-success"></i> completed
-                                      </span>
-                                    </td>
-                                    <td>
-                                      <div class="d-flex align-items-center">
-                                        <span class="mr-2">100%</span>
-                                        <div>
-                                          <div class="progress">
-                                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td scope="row">
-                                      <div class="media align-items-center">
-                                        <div class="media-body">
-                                          <span class="mb-0 text-sm">Black Dashboard</span>
-                                        </div>
-                                      </div>
-                                    </td>
-                                    <td>
-                                      $3,150 USD
-                                    </td>
-                                    <td>
-                                      <span class="badge badge-dot mr-4">
-                                        <i class="bg-danger"></i> delayed
-                                      </span>
-                                    </td>
-                                    <td>
-                                      <div class="d-flex align-items-center">
-                                        <span class="mr-2">72%</span>
-                                        <div>
-                                          <div class="progress">
-                                            <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100" style="width: 72%;"></div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td scope="row">
-                                      <div class="media align-items-center">
-                                        <div class="media-body">
-                                          <span class="mb-0 text-sm">React Material Dashboard</span>
-                                        </div>
-                                      </div>
-                                    </td>
-                                    <td>
-                                      $4,400 USD
-                                    </td>
-                                    <td>
-                                      <span class="badge badge-dot">
-                                        <i class="bg-info"></i> on schedule
-                                      </span>
-                                    </td>
-                                    <td>
-                                      <div class="d-flex align-items-center">
-                                        <span class="mr-2">90%</span>
-                                        <div>
-                                          <div class="progress">
-                                            <div class="progress-bar bg-info" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%;"></div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </td>
-                                  </tr>
+                                    <tr ng-repeat="i in RequestList">
+                                        <td scope="row">
+                                            <div class="media align-items-center">
+                                                <div class="media-body">
+                                                    <a target="_blank" href="/Pages/StationaryRequest.aspx?ID={{i.ID}}">
+                                                        <span class="mb-0 text-sm">{{i.Transaction_Number}}</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td scope="row">{{i.Requestor}}</td>
+                                        <td scope="row">
+                                            <span class="badge badge-dot mr-4">
+                                                <i class="{{i.CSS_Class}}"></i> {{i.Status}}
+                                            </span>
+                                        </td>
+                                        <td scope="row">{{i.Current_Approver}}</td>
+                                        <td scope="row">
+                                            <div class="d-flex align-items-center">
+                                                <span class="mr-2">{{i.Progress}}%</span>
+                                                <div class="progress">
+                                                      <div class="progress-bar bg-warning"
+                                                           role="progressbar"
+                                                           ng-attr-aria-valuenow="{{i.Progress}}"
+                                                           aria-valuemin="0"
+                                                           aria-valuemax="100"
+                                                           ng-style="{'width': i.Progress + '%'}">
+                                                      </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

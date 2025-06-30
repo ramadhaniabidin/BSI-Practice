@@ -157,7 +157,7 @@ namespace BSI_Logics.Controller
             return LoginToken;
         }
 
-        public string HashPassword(string password)
+        public static string HashPassword(string password)
         {
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
@@ -181,7 +181,7 @@ namespace BSI_Logics.Controller
             }
         }
 
-        public bool VerifyPassword(string inputPassword, string hashedPassword)
+        public static bool VerifyPassword(string inputPassword, string hashedPassword)
         {
             return BCrypt.Net.BCrypt.Verify(inputPassword, hashedPassword);
         }

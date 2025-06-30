@@ -23,6 +23,7 @@ namespace BSI_Logics.Controller
         private readonly string JwtKey = "LO6i4DuNxIpmGIpjCPRuPwx1NpA2Deuryh7HOsaw_b0";
         private readonly string JwtIssuer = "https://localhost:44313/";
         private readonly string JwtAudience = "https://localhost:44313/";
+        private readonly string EmailParam = "@email";
 
         public bool CheckEmailExists(string email)
         {
@@ -35,7 +36,7 @@ namespace BSI_Logics.Controller
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@email", email);
+                    cmd.Parameters.AddWithValue(EmailParam, email);
                     using(var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -57,7 +58,7 @@ namespace BSI_Logics.Controller
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@email", email);
+                    cmd.Parameters.AddWithValue(EmailParam, email);
                     cmd.Parameters.AddWithValue("@password", HashPassword(password));
                     cmd.ExecuteNonQuery();
                 }
@@ -76,7 +77,7 @@ namespace BSI_Logics.Controller
                     using(var command = new SqlCommand(query, _conn))
                     {
                         command.CommandType = CommandType.Text;
-                        command.Parameters.AddWithValue("@email", email);
+                        command.Parameters.AddWithValue(EmailParam, email);
                         var result = command.ExecuteScalar();
                         return result != null ? Convert.ToInt32(result) : role_id;
                     }
@@ -177,7 +178,7 @@ namespace BSI_Logics.Controller
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@email", email);
+                    cmd.Parameters.AddWithValue(EmailParam, email);
                     using(var reader = cmd.ExecuteReader())
                     {
                         dt.Load(reader);

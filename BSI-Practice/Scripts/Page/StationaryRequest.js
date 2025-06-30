@@ -444,12 +444,14 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
         if ($scope.ValidateRequest()) {
             if (confirm("Submit Data?")) {
                 const header_data = $scope.SubmitRequest_GenerateHeader();
-                console.log(header_data);
                 const details = $scope.SubmitRequest_GenerateDetails();
-                console.log(details);
                 const promise = svc.svc_SaveUpdate(header_data, details);
                 promise.then((response) => {
-                    console.log(response);
+                    const responseJSON = JSON.parse(response.data.d);
+                    if (responseJSON.Success) {
+                        alert("Save data success");
+                        location.href = "/Pages/Home";
+                    }
                 },
                     (err) => {
                     console.error(err);

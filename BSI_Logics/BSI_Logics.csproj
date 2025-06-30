@@ -102,6 +102,7 @@
     <Compile Include="Models\CombineModel.cs" />
     <Compile Include="Models\CommonResponseModel.cs" />
     <Compile Include="Models\HomeModel.cs" />
+    <Compile Include="Models\ListDataModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\Stationary Request\SaveHeaderModel.cs" />
     <Compile Include="Models\StationaryItemsModel.cs" />

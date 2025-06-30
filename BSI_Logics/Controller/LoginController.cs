@@ -16,10 +16,6 @@ namespace BSI_Logics.Controller
 {
     public class LoginController
     {
-        readonly DatabaseManager db = new DatabaseManager();
-        SqlConnection conn = new SqlConnection();
-        SqlDataReader reader = null;
-
         private readonly string JwtKey = "LO6i4DuNxIpmGIpjCPRuPwx1NpA2Deuryh7HOsaw_b0";
         private readonly string JwtIssuer = "https://localhost:44313/";
         private readonly string JwtAudience = "https://localhost:44313/";
@@ -35,7 +31,6 @@ namespace BSI_Logics.Controller
                 using(var cmd = new SqlCommand("usp_Users_CheckEmailExists", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Clear();
                     cmd.Parameters.AddWithValue(EmailParam, email);
                     using(var reader = cmd.ExecuteReader())
                     {
@@ -57,7 +52,6 @@ namespace BSI_Logics.Controller
                 using(var cmd = new SqlCommand("usp_Users_Insert", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Clear();
                     cmd.Parameters.AddWithValue(EmailParam, email);
                     cmd.Parameters.AddWithValue("@password", HashPassword(password));
                     cmd.ExecuteNonQuery();
@@ -177,7 +171,6 @@ namespace BSI_Logics.Controller
                 using(var cmd = new SqlCommand("usp_GetUser", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Clear();
                     cmd.Parameters.AddWithValue(EmailParam, email);
                     using(var reader = cmd.ExecuteReader())
                     {

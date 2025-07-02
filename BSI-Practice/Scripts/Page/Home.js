@@ -29,5 +29,28 @@ app.controller("HomeController", function ($scope, svc) {
             console.log($scope.RequestList);
         });
     };
+
+    $scope.OpenModal = () => {
+        const modal = document.getElementById("reset-password");
+        const content = document.getElementById("modal-content");
+
+        // Reset animation in case it was previously closed
+        content.classList.remove("fade-out");
+        modal.style.display = "block";
+    };
+
+    $scope.CloseModal = () => {
+        const modal = document.getElementById("reset-password");
+        const content = document.getElementById("modal-content");
+
+        // Add fade-out animation
+        content.classList.add("fade-out");
+
+        // Wait for the animation to finish before hiding
+        setTimeout(() => {
+            modal.style.display = "none";
+            content.classList.remove("fade-out"); // reset for next open
+        }, 300); // match animation duration
+    };
     $scope.GetRequestList();
 });

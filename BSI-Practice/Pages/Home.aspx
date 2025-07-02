@@ -7,9 +7,24 @@
     <script src="../Scripts/Page/Home.js"></script>
 
     <div style="padding-top: 5%" ng-app="HomePage" ng-controller="HomeController">
+        
         <div class="main-content">
             <div class="row mt-5">
                 <div class="col">
+                    <%--Modal--%>
+                    <div id="reset-password" class="my-modal">
+                        <div id="modal-content" class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="mb-0">Reset password</h2>
+                                <span class="close-modal" ng-click="CloseModal()">&times;</span>
+                            </div>
+                            <div class="modal-body py-3">
+                                <input type="text" class="form-control" ng-model="reset_psw_email" placeholder="Masukkan alamat email anda">
+                                <button type="button" class="btn btn-primary mt-3 w-100" ng-click="ResetPassword()">Reset password</button>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Filter Form -->
                     <form class="row g-3 align-items-center mb-3" style="padding-left: 10px;">
                         <div class="col-auto">
@@ -66,8 +81,9 @@
                                             </span>
                                         </td>
                                         <td scope="row">{{i.Current_Approver}}</td>
-                                        <td scope="row">
+                                        <td scope="row" data-toggle="modal" data-target="#largeModal">
                                             <div class="d-flex align-items-center">
+                                                <button class="btn btn-lg btn-primary" ng-click="OpenModal()">Click to open Modal</button>
                                                 <span class="mr-2">{{i.Progress}}%</span>
                                                 <div class="progress">
                                                       <div class="progress-bar bg-warning"

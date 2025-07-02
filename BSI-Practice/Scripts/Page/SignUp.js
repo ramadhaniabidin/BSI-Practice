@@ -1,4 +1,4 @@
-﻿var app = angular.module('SignUpPage', []);
+﻿const app = angular.module('SignUpPage', []);
 
 app.service("svc", function ($http) {
     this.svc_SignUp = function (email, password) {
@@ -17,9 +17,9 @@ app.service("svc", function ($http) {
 });
 
 app.controller("SignUpController", function ($scope, svc) {
-    $scope.email_input;
-    $scope.password_input;
-    $scope.password_verif;
+    $scope.email_input = '';
+    $scope.password_input = '';
+    $scope.password_verif = '';
 
     $scope.isDisabled = false;
     $scope.PasswordLengthValid = true;

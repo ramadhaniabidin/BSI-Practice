@@ -16,14 +16,14 @@ namespace BSI_Logics.Controller
 {
     public class LoginController
     {
-        private readonly string JwtKey = "LO6i4DuNxIpmGIpjCPRuPwx1NpA2Deuryh7HOsaw_b0";
-        private readonly string JwtIssuer = "https://localhost:44313/";
-        private readonly string JwtAudience = "https://localhost:44313/";
         private readonly string EmailParam = "@email";
 
         public bool CheckEmailExists(string email)
         {
-            if (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email)) return false;
+            if (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email))
+            {
+                return false;
+            }
             int itemCount = 0;
             using(var conn = new SqlConnection(Utility.GetSQLConnection()))
             {

@@ -41,7 +41,7 @@ namespace BSI_Practice.Pages
         {
             if (!login.CheckEmailExists(email)) return false;
             var user = login.GetUser(email);
-            if (!login.VerifyPassword(password, user.Password)) return false;
+            if (!LoginController.VerifyPassword(password, user.Password)) return false;
             Session["UserID"] = email;
             Session["RoleID"] = user.RoleID;
             return true;

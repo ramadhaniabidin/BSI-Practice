@@ -29,12 +29,6 @@ namespace BSI_Practice.WebServices
         private readonly LoginController controller = new LoginController();
 
         [WebMethod]
-        public string HelloWorld()
-        {
-            return "Hello World";
-        }
-
-        [WebMethod]
         public string CheckEmailExists(string email)
         {
             try
@@ -199,93 +193,11 @@ namespace BSI_Practice.WebServices
         }
 
         [WebMethod]
-        public string GenerateLoginToken(string email)
-        {
-            var returnedOutput = "";
-            try
-            {
-                var LoginToken = controller.GenerateLoginToken(email);
-                if (!string.IsNullOrWhiteSpace(LoginToken))
-                {
-                    var responseBody = new
-                    {
-                        Success = true,
-                        Message = "OK",
-                        LoginToken
-                    };
-                    returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
-                }
-
-                else
-                {
-                    var responseBody = new
-                    {
-                        Success = false,
-                        Message = "Error, mohon periksa kembali email Anda",
-                        LoginToken
-                    };
-                    returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
-                }
-            }
-            catch(Exception ex)
-            {
-                var responseBody = new
-                {
-                    Success = false,
-                    Message = $"Error: {ex.Message}"
-                };
-                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
-            }
-            return returnedOutput;
-        }
-
-        [WebMethod]
-        public string GenerateLoginToken1(string email)
-        {
-            var returnedOutput = "";
-            try
-            {
-                var LoginToken = controller.GenerateLoginToken1(email);
-                if (!string.IsNullOrWhiteSpace(LoginToken))
-                {
-                    var responseBody = new
-                    {
-                        Success = true,
-                        Message = "OK",
-                        LoginToken
-                    };
-                    returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
-                }
-
-                else
-                {
-                    var responseBody = new
-                    {
-                        Success = false,
-                        Message = "Error, mohon periksa kembali email Anda",
-                        LoginToken
-                    };
-                    returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
-                }
-            }
-            catch (Exception ex)
-            {
-                var responseBody = new
-                {
-                    Success = false,
-                    Message = $"Error: {ex.Message}"
-                };
-                returnedOutput = new JavaScriptSerializer().Serialize(responseBody);
-            }
-            return returnedOutput;
-        }
-
-        [WebMethod]
         public string HashPassword(string password)
         {
             try
             {
-                string hashedPassword = controller.HashPassword(password);
+                string hashedPassword = LoginController.HashPassword(password);
                 return new JavaScriptSerializer().Serialize(new
                 {
                     Success = true,
@@ -308,7 +220,7 @@ namespace BSI_Practice.WebServices
         {
             try
             {
-                bool verified = controller.VerifyPassword(inputPassword, hashedPassword);
+                bool verified = LoginController.VerifyPassword(inputPassword, hashedPassword);
                 return new JavaScriptSerializer().Serialize(new 
                 { 
                     Success = true,
@@ -341,7 +253,7 @@ namespace BSI_Practice.WebServices
                     });
                 }
                 var user = controller.GetUser(email);
-                if(!controller.VerifyPassword(password, user.Password))
+                if(!LoginController.VerifyPassword(password, user.Password))
                 {
                     return new JavaScriptSerializer().Serialize(new
                     {

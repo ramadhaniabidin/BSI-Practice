@@ -11,7 +11,7 @@ namespace BSI_Practice
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            // There is no required logic to be implemented for now
         }
     }
 }

@@ -1330,7 +1330,7 @@ a.btn-icon-only {
 
 @media (min-width: 768px) {
 
-    @ keyframes show-navbar-dropdown {
+    @keyframes show-navbar-dropdown {
         0% {
             transition: visibility .25s, opacity .25s, transform .25s;
             transform: translate(0, 10px) perspective(200px) rotateX(-2deg);
@@ -1500,3 +1500,73 @@ p {
         margin-bottom: 10px;
     }
 }
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+}
+
+.my-modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    padding-top: 30px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 25% !important;
+    border-radius: .3rem;
+    animation: fadeIn 0.3s ease-out;
+}
+
+    .modal-content.fade-out {
+        animation: fadeOut 0.3s ease-out;
+    }
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.close-modal {
+    color: #aaaaaa;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+    .close-modal:hover, .close-modal:focus {
+        color: #000;
+        cursor: pointer;
+    }

@@ -44,5 +44,22 @@ namespace BSI_Practice.WebServices
                 });
             }
         }
+
+        [WebMethod]
+        public string GetHistoryLogList(int ID)
+        {
+            try
+            {
+                return new JavaScriptSerializer().Serialize(new
+                {
+                    Success = true, Message = "OK",
+                    HistoryLog = controller.HistoryLogs(ID)
+                });
+            }
+            catch(Exception ex)
+            {
+                return HomeController.ThrowException(ex.Message);
+            }
+        }
     }
 }

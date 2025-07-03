@@ -1544,7 +1544,7 @@ p {
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 25% !important;
+    width: 75% !important;
     border-radius: .3rem;
     animation: fadeIn 0.3s ease-out;
 }
@@ -1570,3 +1570,9 @@ p {
         color: #000;
         cursor: pointer;
     }
+
+.my-modal-footer {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+}

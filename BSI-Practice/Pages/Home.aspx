@@ -12,15 +12,36 @@
             <div class="row mt-5">
                 <div class="col">
                     <%--Modal--%>
-                    <div id="reset-password" class="my-modal">
+                    <div id="history-log" class="my-modal">
                         <div id="modal-content" class="modal-content">
                             <div class="modal-header">
-                                <h2 class="mb-0">Reset password</h2>
+                                <h2 class="mb-0">Histroy Log: {{Modal_Header}}</h2>
                                 <span class="close-modal" ng-click="CloseModal()">&times;</span>
                             </div>
                             <div class="modal-body py-3">
-                                <input type="text" class="form-control" ng-model="reset_psw_email" placeholder="Masukkan alamat email anda">
-                                <button type="button" class="btn btn-primary mt-3 w-100" ng-click="ResetPassword()">Reset password</button>
+                                <table class="table align-items-center table-dark table-flush">
+                                    <thead class="thead-dark">
+                                      <tr>
+                                          <th scope="col">Person</th>
+                                          <th scope="col">Person</th>
+                                          <th scope="col">Comments</th>
+                                          <th scope="col">Action</th>
+                                          <th scope="col">Date</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="i in HistoryLogs">
+                                            <td>{{i.PIC_Name}}</td>
+                                            <td>{{i.PIC_Name}}</td>
+                                            <td>{{i.Comment}}</td>
+                                            <td>{{i.Action_Name}}</td>
+                                            <td>{{i.Action_Date}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="my-modal-footer">
+                                <span>Status: {{Modal_Footer}}</span>
                             </div>
                         </div>
                     </div>
@@ -60,7 +81,7 @@
                                     <th scope="col">Requestor</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Current Approver</th>
-                                    <th scope="col">Progress</th>
+                                    <th scope="col">Created Date</th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -75,27 +96,13 @@
                                             </div>
                                         </td>
                                         <td scope="row">{{i.Requestor}}</td>
-                                        <td scope="row">
-                                            <span class="badge badge-dot mr-4">
+                                        <td scope="row" ng-click="HistoryLog(i.ID)">
+                                            <span class="badge badge-dot mr-4" style="cursor: pointer">
                                                 <i class="{{i.CSS_Class}}"></i> {{i.Status}}
                                             </span>
                                         </td>
                                         <td scope="row">{{i.Current_Approver}}</td>
-                                        <td scope="row" data-toggle="modal" data-target="#largeModal">
-                                            <div class="d-flex align-items-center">
-                                                <button class="btn btn-lg btn-primary" ng-click="OpenModal()">Click to open Modal</button>
-                                                <span class="mr-2">{{i.Progress}}%</span>
-                                                <div class="progress">
-                                                      <div class="progress-bar bg-warning"
-                                                           role="progressbar"
-                                                           ng-attr-aria-valuenow="{{i.Progress}}"
-                                                           aria-valuemin="0"
-                                                           aria-valuemax="100"
-                                                           ng-style="{'width': i.Progress + '%'}">
-                                                      </div>
-                                                </div>
-                                            </div>
-                                        </td>
+                                        <td scope="row">{{i.Created_Date}}</td>
                                     </tr>
                                 </tbody>
                             </table>

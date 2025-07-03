@@ -8,11 +8,12 @@ namespace BSI_Logics.Models
 {
     public class WorkflowHistoryModel
     {
-        public int id { get; set; }
-        public string folio_no { get; set; }
-        public string pic_name { get; set; }
-        public string comment { get; set; }
-        public string action_name { get; set; }
-        public DateTime action_date { get; set; }
+        public int ID { get; set; }
+        public string Transaction_No { get; set; }
+        public string PIC_Name { get; set; }
+        public string Role { get; set; }
+        public string Comment { get; set; }
+        public string Action_Name { get; set; }
+        public DateTime Action_Date { get; set; }
     }
 }

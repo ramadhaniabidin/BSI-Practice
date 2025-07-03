@@ -15,6 +15,7 @@ namespace BSI_Logics.Models
         public string Current_Approver_Role { get; set; }
         public string Current_Approver { get; set; }
         public string Current_Approver_Email { get; set; }
+        public DateTime Created_Date { get; set; }
         public string CSS_Class { get; set; }
         public int Total_Stage { get; set; }
         public int Current_Stage { get; set; }

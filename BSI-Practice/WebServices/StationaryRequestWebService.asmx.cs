@@ -1,4 +1,5 @@
-﻿using BSI_Logics.Controller;
+﻿using BSI_Logics.Common;
+using BSI_Logics.Controller;
 using BSI_Logics.Models;
 using Newtonsoft.Json;
 using System;
@@ -137,6 +138,24 @@ namespace BSI_Practice.WebServices
             catch (Exception ex)
             {
                 return new JavaScriptSerializer().Serialize(new { Success = false, Message = $"Error: {ex.Message}" });
+            }
+        }
+
+        [WebMethod]
+        public string GetFormRequestData(int ID)
+        {
+            try
+            {
+                return new JavaScriptSerializer().Serialize(new
+                {
+                    Header = controller.GetDataHeader(ID),
+                    Details = controller.GetDataDetails(ID),
+                    Success = true, Message = "OK"
+                });
+            }
+            catch(Exception ex)
+            {
+                return Utility.ThrowException(ex.Message);
             }
         }
     }

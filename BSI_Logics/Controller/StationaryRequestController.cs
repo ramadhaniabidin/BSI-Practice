@@ -221,7 +221,7 @@ namespace BSI_Logics.Controller
         {
             try
             {
-                using(var conn = new SqlConnection())
+                using(var conn = new SqlConnection(Utility.GetSQLConnection()))
                 {
                     conn.Open();
                     using(var cmd = new SqlCommand("usp_GetHeaderData", conn))

@@ -10,11 +10,20 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 
 namespace BSI_Logics.Common
 {
     public static class Utility
     {
+        public static string ThrowException(string Message)
+        {
+            return new JavaScriptSerializer().Serialize(new
+            {
+                Success = false,
+                Message = Message
+            });
+        }
         public static string DecryptString(string encrString)
         {
             byte[] b;

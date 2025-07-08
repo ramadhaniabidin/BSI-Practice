@@ -13,14 +13,6 @@ namespace BSI_Logics.Controller
 {
     public class HomeController
     {
-        public static string ThrowException(string Message)
-        {
-            return new JavaScriptSerializer().Serialize(new
-            {
-                Success = false,
-                Message = Message
-            });
-        }
         public List<ListDataModel> GetRequestList()
         {
             try

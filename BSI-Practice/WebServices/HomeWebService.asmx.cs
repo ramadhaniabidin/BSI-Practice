@@ -1,4 +1,5 @@
-﻿using BSI_Logics.Controller;
+﻿using BSI_Logics.Common;
+using BSI_Logics.Controller;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,7 +59,7 @@ namespace BSI_Practice.WebServices
             }
             catch(Exception ex)
             {
-                return HomeController.ThrowException(ex.Message);
+                return Utility.ThrowException(ex.Message);
             }
         }
     }

@@ -1,25 +1,24 @@
-﻿var app = angular.module('StationaryRequestPage', []);
+﻿const app = angular.module('StationaryRequestPage', []);
 
 app.service("svc", function ($http) {
     this.svc_GetCurrentLoginData = function (email) {
-        var param = {
+        const param = {
             'email': email
         };
 
-        var response = $http({
+        const response = $http({
             method: 'POST',
             url: '/WebServices/StationaryRequestWebService.asmx/GetCurrentLoginData',
             data: JSON.stringify(param),
             contentType: 'application/json; charset=utf-8',
             dataType: "json"
         });
-        //console.log(param);
 
         return response;
     }
 
     this.svc_GetStationaryItems = function () {
-        var response = $http({
+        const response = $http({
             method: 'POST',
             url: '/WebServices/StationaryRequestWebService.asmx/GetStationaryItems',
             data: {},
@@ -31,7 +30,7 @@ app.service("svc", function ($http) {
     };
 
     this.svc_GetApproverList = function () {
-        var response = $http({
+        const response = $http({
             method: 'POST',
             url: '/WebServices/StationaryRequestWebService.asmx/GetApproverList',
             data: {},
@@ -43,14 +42,14 @@ app.service("svc", function ($http) {
     };
 
     this.svc_SaveUpdate = function (header, details) {
-        var param = {
+        const param = {
             'header': header,
             'details': details
         };
 
         console.log('Param : ', param);
 
-        var response = $http({
+        const response = $http({
             method: 'POST',
             url: '/WebServices/StationaryRequestWebService.asmx/SaveUpdate',
             data: JSON.stringify(param),
@@ -73,10 +72,10 @@ app.service("svc", function ($http) {
     };
 
     this.svc_GetRequestData = function (folio_no) {
-        var param = {
+        const param = {
             'folio_no': folio_no
         };
-        var response = $http({
+        const response = $http({
             method: 'POST',
             url: '/WebServices/StationaryRequestWebService.asmx/GetRequestDataByJoin',
             data: JSON.stringify(param),
@@ -87,11 +86,11 @@ app.service("svc", function ($http) {
     };
 
     this.svc_GetWorkflowHistories = function (folio_no) {
-        var param = {
+        const param = {
             'folio_no': folio_no
         };
 
-        var response = $http({
+        const response = $http({
             method: 'POST',
             url: '/WebServices/StationaryRequestWebService.asmx/GetWorkflowHistories',
             data: JSON.stringify(param),
@@ -102,11 +101,11 @@ app.service("svc", function ($http) {
     };
 
     this.svc_InsertApprovalLog = function (param) {
-        var parameters = {
+        const parameters = {
             model: param
         };
 
-        var response = $http({
+        const response = $http({
             method: 'POST',
             url: '/WebServices/StationaryRequestWebService.asmx/InsertApprovalLog',
             data: JSON.stringify(parameters),
@@ -159,11 +158,11 @@ app.service("svc", function ($http) {
     };
 
     this.svc_GetTaskAndAssignmentID = function (header_id) {
-        var param = {
+        const param = {
             'header_id': header_id,
         }
 
-        var response = $http({
+        const response = $http({
             method: "post",
             url: "/WebServices/StationaryRequest.asmx/GetTaskAndAssignmentID",
             data: JSON.stringify(param),
@@ -174,24 +173,34 @@ app.service("svc", function ($http) {
     };
 
     this.svc_ApproveRequest = function (approval_value, task_id, assignmnet_id) {
-        var param = {
+        const param = {
             'action_name': approval_value,
             'task_id': task_id,
             'assignment_id': assignmnet_id
         }
 
-        var config = {
+        const config = {
             headers: {
                 "Content-Type": "application/json"
             }
         };
 
-        var url = "/WebServices/StationaryRequest.asmx/ApprovalAction";
-        var response = $http.post(url, param, config);
+        const url = "/WebServices/StationaryRequest.asmx/ApprovalAction";
+        const response = $http.post(url, param, config);
         console.log(response);
 
         return response;
-    }
+    };
+
+    this.svc_GetFormRequestData = function (ID) {
+        const param = { 'ID': ID };
+        return $http({
+            method: "post",
+            url: "/WebServices/StationaryRequestWebService.asmx/GetFormRequestData",
+            data: JSON.stringify(param),
+            dataType: "json",
+        });
+    };
 });
 
 app.controller("StatinoaryRequestController", function ($scope, svc) {
@@ -269,8 +278,8 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
 
     
     $scope.ApprovalAction = function () {
-        //var header_i
-        var approval_value = $scope.workflow_histories.action_name;
+        //const header_i
+        const approval_value = $scope.workflow_histories.action_name;
 
     };
 
@@ -298,11 +307,11 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
 
     // This function get the current login role id when folio_no is not null
     $scope.CurrentRoleId_WithFolioNo = function () {
-        var token = sessionStorage.getItem('LoginToken');
-        var promise = svc.svc_GetCurrentLoginData(token);
+        const token = sessionStorage.getItem('LoginToken');
+        const promise = svc.svc_GetCurrentLoginData(token);
         promise.then(function (response) {
-            var jsonData = JSON.parse(response.data.d);
-            var userData = jsonData.currentLoginData;
+            const jsonData = JSON.parse(response.data.d);
+            const userData = jsonData.currentLoginData;
             $scope.role_id = userData.role_id;
         });
     }
@@ -389,15 +398,15 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     // THIS FUNCTION VALIDATES THE REQUEST QUANTITY
     $scope.CekRequestQty = function (index) {
 
-        var stock = $scope.request.detail[index].stock;
-        var req_qty = $scope.request.detail[index].request_qty;
+        const stock = $scope.request.detail[index].stock;
+        const req_qty = $scope.request.detail[index].request_qty;
 
         // THIS CHECKS WHETHER THE REQUEST QUANTITY EXCEEDS THE STOCK
-        var validation1 = req_qty > stock;
+        const validation1 = req_qty > stock;
         // END REGION
 
         // THIS CHECKS WHETHER THE REQUEST QUANTITY IS EMPTY OR NULL
-        var validation2 = ((req_qty == 0) || (req_qty == undefined) || (req_qty == null));
+        const validation2 = ((req_qty == 0) || (req_qty == undefined) || (req_qty == null));
         // END REGION
 
         if (validation1) {
@@ -410,7 +419,7 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
 
 
         else {
-            var submit_btn = document.getElementById("submit-btn");
+            const submit_btn = document.getElementById("submit-btn");
             if (submit_btn.classList.contains("disabled")) {
                 submit_btn.classList.remove("disabled");
             }
@@ -513,13 +522,13 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
 
     // Get current date time function
     $scope.getCurrentDateTime = function() {
-        var currentDate = new Date();
-        var year = currentDate.getFullYear();
-        var month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Adding 1 to the month and zero-padding
-        var day = String(currentDate.getDate()).padStart(2, '0'); // Zero-padding
-        var hours = String(currentDate.getHours()).padStart(2, '0'); // Zero-padding
-        var minutes = String(currentDate.getMinutes()).padStart(2, '0'); // Zero-padding
-        var seconds = String(currentDate.getSeconds()).padStart(2, '0'); // Zero-padding
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Adding 1 to the month and zero-padding
+        const day = String(currentDate.getDate()).padStart(2, '0'); // Zero-padding
+        const hours = String(currentDate.getHours()).padStart(2, '0'); // Zero-padding
+        const minutes = String(currentDate.getMinutes()).padStart(2, '0'); // Zero-padding
+        const seconds = String(currentDate.getSeconds()).padStart(2, '0'); // Zero-padding
 
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
@@ -548,26 +557,26 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
 
     // This function retrieves header and details by folio_no
     $scope.GetRequestData = function (folio_no) {
-        var promise = svc.svc_GetRequestData(folio_no);
+        const promise = svc.svc_GetRequestData(folio_no);
         promise.then(function (response) {
-            var jsonData = JSON.parse(response.data.d);
-            var headerData = jsonData.data[0];
-            var detailData = jsonData.data;
+            const jsonData = JSON.parse(response.data.d);
+            const headerData = jsonData.data[0];
+            const detailData = jsonData.data;
             $scope.request.header = headerData;
             $scope.request.detail = detailData;
             console.log('Header data: ', $scope.request.header);
 
-            var workflowPromise = svc.svc_GetWorkflowHistories(folio_no);
+            const workflowPromise = svc.svc_GetWorkflowHistories(folio_no);
             workflowPromise.then(function (resp) {
-                var jsonData_Workflow = JSON.parse(resp.data.d);
+                const jsonData_Workflow = JSON.parse(resp.data.d);
                 $scope.workflow_histories = jsonData_Workflow.data;
 
                 for (i of $scope.workflow_histories) {
-                    var action_date = i.action_date;
-                    var timeStamp = parseInt(action_date.match(/\d+/)[0]);
-                    var date = new Date(timeStamp);
+                    const action_date = i.action_date;
+                    const timeStamp = parseInt(action_date.match(/\d+/)[0]);
+                    const date = new Date(timeStamp);
 
-                    var formattedDate = date.getFullYear() + '-' +
+                    const formattedDate = date.getFullYear() + '-' +
                         ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
                         ('0' + date.getDate()).slice(-2) + ' ' +
                         ('0' + date.getHours()).slice(-2) + ':' +
@@ -661,7 +670,7 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
     };
 
     $scope.InsertApprovalLog = function () {
-        var param = {
+        const param = {
             folio_no: $scope.request.header.folio_no,
             comment: $scope.comment,
             action_name: $scope.ApprovalAction,
@@ -671,9 +680,9 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
 
         console.log(param);
 
-        var promise = svc.svc_InsertApprovalLog(param);
+        const promise = svc.svc_InsertApprovalLog(param);
         promise.then(function (response) {
-            var jsonData = JSON.parse(response.data.d);
+            const jsonData = JSON.parse(response.data.d);
             console.log("Json Data after insert approval log: ", jsonData);
         });
     };
@@ -684,6 +693,13 @@ app.controller("StatinoaryRequestController", function ($scope, svc) {
 
     $scope.GetFormRequestData = (ID) => {
         // to be implemented
+        const promise = svc.svc_GetFormRequestData(ID);
+        promise.then((resp) => {
+            const jsonData = JSON.parse(resp.data.d);
+            console.log(jsonData);
+        }).catch((err) => {
+            console.error(err);
+        });
     };
 
     $scope.PopulateFormData = () => {
